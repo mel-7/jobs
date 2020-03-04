@@ -22,7 +22,8 @@ Vue.use(Vuetify);
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
-Vue.component('example-component', require('./components/ExampleComponent.vue').default);
+Vue.component('create-post', require('./components/admin/posts/CreatePost.vue').default);
+Vue.component('post-list', require('./components/admin/posts/PostList.vue').default);
 Vue.component('admin-header', require('./components/admin/AdminHeader.vue').default);
 
 /**

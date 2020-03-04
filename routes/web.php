@@ -19,7 +19,6 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-
 /**
  * 
  * Admin Routes
@@ -28,7 +27,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::group(['prefix'=>'admin','as'=>'admin.'], function(){
     // ->middleware('can:accessAdminModel,user')
     Route::get('/', 'adminController@dashboard')->name('dashboard');
+    Route::get('/posts', 'PostController@index')->name('posts');
+    Route::get('/post/create', 'PostController@create')->name('create');
 
 });
-
-

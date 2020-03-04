@@ -22,23 +22,15 @@
 <body>
     <div id="app">
         <v-app>
-            @guest
-            @else
+            @auth
                 <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                     @csrf
                 </form>
-            @endguest 
-           
-            <admin-header :auth-user="{{ Auth::user() }}"/>
-            <v-content>
-                <v-container
-                    fluid
-                    fill-height
-                    class="grey lighten-4"
-                    >
+                <admin-header :auth-user="{{ Auth::user() }}"></admin-header>
+                <v-content style="height:100%" class="grey lighten-4">
                     @yield('admin-content')
-                </v-container>
-            </v-content>
+                </v-content>
+            @endauth
         </v-app>
     </div>
     <div id="ldr">

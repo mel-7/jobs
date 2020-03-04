@@ -44,11 +44,4 @@ if (token) {
 //     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
 //     encrypted: true
 // });
-
-// Custom Loader
-// document.addEventListener("DOMContentLoaded", function() {
-//     setTimeout(function(){ 
-//         var elem = document.getElementById('loaderWrapper').style.display = 'none';
-//     }, 300);
-// });
 document.addEventListener("DOMContentLoaded",function(){setTimeout(function(){document.getElementById("ldr").style.display="none"},300)});
