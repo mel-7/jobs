@@ -7,6 +7,13 @@ use Illuminate\Http\Request;
 
 class PostController extends Controller
 {
+    public function __construct()
+    {
+        // $this->middleware('auth');
+        $this->middleware('auth')->except(['postAPI']);
+        // $this->middleware('auth')->only(['index']);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -41,7 +48,13 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $post = Post::create($this->validateRequest());
+
+        // return request
+        return response()->json([
+            'post'  => $post,
+            'message' => 'Job post has been created'
+        ], 200);
     }
 
     /**
@@ -87,5 +100,18 @@ class PostController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    /**
+     * Form Validation
+     */
+    public function validateRequest()
+    {
+        return request()->validate([
+            'position' => ['required', 'min:1', 'max:50', 'string'],
+            'slug' => ['min:1', 'max:50', 'string', 'alpha_dash', 'unique:posts'],
+            'content' => [''],
+        ]);
+
     }
 }

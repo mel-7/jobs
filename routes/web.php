@@ -29,5 +29,6 @@ Route::group(['prefix'=>'admin','as'=>'admin.'], function(){
     Route::get('/', 'adminController@dashboard')->name('dashboard');
     Route::get('/posts', 'PostController@index')->name('posts');
     Route::get('/post/create', 'PostController@create')->name('create');
+    Route::post('/post/store', 'PostController@store')->name('store');
 
 });

@@ -26,6 +26,8 @@ Vue.component('create-post', require('./components/admin/posts/CreatePost.vue').
 Vue.component('post-list', require('./components/admin/posts/PostList.vue').default);
 Vue.component('admin-header', require('./components/admin/AdminHeader.vue').default);
 
+Vue.component('snack-bar', require('./components/SnackBar.vue').default);
+
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -40,8 +42,9 @@ const app = new Vue({
                 light: {
                     // GAG Colors
                     gagrey: '#5a5b5c',
+                    gayellow: '#c7a92e',
                     text: 'rgb(0, 0, 0, .75)',
-                    primary: '#c7a92e',
+                    primary: '#1D1D1B',
 
                     // Vuetify Action Colors
                     secondary: '#f5f5f5',

@@ -17,10 +17,10 @@ class CreatePostsTable extends Migration
             $table->bigIncrements('id');
             $table->string('position');
             $table->string('slug')->unique();
-            $table->string('content');
-            $table->string('status');
-            $table->unsignedInteger('author');
-            $table->unsignedInteger('company');
+            $table->string('content')->nullable();
+            $table->string('status')->nullable();
+            $table->unsignedInteger('author')->nullable();
+            $table->unsignedInteger('company')->nullable();
             $table->timestamps();
         });
     }

@@ -3,7 +3,7 @@
         <div class="col-12">
             <v-data-table
                 :headers="headers"
-                :items="products"
+                :items="posts"
                 :page.sync="page"
                 :items-per-page="itemsPerPage"
                 hide-default-footer
