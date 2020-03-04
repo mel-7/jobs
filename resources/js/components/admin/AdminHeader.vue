@@ -3,6 +3,40 @@
         <v-app-bar app clipped-left dense dark>
             <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
             <span class="ml-3 mr-5">Ghassan Aboud Group</span>
+            <v-spacer></v-spacer>
+            <v-menu
+                v-model="menu"
+                :close-on-content-click="false"
+                :nudge-width="150"
+                transition="slide-y-transition"
+                offset-y
+                :nudge-bottom="3"
+            >
+                <template v-slot:activator="{ on }">
+                    <v-btn text icon v-on="on">
+                        <v-avatar size="36">
+                        <img src="https://mel-7.com/wp-content/uploads/2019/04/romel-indemne-v1.jpg" alt="Romel Indemne">
+                        </v-avatar>
+                    </v-btn>
+                </template>
+                <v-card>
+                    <v-list>
+                        <v-list-item>
+                        <v-list-item-avatar>
+                            <img src="https://mel-7.com/wp-content/uploads/2019/04/romel-indemne-v1.jpg" alt="Romel Indemne">
+                        </v-list-item-avatar>
+                        <v-list-item-content>
+                            <v-list-item-title> {{ authUser.name }} </v-list-item-title>
+                            <v-list-item-subtitle>{{ authUser.email }}</v-list-item-subtitle> 
+                        </v-list-item-content>
+                        </v-list-item>
+                    </v-list>
+                    <v-divider></v-divider>
+                    <v-card-actions>
+                        <v-btn depressed v-on:click="logout" width="100%">Logout</v-btn>
+                    </v-card-actions>
+                </v-card>
+            </v-menu>
         </v-app-bar>
     
         <v-navigation-drawer
@@ -87,8 +121,16 @@
 
 <script>
 export default {
-  data: () => ({
-    drawer: null
-  })
+    props: ['authUser'],
+    data: () => ({
+        drawer: null,
+        menu: false,
+    }),
+    methods: {
+        logout: function (event) {
+            event.preventDefault();
+            document.getElementById('logout-form').submit();
+        },
+    }
 }
 </script>

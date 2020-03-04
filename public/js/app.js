@@ -2982,11 +2982,53 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
+  props: ['authUser'],
   data: function data() {
     return {
-      drawer: null
+      drawer: null,
+      menu: false
     };
+  },
+  methods: {
+    logout: function logout(event) {
+      event.preventDefault();
+      document.getElementById('logout-form').submit();
+    }
   }
 });
 
@@ -34602,7 +34644,117 @@ var render = function() {
           _vm._v(" "),
           _c("span", { staticClass: "ml-3 mr-5" }, [
             _vm._v("Ghassan Aboud Group")
-          ])
+          ]),
+          _vm._v(" "),
+          _c("v-spacer"),
+          _vm._v(" "),
+          _c(
+            "v-menu",
+            {
+              attrs: {
+                "close-on-content-click": false,
+                "nudge-width": 150,
+                transition: "slide-y-transition",
+                "offset-y": "",
+                "nudge-bottom": 3
+              },
+              scopedSlots: _vm._u([
+                {
+                  key: "activator",
+                  fn: function(ref) {
+                    var on = ref.on
+                    return [
+                      _c(
+                        "v-btn",
+                        _vm._g({ attrs: { text: "", icon: "" } }, on),
+                        [
+                          _c("v-avatar", { attrs: { size: "36" } }, [
+                            _c("img", {
+                              attrs: {
+                                src:
+                                  "https://mel-7.com/wp-content/uploads/2019/04/romel-indemne-v1.jpg",
+                                alt: "Romel Indemne"
+                              }
+                            })
+                          ])
+                        ],
+                        1
+                      )
+                    ]
+                  }
+                }
+              ]),
+              model: {
+                value: _vm.menu,
+                callback: function($$v) {
+                  _vm.menu = $$v
+                },
+                expression: "menu"
+              }
+            },
+            [
+              _vm._v(" "),
+              _c(
+                "v-card",
+                [
+                  _c(
+                    "v-list",
+                    [
+                      _c(
+                        "v-list-item",
+                        [
+                          _c("v-list-item-avatar", [
+                            _c("img", {
+                              attrs: {
+                                src:
+                                  "https://mel-7.com/wp-content/uploads/2019/04/romel-indemne-v1.jpg",
+                                alt: "Romel Indemne"
+                              }
+                            })
+                          ]),
+                          _vm._v(" "),
+                          _c(
+                            "v-list-item-content",
+                            [
+                              _c("v-list-item-title", [
+                                _vm._v(" " + _vm._s(_vm.authUser.name) + " ")
+                              ]),
+                              _vm._v(" "),
+                              _c("v-list-item-subtitle", [
+                                _vm._v(_vm._s(_vm.authUser.email))
+                              ])
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c("v-divider"),
+                  _vm._v(" "),
+                  _c(
+                    "v-card-actions",
+                    [
+                      _c(
+                        "v-btn",
+                        {
+                          attrs: { depressed: "", width: "100%" },
+                          on: { click: _vm.logout }
+                        },
+                        [_vm._v("Logout")]
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          )
         ],
         1
       ),
@@ -88438,6 +88590,19 @@ if (token) {
 //     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
 //     encrypted: true
 // });
+// Custom Loader
+// document.addEventListener("DOMContentLoaded", function() {
+//     setTimeout(function(){ 
+//         var elem = document.getElementById('loaderWrapper').style.display = 'none';
+//     }, 300);
+// });
+
+
+document.addEventListener("DOMContentLoaded", function () {
+  setTimeout(function () {
+    document.getElementById("ldr").style.display = "none";
+  }, 300);
+});
 
 /***/ }),
 

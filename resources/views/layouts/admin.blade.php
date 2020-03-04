@@ -22,8 +22,15 @@
 <body>
     <div id="app">
         <v-app>
-            <admin-header/>
-                <v-content>
+            @guest
+            @else
+                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                    @csrf
+                </form>
+            @endguest 
+           
+            <admin-header :auth-user="{{ Auth::user() }}"/>
+            <v-content>
                 <v-container
                     fluid
                     fill-height
@@ -33,6 +40,11 @@
                 </v-container>
             </v-content>
         </v-app>
+    </div>
+    <div id="ldr">
+        <div class="loader">
+            <img src="https://cdn.shortpixel.ai/spai/q_glossy+ret_img+to_webp/https://mel-7.com/wp-content/uploads/2019/03/romel-indemne.svg" alt="Romel Indemne">
+        </div>
     </div>
 </body>
 </html>
