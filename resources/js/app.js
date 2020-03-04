@@ -23,6 +23,7 @@ Vue.use(Vuetify);
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
+Vue.component('admin-header', require('./components/admin/AdminHeader.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -37,10 +38,9 @@ const app = new Vue({
             themes: {
                 light: {
                     // GAG Colors
-                    grey: '#5a5b5c',
+                    gagrey: '#5a5b5c',
                     text: 'rgb(0, 0, 0, .75)',
                     primary: '#c7a92e',
-                    // primary: 'rgb(199, 169, 46)',
 
                     // Vuetify Action Colors
                     secondary: '#f5f5f5',

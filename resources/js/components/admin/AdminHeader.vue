@@ -1,0 +1,94 @@
+<template>
+    <div>
+        <v-app-bar app clipped-left dense dark>
+            <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
+            <span class="ml-3 mr-5">Ghassan Aboud Group</span>
+        </v-app-bar>
+    
+        <v-navigation-drawer
+        v-model="drawer"
+        app
+        clipped
+        color="grey lighten-5"
+        >
+            <v-list>
+                <v-list-item :href="'/admin/'">
+                    <v-list-item-icon>
+                    <v-icon>mdi-view-dashboard-outline</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-title>Dashboard</v-list-item-title>
+                </v-list-item>
+
+                <v-list-group prepend-icon="mdi-bulletin-board">  
+                    <template v-slot:activator>
+                        <v-list-item-title>Job Posts</v-list-item-title>
+                    </template>
+                    <v-list class="grey lighten-3">
+                        <v-list-item @click="0">
+                            <v-list-item-icon class="pl-5">
+                                <v-icon small>mdi-account</v-icon>
+                            </v-list-item-icon>
+                            <v-list-item-title>All Posts</v-list-item-title>
+                        </v-list-item>
+                        <v-list-item @click="0">
+                            <v-list-item-icon class="pl-5">
+                                <v-icon small>mdi-account</v-icon>
+                            </v-list-item-icon>
+                            <v-list-item-title>Categories</v-list-item-title>
+                        </v-list-item>
+                        <v-list-item @click="0">
+                            <v-list-item-icon class="pl-5">
+                                <v-icon small>mdi-format-list-text</v-icon>
+                            </v-list-item-icon>
+                            <v-list-item-title>Custom Fields</v-list-item-title>
+                        </v-list-item>
+                    </v-list>
+                </v-list-group>
+
+                <v-list-group prepend-icon="mdi-account-group">  
+                    <template v-slot:activator>
+                        <v-list-item-title>Users</v-list-item-title>
+                    </template>
+                    <v-list class="grey lighten-3">
+                        <v-list-item @click="0">
+                            <v-list-item-icon class="pl-5">
+                                <v-icon small>mdi-account</v-icon>
+                            </v-list-item-icon>
+                            <v-list-item-title>All Users</v-list-item-title>
+                        </v-list-item>
+                        <v-list-item @click="0">
+                            <v-list-item-icon class="pl-5">
+                                <v-icon small>mdi-account-check</v-icon>
+                            </v-list-item-icon>
+                            <v-list-item-title>Roles</v-list-item-title>
+                        </v-list-item>
+                        <v-list-item @click="0">
+                            <v-list-item-icon class="pl-5">
+                                <v-icon small>mdi-account-details</v-icon>
+                            </v-list-item-icon>
+                            <v-list-item-title>User Fields</v-list-item-title>
+                        </v-list-item>
+                    </v-list>
+                </v-list-group>
+
+                <v-list-item @click="0">
+                     <v-list-item-icon>
+                        <v-icon>mdi-email-receive</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-title>Applications</v-list-item-title>
+                    <v-list-item-action>
+                    <v-badge color="success" small content="6"></v-badge>
+                    </v-list-item-action>
+                </v-list-item>
+            </v-list>
+        </v-navigation-drawer>      
+    </div>
+</template>
+
+<script>
+export default {
+  data: () => ({
+    drawer: null
+  })
+}
+</script>

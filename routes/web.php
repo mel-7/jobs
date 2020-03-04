@@ -18,3 +18,17 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+
+/**
+ * 
+ * Admin Routes
+ * 
+ */
+Route::group(['prefix'=>'admin','as'=>'admin.'], function(){
+    // ->middleware('can:accessAdminModel,user')
+    Route::get('/', 'adminController@dashboard')->name('dashboard');
+
+});
+
+

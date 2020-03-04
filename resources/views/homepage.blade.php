@@ -21,22 +21,23 @@
         <div id="app">
             <v-app>
                 <header class="elevation-3">
-                    <div class="container">
+                    <div class="container py-0">
                         <div class="row">
                             <div class="col-4 py-0">
                                 <a href="/">
-                                    <v-img max-width="200px" src="https://grandiose.net/wp-content/uploads/2019/10/grandiose-logo-v3.svg"></v-img>
+                                    <v-img max-width="300px" src="img/gag.png"></v-img>
                                 </a>
                             </div>
                             <div class="col-8 py-0 d-flex align-center">
                                 <v-text-field
-                                    label="Search Jobs"
+                                    label="Find Jobs"
                                     single-line
                                     outlined
                                     hide-details
                                     dense
+                                    color="grey"
                                     class="ml-auto"
-                                    style="max-width:300px;"
+                                    style="max-width:480px;"
                                 ></v-text-field>
                             </div>
                         </div>
