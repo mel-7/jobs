@@ -28,7 +28,10 @@ Route::group(['prefix'=>'admin','as'=>'admin.'], function(){
     // ->middleware('can:accessAdminModel,user')
     Route::get('/', 'adminController@dashboard')->name('dashboard');
     Route::get('/posts', 'PostController@index')->name('posts');
-    Route::get('/post/create', 'PostController@create')->name('create');
-    Route::post('/post/store', 'PostController@store')->name('store');
+    Route::get('/post/create', 'PostController@create')->name('create_post');
+    Route::post('/post/store', 'PostController@store')->name('store_post');
+    
+    // Category Routes
+    Route::get('/categories', 'CategoryController@index')->name('categories');
 
 });

@@ -1,7 +1,10 @@
 @extends('layouts.admin')
 
 @section('admin-content')
-
-    <h2 class="mb-3">{{ _('Dashboard') }}</h2>
+    <div class="col">
+        <div class="col-12">
+            <h2 class="mb-3">{{ _('Dashboard') }}</h2>
+        </div>
+    </div>
     
 @endsection

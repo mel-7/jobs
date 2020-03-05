@@ -1,5 +1,8 @@
 <template>
     <div style="width:100%;">
+        <v-overlay :value="loading" color="#FFF">
+            <v-progress-circular indeterminate color="primary" width="3" size="32"></v-progress-circular>
+        </v-overlay>
         <v-form v-model="valid">
             <div class="secondary-header" style="width:100%;border-bottom:1px solid #ddd;">
                 <v-toolbar dense flat class="grey lighten-4">
@@ -125,12 +128,15 @@ export default {
     },
     methods:{
         clearAlert(){
-
+            this.sbStatus = false; // SnackBar
+            this.positionError = false;
+            this.positionErrMsg = '';
+            this.slugError = false;
+            this.slugErrMsg = '';
+            this.errors.clearAll();
         },
         successUI(msg){
-            // Dialog
             this.loading = false;
-            // SnackBar
             setTimeout(() => {
                 this.sbStatus = true;
                 this.sbType = 'success';
@@ -141,6 +147,7 @@ export default {
             this.slug = this.position && slugify(this.position);
         },
         publish(){
+            this.loading = true;
             let position = this.position && this.position.trim();
             let postData = [];
             postData = {
@@ -156,7 +163,6 @@ export default {
             })
             .catch(error => {
                 this.loading = false;
-                // if(error.response.status == 403){
                 if(error.response.status == 403){
                 // SnackBar
                 this.sbStatus = true;

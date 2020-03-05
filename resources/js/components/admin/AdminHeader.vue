@@ -71,13 +71,13 @@
                         </v-list-item>
                         <v-list-item @click="0">
                             <v-list-item-icon class="pl-5">
-                                <v-icon small>mdi-account</v-icon>
+                                <v-icon small>mdi-file-tree</v-icon>
                             </v-list-item-icon>
                             <v-list-item-title>Categories</v-list-item-title>
                         </v-list-item>
                         <v-list-item @click="0">
                             <v-list-item-icon class="pl-5">
-                                <v-icon small>mdi-format-list-text</v-icon>
+                                <v-icon small>mdi-checkbox-multiple-blank-outline</v-icon>
                             </v-list-item-icon>
                             <v-list-item-title>Custom Fields</v-list-item-title>
                         </v-list-item>

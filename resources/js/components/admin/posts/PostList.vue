@@ -1,39 +1,39 @@
 <template>
-    <v-row>
-        <div class="col-12">
-            <v-data-table
-                :headers="headers"
-                :items="posts"
-                :page.sync="page"
-                :items-per-page="itemsPerPage"
-                hide-default-footer
-                class="elevation-1"
-                >
-                <template v-slot:top>
-                    <v-toolbar flat color="transparent">
-                        <v-toolbar-title>Job Posts</v-toolbar-title>
-                        <v-spacer></v-spacer>
-                        <v-btn class="primary" v-bind:href="'/admin/post/create/'">new</v-btn>
-                    </v-toolbar>
-                </template>
-                <template v-slot:item.title="{ item }">
-                    <a v-bind:href="'/admin/post/'+item.id">{{ item.title }}</a>
-                </template>
-                <template v-slot:item.action="{ item }">
-                    <v-icon small @click="editItem(item)">mdi-pencil</v-icon>
-                    <v-icon small @click="toDeleteItem(item)">mdi-trash-can</v-icon>
-                </template>
-            </v-data-table>
-            <v-pagination
-                v-if="pageCount > 1"
-                class="mt-3"
-                v-model="page"
-                :length="pageCount"
-                @input="onPageChange"
-            ></v-pagination>
-        </div>
-      <!-- <snack-bar :snackbar-type="sbType" :snackbar-text="sbText" :snackbar-status="sbStatus"></snack-bar> -->
-    </v-row>
+   <div class="col">
+      <div class="col-12">
+         <v-data-table
+            :headers="headers"
+            :items="posts"
+            :page.sync="page"
+            :items-per-page="itemsPerPage"
+            hide-default-footer
+            class="elevation-1"
+            >
+            <template v-slot:top>
+               <v-toolbar flat color="transparent">
+                  <v-toolbar-title>Job Posts</v-toolbar-title>
+                  <v-spacer></v-spacer>
+                  <v-btn class="primary" v-bind:href="'/admin/post/create/'">new</v-btn>
+               </v-toolbar>
+            </template>
+            <template v-slot:item.title="{ item }">
+               <a v-bind:href="'/admin/post/'+item.id">{{ item.title }}</a>
+            </template>
+            <template v-slot:item.action="{ item }">
+               <v-icon small @click="editItem(item)">mdi-pencil</v-icon>
+               <v-icon small @click="toDeleteItem(item)">mdi-trash-can</v-icon>
+            </template>
+         </v-data-table>
+         <v-pagination
+               v-if="pageCount > 1"
+               class="mt-3"
+               v-model="page"
+               :length="pageCount"
+               @input="onPageChange"
+         ></v-pagination>
+      </div>
+   </div>
+   <!-- <snack-bar :snackbar-type="sbType" :snackbar-text="sbText" :snackbar-status="sbStatus"></snack-bar> -->
 </template>
 <style scoped>
    table td a:hover{
