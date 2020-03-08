@@ -77,7 +77,7 @@
                             </v-list-item-icon>
                             <v-list-item-title>Categories</v-list-item-title>
                         </v-list-item>
-                        <v-list-item to="/admin/posts">
+                        <v-list-item to="/admin/post/customfields">
                             <v-list-item-icon class="pl-5">
                                 <v-icon small>mdi-checkbox-multiple-blank-outline</v-icon>
                             </v-list-item-icon>
