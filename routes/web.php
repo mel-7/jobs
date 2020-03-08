@@ -32,6 +32,7 @@ Route::group(['prefix'=>'admin','as'=>'admin.'], function(){
     Route::post('/post/store', 'PostController@store')->name('store_post');
     
     // Category Routes
-    Route::get('/categories', 'CategoryController@index')->name('categories');
+    Route::get('/post/categories', 'CategoryController@index')->name('categories');
+    Route::post('/post/category/store', 'CategoryController@store')->name('addcategory');
 
 });

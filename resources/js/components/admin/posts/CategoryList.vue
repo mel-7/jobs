@@ -1,5 +1,5 @@
 <template>
-  <div class="row">
+  <div class="col">
     <div class="col-12">
       <v-card class="mx-0 py-2">
         <v-toolbar flat color="white">
@@ -150,14 +150,15 @@
   </div>
 </template>
 <script>
-  import SnackBar from '../../components/SnackBar.vue';
-  import ErrorBag from "../../actions/errorBag.js";
+  import SnackBar from '../../../components/SnackBar.vue';
+  import ErrorBag from "../../../helpers/errorBag.js";
   export default {
     components: {
       SnackBar
     },
     mounted (){
-    //   this.getProductCategoriesTree();
+      // console.log('meh');
+      this.getProductCategoriesTree();
     },
     computed: {
     },
@@ -341,7 +342,7 @@
       },
       // Get Product Categories Tree
       getProductCategoriesTree () {
-        axios.get('/api/product/category/tree')
+        axios.get('/api/category/tree')
           .then(response => {
             this.productCategories = response.data;
           })
@@ -352,7 +353,7 @@
       },
       // Get Product Categories List
       getProductCategoriesList (pID) {
-        axios.get('/api/product/category/list')
+        axios.get('/api/category/list')
           .then(response => {
             this.allCategories = response.data;
             this.categoryList = response.data;
@@ -418,7 +419,8 @@
           // Create
           this.loading = true;
           let title = this.dialogItem.title && this.dialogItem.title.trim();
-          axios.post('/admin/product/category/store', {
+          console.log(title);
+          axios.post('/admin/post/category/store', {
             slug : this.dialogItem.slug,
             title : title,
             parent : this.selected.id
@@ -427,6 +429,7 @@
             this.getProductCategoriesTree();
             this.getProductCategoriesList(0);
             this.successUI(response.data.message);
+            console.log(response.data);
           })
           .catch(error => {
             this.loading = false;

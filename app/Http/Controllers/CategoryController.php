@@ -2,26 +2,27 @@
 
 namespace App\Http\Controllers;
 
+use App\Category;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth');
-        // $this->middleware('auth')->except(['postAPI']);
+        // $this->middleware('auth');
+        $this->middleware('auth')->except(['categoryTreeAPI', 'categoryListAPI']);
     }
 
     public function categoryListAPI()
     {
-        $productCategories = Product_categories::all();
+        $productCategories = Category::all();
 
         return collect($productCategories);
     }  
 
     public function categoryTreeAPI()
     {
-        $productCategories = Product_categories::all();
+        $productCategories = Category::all();
 
         function recurse_uls($array, $parent)
         {
@@ -71,7 +72,12 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $category = Category::create($this->validateRequest()); // Working
+        // return request
+        return response()->json([
+            'request' => $category,
+            'message' => 'Product category has been added'
+        ], 200);
     }
 
     /**
@@ -117,5 +123,19 @@ class CategoryController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+
+    /**
+     * Form Validation
+     */
+    public function validateRequest()
+    {
+        return request()->validate([
+            'slug' => ['min:1', 'max:50', 'string', 'alpha_dash', 'unique:categories'],
+            'title' => ['required', 'min:1', 'max:50', 'string'],
+            'parent' => ['required', 'numeric'],
+        ]);
+
     }
 }

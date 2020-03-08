@@ -76,12 +76,14 @@
                                 <v-list-item-title>All Posts</v-list-item-title>
                             </v-list-item>
                         </router-link>
-                        <v-list-item @click="0">
-                            <v-list-item-icon class="pl-5">
-                                <v-icon small>mdi-file-tree</v-icon>
-                            </v-list-item-icon>
-                            <v-list-item-title>Categories</v-list-item-title>
-                        </v-list-item>
+                        <router-link tabindex="0" to="/admin/post/categories" class="router px-0 v-list-item v-list-item--link theme--light">
+                            <v-list-item :ripple="{ center: true }">
+                                <v-list-item-icon class="pl-5">
+                                    <v-icon small>mdi-file-tree</v-icon>
+                                </v-list-item-icon>
+                                <v-list-item-title>Categories</v-list-item-title>
+                            </v-list-item>
+                        </router-link>
                         <v-list-item @click="0">
                             <v-list-item-icon class="pl-5">
                                 <v-icon small>mdi-checkbox-multiple-blank-outline</v-icon>

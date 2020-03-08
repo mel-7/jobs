@@ -18,3 +18,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::get('/posts', 'PostController@postAPI')->name('posts');
+
+Route::get('/category/list', 'CategoryController@categoryListAPI')->name('categorieslist');
+Route::get('/category/tree', 'CategoryController@categoryTreeAPI')->name('categoriestree');
