@@ -76,7 +76,15 @@ class PostController extends Controller
      */
     public function edit($id)
     {
-        //
+        // https://www.mynotepaper.com/laravel-vue-crud-single-page-application-tutorial
+        // $post = Post::find($id);
+        $post = Post::where('id', '=', $id)->firstOrFail();
+        // return response()->json($post);
+        // return response()->json([
+        //     'post'  => $post,
+        //     'message' => 'Job post has been created'
+        // ], 200);
+        return view('admin.posts.edit', compact('post'));
     }
 
     /**

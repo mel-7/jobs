@@ -107,6 +107,10 @@ export default {
       },
       newItem(){
 
+      },
+      editItem(i) {
+         console.log(i.id);
+         this.$router.push({name:'EditPost',params:{id:i.id}})
       }
    },
    mounted(){

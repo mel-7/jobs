@@ -1,5 +1,5 @@
 @extends('layouts.admin')
 
 @section('admin-content')
-    <post-list></post-list>
+    <router-view></router-view>
 @endsection

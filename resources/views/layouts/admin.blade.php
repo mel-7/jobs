@@ -30,8 +30,8 @@
                 </form>
                 <admin-header :auth-user="{{ Auth::user() }}"></admin-header>
                 <v-content style="height:100%" class="grey lighten-4">
-                    {{-- @yield('admin-content') --}}
-                    <router-view></router-view>
+                    @yield('admin-content')
+                    {{-- <router-view></router-view> --}}
                 </v-content>
             @endauth
         </v-app>

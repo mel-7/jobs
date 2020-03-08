@@ -1,5 +1,7 @@
 @extends('layouts.admin')
 
 @section('admin-content')
-    <router-view></router-view>
+
+    <edit-post :post="{{ $post->toJson() }}"></edit-post>
+
 @endsection
