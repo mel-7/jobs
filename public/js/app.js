@@ -3038,13 +3038,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['authUser'],
   data: function data() {
@@ -3609,7 +3602,7 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _SnackBar_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../SnackBar.vue */ "./resources/js/components/SnackBar.vue");
-/* harmony import */ var _actions_errorBag_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../actions/errorBag.js */ "./resources/js/actions/errorBag.js");
+/* harmony import */ var _helpers_errorBag_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../helpers/errorBag.js */ "./resources/js/helpers/errorBag.js");
 //
 //
 //
@@ -3700,7 +3693,7 @@ __webpack_require__.r(__webpack_exports__);
       slug: '',
       content: '',
       // Error Handling
-      errors: new _actions_errorBag_js__WEBPACK_IMPORTED_MODULE_1__["default"](),
+      errors: new _helpers_errorBag_js__WEBPACK_IMPORTED_MODULE_1__["default"](),
       positionError: false,
       positionErrMsg: '',
       slugError: false,
@@ -3820,6 +3813,7 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+//
 //
 //
 //
@@ -36363,107 +36357,68 @@ var render = function() {
                     { staticClass: "grey lighten-3" },
                     [
                       _c(
-                        "router-link",
-                        {
-                          staticClass:
-                            "router px-0 v-list-item v-list-item--link theme--light",
-                          attrs: { tabindex: "0", to: "/admin/post/create" }
-                        },
+                        "v-list-item",
+                        { attrs: { to: "/admin/post/create" } },
                         [
                           _c(
-                            "v-list-item",
-                            { attrs: { ripple: { center: true } } },
+                            "v-list-item-icon",
+                            { staticClass: "pl-5" },
                             [
-                              _c(
-                                "v-list-item-icon",
-                                { staticClass: "pl-5" },
-                                [
-                                  _c("v-icon", { attrs: { small: "" } }, [
-                                    _vm._v("mdi-file-document-box-plus-outline")
-                                  ])
-                                ],
-                                1
-                              ),
-                              _vm._v(" "),
-                              _c("v-list-item-title", [_vm._v("Create Post")])
+                              _c("v-icon", { attrs: { small: "" } }, [
+                                _vm._v("mdi-file-document-box-plus-outline")
+                              ])
                             ],
                             1
-                          )
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "router-link",
-                        {
-                          staticClass:
-                            "router px-0 v-list-item v-list-item--link theme--light",
-                          attrs: { to: "/admin/posts" }
-                        },
-                        [
-                          _c(
-                            "v-list-item",
-                            { attrs: { ripple: { center: true } } },
-                            [
-                              _c(
-                                "v-list-item-icon",
-                                { staticClass: "pl-5" },
-                                [
-                                  _c("v-icon", { attrs: { small: "" } }, [
-                                    _vm._v("mdi-format-list-bulleted")
-                                  ])
-                                ],
-                                1
-                              ),
-                              _vm._v(" "),
-                              _c("v-list-item-title", [_vm._v("All Posts")])
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "router-link",
-                        {
-                          staticClass:
-                            "router px-0 v-list-item v-list-item--link theme--light",
-                          attrs: { tabindex: "0", to: "/admin/post/categories" }
-                        },
-                        [
-                          _c(
-                            "v-list-item",
-                            { attrs: { ripple: { center: true } } },
-                            [
-                              _c(
-                                "v-list-item-icon",
-                                { staticClass: "pl-5" },
-                                [
-                                  _c("v-icon", { attrs: { small: "" } }, [
-                                    _vm._v("mdi-file-tree")
-                                  ])
-                                ],
-                                1
-                              ),
-                              _vm._v(" "),
-                              _c("v-list-item-title", [_vm._v("Categories")])
-                            ],
-                            1
-                          )
+                          ),
+                          _vm._v(" "),
+                          _c("v-list-item-title", [_vm._v("Create Post")])
                         ],
                         1
                       ),
                       _vm._v(" "),
                       _c(
                         "v-list-item",
-                        {
-                          on: {
-                            click: function($event) {
-                              0
-                            }
-                          }
-                        },
+                        { attrs: { to: "/admin/posts" } },
+                        [
+                          _c(
+                            "v-list-item-icon",
+                            { staticClass: "pl-5" },
+                            [
+                              _c("v-icon", { attrs: { small: "" } }, [
+                                _vm._v("mdi-format-list-bulleted")
+                              ])
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c("v-list-item-title", [_vm._v("All Posts")])
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-list-item",
+                        { attrs: { to: "/admin/post/categories" } },
+                        [
+                          _c(
+                            "v-list-item-icon",
+                            { staticClass: "pl-5" },
+                            [
+                              _c("v-icon", { attrs: { small: "" } }, [
+                                _vm._v("mdi-file-tree")
+                              ])
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c("v-list-item-title", [_vm._v("Categories")])
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-list-item",
+                        { attrs: { to: "/admin/posts" } },
                         [
                           _c(
                             "v-list-item-icon",
@@ -37512,18 +37467,11 @@ var render = function() {
                       _vm._v(" "),
                       _c(
                         "v-btn",
-                        { staticClass: "primary" },
-                        [
-                          _c(
-                            "router-link",
-                            {
-                              staticClass: "white--text router",
-                              attrs: { to: "/admin/post/create" }
-                            },
-                            [_vm._v("New")]
-                          )
-                        ],
-                        1
+                        {
+                          staticClass: "primary",
+                          attrs: { to: "/admin/post/create" }
+                        },
+                        [_vm._v("New")]
                       )
                     ],
                     1
@@ -95022,79 +94970,6 @@ module.exports = function(module) {
 	return module;
 };
 
-
-/***/ }),
-
-/***/ "./resources/js/actions/errorBag.js":
-/*!******************************************!*\
-  !*** ./resources/js/actions/errorBag.js ***!
-  \******************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-var ErrorBag = /*#__PURE__*/function () {
-  function ErrorBag() {
-    var errors = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-
-    _classCallCheck(this, ErrorBag);
-
-    this.setErrors(errors);
-  }
-
-  _createClass(ErrorBag, [{
-    key: "hasErrors",
-    value: function hasErrors() {
-      return !!this.keys.length;
-    }
-  }, {
-    key: "hasError",
-    value: function hasError(key) {
-      return this.keys.indexOf(key) > -1;
-    }
-  }, {
-    key: "firstKey",
-    value: function firstKey() {
-      return this.keys[0];
-    }
-  }, {
-    key: "first",
-    value: function first(key) {
-      return this.errors[key] ? this.errors[key][0] : undefined;
-    }
-  }, {
-    key: "setErrors",
-    value: function setErrors(errors) {
-      this.errors = errors;
-    }
-  }, {
-    key: "clearAll",
-    value: function clearAll() {
-      this.setErrors({});
-    }
-  }, {
-    key: "clear",
-    value: function clear(key) {
-      return delete this.errors[key];
-    }
-  }, {
-    key: "keys",
-    get: function get() {
-      return Object.keys(this.errors);
-    }
-  }]);
-
-  return ErrorBag;
-}();
-
-/* harmony default export */ __webpack_exports__["default"] = (ErrorBag);
 
 /***/ }),
 

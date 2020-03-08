@@ -14,7 +14,8 @@
                   <v-toolbar-title>Job Posts</v-toolbar-title>
                   <v-spacer></v-spacer>
                    
-                  <v-btn class="primary" ><router-link to="/admin/post/create" class="white--text router">New</router-link></v-btn>
+                  <!-- <v-btn class="primary" ><router-link to="/admin/post/create" class="white--text router">New</router-link></v-btn> -->
+                  <v-btn class="primary" to="/admin/post/create">New</v-btn>
                </v-toolbar>
             </template>
             <template v-slot:item.title="{ item }">

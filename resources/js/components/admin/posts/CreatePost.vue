@@ -75,7 +75,7 @@
 
 <script>
 import SnackBar from '../../SnackBar.vue';
-import ErrorBag from "../../../actions/errorBag.js";
+import ErrorBag from "../../../helpers/errorBag.js";
 
 export default {
     components: {
