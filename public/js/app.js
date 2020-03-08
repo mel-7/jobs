@@ -3089,6 +3089,10 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_SnackBar_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../components/SnackBar.vue */ "./resources/js/components/SnackBar.vue");
 /* harmony import */ var _helpers_errorBag_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../helpers/errorBag.js */ "./resources/js/helpers/errorBag.js");
+var _methods;
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 //
 //
 //
@@ -3324,7 +3328,10 @@ __webpack_require__.r(__webpack_exports__);
       deleteID: 0
     };
   },
-  methods: {
+  methods: (_methods = {
+    generateSlug: function generateSlug() {
+      this.dialogItem.slug = this.dialogItem.title && slugify(this.dialogItem.title);
+    },
     customFilter: function customFilter(item, queryText, itemText) {
       var textOne = item.title.toLowerCase();
       var textTwo = item.title.toLowerCase();
@@ -3348,246 +3355,233 @@ __webpack_require__.r(__webpack_exports__);
 
       console.log(this.productCategories);
       console.log(this.searchStatus);
-    },
-    generateSlug: function generateSlug() {
-      this.dialogItem.slug = this.dialogItem.title && slugify(this.dialogItem.title);
-    },
-    getParetTitle: function getParetTitle(pID) {
-      if (pID > 0) {
-        var result = this.allCategories.filter(function (obj) {
-          return obj.id === pID;
-        }); // Assign result to selected
+    }
+  }, _defineProperty(_methods, "generateSlug", function generateSlug() {
+    this.dialogItem.slug = this.dialogItem.title && slugify(this.dialogItem.title);
+  }), _defineProperty(_methods, "getParetTitle", function getParetTitle(pID) {
+    if (pID > 0) {
+      var result = this.allCategories.filter(function (obj) {
+        return obj.id === pID;
+      }); // Assign result to selected
 
-        this.selected = result && result[0];
+      this.selected = result && result[0];
+    } else {
+      this.selected = {
+        id: 0,
+        title: 'Select Category'
+      };
+    }
+  }), _defineProperty(_methods, "setCategoryList", function setCategoryList() {
+    // get all the IDs of selected and children from the selected item
+    var excludeIDs = [];
+    JSON.stringify(this.dialogItem, function (key, value) {
+      if (key === 'id') excludeIDs.push(value);
+      return value;
+    });
+    var tempList = [];
+    this.allCategories.map(function (item) {
+      if (!excludeIDs.includes(item.id)) {
+        tempList.push(item);
+      }
+    });
+    this.categoryList = tempList;
+  }), _defineProperty(_methods, "editItem", function editItem(i) {
+    this.dialogItem = Object.assign({}, i);
+    this.defaultItem = Object.assign({}, i);
+    this.mainAction = 'update';
+    this.dialog = true;
+    this.formTitle = 'Edit ' + i.title;
+
+    if (this.listLoaded == false) {
+      this.selectLoading = true;
+      this.listLoaded = true;
+      this.getProductCategoriesList(i.parent);
+    } else {
+      this.getParetTitle(i.parent);
+    }
+  }), _defineProperty(_methods, "deleteItem", function deleteItem(i) {
+    this.mainAction = 'delete';
+    this.dialog = true;
+    this.formTitle = 'Delete ' + i.title;
+    this.deleteID = i.id;
+  }), _defineProperty(_methods, "successUI", function successUI(msg) {
+    var _this = this;
+
+    // Dialog
+    this.dialog = false;
+    this.loading = false; // SnackBar
+
+    setTimeout(function () {
+      _this.sbStatus = true;
+      _this.sbType = 'success';
+      _this.sbText = msg;
+    }, 100);
+  }), _defineProperty(_methods, "clearAlert", function clearAlert() {
+    this.sbStatus = false; // SnackBar
+
+    this.titleError = false;
+    this.titleErrMsg = '';
+    this.slugError = false;
+    this.slugErrMsg = '';
+    this.errors.clearAll();
+  }), _defineProperty(_methods, "createItem", function createItem() {
+    console.log(this.dialogItem);
+    this.mainAction = 'create';
+    this.dialog = true;
+    this.formTitle = 'Create new';
+    this.getProductCategoriesList(0);
+  }), _defineProperty(_methods, "getProductCategoriesTree", function getProductCategoriesTree() {
+    var _this2 = this;
+
+    axios.get('/api/category/tree').then(function (response) {
+      _this2.productCategories = response.data;
+    })["catch"](function (error) {
+      console.log(error.response);
+      console.log('error');
+    });
+  }), _defineProperty(_methods, "getProductCategoriesList", function getProductCategoriesList(pID) {
+    var _this3 = this;
+
+    axios.get('/api/category/list').then(function (response) {
+      _this3.allCategories = response.data;
+      _this3.categoryList = response.data;
+      _this3.selectLoading = false;
+
+      _this3.getParetTitle(pID);
+
+      _this3.selectDisabled = false;
+      _this3.allCategoriesLoded = true; // console.log('list has loaded');
+    })["catch"](function (error) {
+      console.log(error.response);
+      console.log('error');
+    });
+  }), _defineProperty(_methods, "save", function save() {
+    var _this4 = this;
+
+    this.valid = false;
+    this.loading = true; // Update
+
+    if (this.mainAction == 'update') {
+      var postData = [];
+      var p = this.selected.id ? this.selected.id : 0;
+
+      if (this.defaultItem.slug != this.dialogItem.slug) {
+        postData = {
+          id: this.dialogItem.id,
+          title: this.dialogItem.title,
+          slug: this.dialogItem.slug,
+          parent: p
+        };
       } else {
-        this.selected = {
-          id: 0,
-          title: 'Select Category'
+        postData = {
+          id: this.dialogItem.id,
+          title: this.dialogItem.title,
+          parent: p
         };
       }
-    },
-    setCategoryList: function setCategoryList() {
-      // get all the IDs of selected and children from the selected item
-      var excludeIDs = [];
-      JSON.stringify(this.dialogItem, function (key, value) {
-        if (key === 'id') excludeIDs.push(value);
-        return value;
-      });
-      var tempList = [];
-      this.allCategories.map(function (item) {
-        if (!excludeIDs.includes(item.id)) {
-          tempList.push(item);
+
+      axios.post('/admin/post/category/update', postData).then(function (response) {
+        // Update Table
+        _this4.getProductCategoriesTree();
+
+        _this4.getProductCategoriesList(0);
+
+        _this4.successUI(response.data.message);
+      })["catch"](function (error) {
+        _this4.loading = false;
+
+        if (error.response && error.response.status == 422) {
+          _this4.errors.setErrors(error.response.data.errors); // SnackBar
+
+
+          _this4.sbStatus = true;
+          _this4.sbType = 'error';
+          _this4.sbText = 'Error adding product category'; // Input error messages
+
+          if (_this4.errors.hasError('slug')) {
+            _this4.updateKeyError = true;
+            _this4.updateKeyErrMsg = _this4.errors.first('slug');
+          }
+
+          if (_this4.errors.hasError('title')) {
+            _this4.updateValueError = true;
+            _this4.updateValueErrMsg = _this4.errors.first('title');
+          }
         }
       });
-      this.categoryList = tempList;
-    },
-    editItem: function editItem(i) {
-      this.dialogItem = Object.assign({}, i);
-      this.defaultItem = Object.assign({}, i);
-      this.mainAction = 'update';
-      this.dialog = true;
-      this.formTitle = 'Edit ' + i.title;
+    } else if (this.mainAction == 'create') {
+      // Create
+      this.loading = true;
+      var title = this.dialogItem.title && this.dialogItem.title.trim();
+      console.log(title);
+      axios.post('/admin/post/category/store', {
+        slug: this.dialogItem.slug,
+        title: title,
+        parent: this.selected.id
+      }).then(function (response) {
+        _this4.getProductCategoriesTree();
 
-      if (this.listLoaded == false) {
-        this.selectLoading = true;
-        this.listLoaded = true;
-        this.getProductCategoriesList(i.parent);
-      } else {
-        this.getParetTitle(i.parent);
-      }
-    },
-    deleteItem: function deleteItem(i) {
-      this.mainAction = 'delete';
-      this.dialog = true;
-      this.formTitle = 'Delete ' + i.title;
-      this.deleteID = i.id;
-    },
-    successUI: function successUI(msg) {
-      var _this = this;
+        _this4.getProductCategoriesList(0);
 
-      // Dialog
-      this.dialog = false;
-      this.loading = false; // SnackBar
+        _this4.successUI(response.data.message);
 
-      setTimeout(function () {
-        _this.sbStatus = true;
-        _this.sbType = 'success';
-        _this.sbText = msg;
-      }, 100);
-    },
-    clearAlert: function clearAlert() {
-      this.sbStatus = false; // SnackBar
-
-      this.titleError = false;
-      this.titleErrMsg = '';
-      this.slugError = false;
-      this.slugErrMsg = '';
-      this.errors.clearAll();
-    },
-    createItem: function createItem() {
-      console.log(this.dialogItem);
-      this.mainAction = 'create';
-      this.dialog = true;
-      this.formTitle = 'Create new';
-      this.getProductCategoriesList(0);
-    },
-    // Get Product Categories Tree
-    getProductCategoriesTree: function getProductCategoriesTree() {
-      var _this2 = this;
-
-      axios.get('/api/category/tree').then(function (response) {
-        _this2.productCategories = response.data;
+        console.log(response.data);
       })["catch"](function (error) {
-        console.log(error.response);
-        console.log('error');
-      });
-    },
-    // Get Product Categories List
-    getProductCategoriesList: function getProductCategoriesList(pID) {
-      var _this3 = this;
+        _this4.loading = false; // if(error.response.status == 403){
 
-      axios.get('/api/category/list').then(function (response) {
-        _this3.allCategories = response.data;
-        _this3.categoryList = response.data;
-        _this3.selectLoading = false;
-
-        _this3.getParetTitle(pID);
-
-        _this3.selectDisabled = false;
-        _this3.allCategoriesLoded = true; // console.log('list has loaded');
-      })["catch"](function (error) {
-        console.log(error.response);
-        console.log('error');
-      });
-    },
-    save: function save() {
-      var _this4 = this;
-
-      this.valid = false;
-      this.loading = true; // Update
-
-      if (this.mainAction == 'update') {
-        var postData = [];
-        var p = this.selected.id ? this.selected.id : 0;
-
-        if (this.defaultItem.slug != this.dialogItem.slug) {
-          postData = {
-            id: this.dialogItem.id,
-            title: this.dialogItem.title,
-            slug: this.dialogItem.slug,
-            parent: p
-          };
-        } else {
-          postData = {
-            id: this.dialogItem.id,
-            title: this.dialogItem.title,
-            parent: p
-          };
+        if (error.response.status == 403) {
+          // SnackBar
+          _this4.sbStatus = true;
+          _this4.sbType = 'error';
+          _this4.sbText = error;
+          console.log(error);
         }
 
-        axios.post('/admin/post/category/update', postData).then(function (response) {
-          // Update Table
-          _this4.getProductCategoriesTree();
+        if (error.response && error.response.status == 422) {
+          _this4.errors.setErrors(error.response.data.errors); // SnackBar
 
-          _this4.getProductCategoriesList(0);
 
-          _this4.successUI(response.data.message);
-        })["catch"](function (error) {
-          _this4.loading = false;
+          _this4.sbStatus = true;
+          _this4.sbType = 'error';
+          _this4.sbText = 'Error adding product category'; // Input error messages
+
+          if (_this4.errors.hasError('slug')) {
+            _this4.slugError = true;
+            _this4.slugErrMsg = _this4.errors.first('slug');
+          }
+
+          if (_this4.errors.hasError('title')) {
+            _this4.titleError = true;
+            _this4.titleErrMsg = _this4.errors.first('title');
+          }
+        }
+      });
+    } else if (this.mainAction == 'delete') {
+      axios["delete"]('/admin/post/category/destroy/' + this.deleteID).then(function (response) {
+        _this4.successUI(response.data.message);
+
+        _this4.getProductCategoriesList(0);
+
+        _this4.getProductCategoriesTree();
+      })["catch"](function (error) {
+        _this4.loading = false;
+        _this4.dialog = false; // SnackBar
+
+        setTimeout(function () {
+          _this4.sbStatus = true;
+          _this4.sbType = 'error';
 
           if (error.response && error.response.status == 422) {
-            _this4.errors.setErrors(error.response.data.errors); // SnackBar
+            _this4.errors.setErrors(error.response.data.errors);
 
-
-            _this4.sbStatus = true;
-            _this4.sbType = 'error';
-            _this4.sbText = 'Error adding product category'; // Input error messages
-
-            if (_this4.errors.hasError('slug')) {
-              _this4.updateKeyError = true;
-              _this4.updateKeyErrMsg = _this4.errors.first('slug');
-            }
-
-            if (_this4.errors.hasError('title')) {
-              _this4.updateValueError = true;
-              _this4.updateValueErrMsg = _this4.errors.first('title');
-            }
+            _this4.sbText = error.response.data.message;
+          } else {
+            _this4.sbText = 'Error deleting product category';
           }
-        });
-      } else if (this.mainAction == 'create') {
-        // Create
-        this.loading = true;
-        var title = this.dialogItem.title && this.dialogItem.title.trim();
-        console.log(title);
-        axios.post('/admin/post/category/store', {
-          slug: this.dialogItem.slug,
-          title: title,
-          parent: this.selected.id
-        }).then(function (response) {
-          _this4.getProductCategoriesTree();
-
-          _this4.getProductCategoriesList(0);
-
-          _this4.successUI(response.data.message);
-
-          console.log(response.data);
-        })["catch"](function (error) {
-          _this4.loading = false; // if(error.response.status == 403){
-
-          if (error.response.status == 403) {
-            // SnackBar
-            _this4.sbStatus = true;
-            _this4.sbType = 'error';
-            _this4.sbText = error;
-            console.log(error);
-          }
-
-          if (error.response && error.response.status == 422) {
-            _this4.errors.setErrors(error.response.data.errors); // SnackBar
-
-
-            _this4.sbStatus = true;
-            _this4.sbType = 'error';
-            _this4.sbText = 'Error adding product category'; // Input error messages
-
-            if (_this4.errors.hasError('slug')) {
-              _this4.slugError = true;
-              _this4.slugErrMsg = _this4.errors.first('slug');
-            }
-
-            if (_this4.errors.hasError('title')) {
-              _this4.titleError = true;
-              _this4.titleErrMsg = _this4.errors.first('title');
-            }
-          }
-        });
-      } else if (this.mainAction == 'delete') {
-        axios["delete"]('/admin/post/category/destroy/' + this.deleteID).then(function (response) {
-          _this4.successUI(response.data.message);
-
-          _this4.getProductCategoriesList(0);
-
-          _this4.getProductCategoriesTree();
-        })["catch"](function (error) {
-          _this4.loading = false;
-          _this4.dialog = false; // SnackBar
-
-          setTimeout(function () {
-            _this4.sbStatus = true;
-            _this4.sbType = 'error';
-
-            if (error.response && error.response.status == 422) {
-              _this4.errors.setErrors(error.response.data.errors);
-
-              _this4.sbText = error.response.data.message;
-            } else {
-              _this4.sbText = 'Error deleting product category';
-            }
-          }, 100);
-        });
-      }
+        }, 100);
+      });
     }
-  }
+  }), _methods)
 });
 
 /***/ }),
@@ -95780,7 +95774,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_admin_posts_PostList__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/admin/posts/PostList */ "./resources/js/components/admin/posts/PostList.vue");
 /* harmony import */ var _components_admin_posts_CreatePost__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/admin/posts/CreatePost */ "./resources/js/components/admin/posts/CreatePost.vue");
 /* harmony import */ var _components_admin_posts_CategoryList__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/admin/posts/CategoryList */ "./resources/js/components/admin/posts/CategoryList.vue");
-/* harmony import */ var _components_admin_posts_CustomFields__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/admin/posts/CustomFields */ "./resources/js/components/admin/posts/CustomFields.vue");
+/* harmony import */ var _components_admin_posts_CustomFields__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/admin/posts/CustomFields */ "./resources/js/components/admin/posts/CustomFields.vue");
 
 
 
@@ -95800,7 +95794,7 @@ var routes = [{
   component: _components_admin_posts_CategoryList__WEBPACK_IMPORTED_MODULE_3__["default"]
 }, {
   path: '/admin/post/customfields',
-  component: _components_admin_posts_CustomFields__WEBPACK_IMPORTED_MODULE_5__["default"]
+  component: _components_admin_posts_CustomFields__WEBPACK_IMPORTED_MODULE_4__["default"]
 }];
 
 /***/ }),
@@ -95823,8 +95817,8 @@ var routes = [{
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! c:\xampp7.3.14\htdocs\jobs\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! c:\xampp7.3.14\htdocs\jobs\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! c:\xampp7.3.15\htdocs\jobs\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! c:\xampp7.3.15\htdocs\jobs\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

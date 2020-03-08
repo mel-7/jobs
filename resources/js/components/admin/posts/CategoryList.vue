@@ -237,6 +237,9 @@
       deleteID : 0,
     }),
     methods: {
+      generateSlug(){
+        this.dialogItem.slug = this.dialogItem.title && slugify(this.dialogItem.title);
+      },
       customFilter (item, queryText, itemText) {
         const textOne = item.title.toLowerCase()
         const textTwo = item.title.toLowerCase()
