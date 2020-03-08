@@ -13,7 +13,8 @@
                <v-toolbar flat color="transparent">
                   <v-toolbar-title>Job Posts</v-toolbar-title>
                   <v-spacer></v-spacer>
-                  <v-btn class="primary" v-bind:href="'/admin/post/create/'">new</v-btn>
+                   
+                  <v-btn class="primary" ><router-link to="/admin/post/create" class="white--text router">New</router-link></v-btn>
                </v-toolbar>
             </template>
             <template v-slot:item.title="{ item }">
@@ -43,6 +44,7 @@
 </style>
 <script>
 export default {
+   name: 'PostList',
    data() {
       return {
          // Base URL to be changed in vuex

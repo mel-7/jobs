@@ -45,30 +45,37 @@
             color="grey lighten-4"
         >
             <v-list>
-                <v-list-item :href="'/admin/'">
-                    <v-list-item-icon>
-                    <v-icon>mdi-view-dashboard-outline</v-icon>
-                    </v-list-item-icon>
-                    <v-list-item-title>Dashboard</v-list-item-title>
-                </v-list-item>
+                <router-link tabindex="0" to="/admin/dashboard" class="router px-0 v-list-item v-list-item--link theme--light">
+                    <v-list-item :ripple="{ center: true }">
+                        <v-list-item-icon>
+                            <v-icon>mdi-view-dashboard-outline</v-icon>
+                        </v-list-item-icon>
+                        <v-list-item-title>Dashboard</v-list-item-title>
+                    </v-list-item>
+                </router-link>
 
                 <v-list-group prepend-icon="mdi-format-list-text">  
                     <template v-slot:activator>
                         <v-list-item-title>Job Posts</v-list-item-title>
                     </template>
                     <v-list class="grey lighten-3">
-                        <v-list-item :href="'/admin/post/create/'">
-                            <v-list-item-icon class="pl-5">
-                                <v-icon small>mdi-file-document-box-plus-outline</v-icon>
-                            </v-list-item-icon>
-                            <v-list-item-title>Create Post</v-list-item-title>
-                        </v-list-item>
-                        <v-list-item :href="'/admin/posts/'">
-                            <v-list-item-icon class="pl-5">
-                                <v-icon small>mdi-format-list-bulleted</v-icon>
-                            </v-list-item-icon>
-                            <v-list-item-title>All Posts</v-list-item-title>
-                        </v-list-item>
+                        <!-- <v-list-item :href="'/admin/post/create/'"> -->
+                        <router-link tabindex="0" to="/admin/post/create" class="router px-0 v-list-item v-list-item--link theme--light">
+                            <v-list-item :ripple="{ center: true }">
+                                <v-list-item-icon class="pl-5">
+                                    <v-icon small>mdi-file-document-box-plus-outline</v-icon>
+                                </v-list-item-icon>
+                                <v-list-item-title>Create Post</v-list-item-title>
+                            </v-list-item>
+                        </router-link>
+                        <router-link to="/admin/posts" class="router px-0 v-list-item v-list-item--link theme--light">
+                            <v-list-item :ripple="{ center: true }">
+                                <v-list-item-icon class="pl-5">
+                                    <v-icon small>mdi-format-list-bulleted</v-icon>
+                                </v-list-item-icon>
+                                <v-list-item-title>All Posts</v-list-item-title>
+                            </v-list-item>
+                        </router-link>
                         <v-list-item @click="0">
                             <v-list-item-icon class="pl-5">
                                 <v-icon small>mdi-file-tree</v-icon>

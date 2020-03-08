@@ -21,6 +21,7 @@
 </head>
 <body>
     <div id="app">
+        {{-- <admin-app></admin-app> --}}
         <v-app>
             @auth
                 <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
@@ -28,7 +29,8 @@
                 </form>
                 <admin-header :auth-user="{{ Auth::user() }}"></admin-header>
                 <v-content style="height:100%" class="grey lighten-4">
-                    @yield('admin-content')
+                    {{-- @yield('admin-content') --}}
+                    <router-view></router-view>
                 </v-content>
             @endauth
         </v-app>

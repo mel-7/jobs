@@ -1,30 +1,33 @@
-/**
- * First we will load all of this project's JavaScript dependencies which
- * includes Vue and other libraries. It is a great starting point when
- * building robust, powerful web applications using Vue and Laravel.
- */
-
 require('./bootstrap');
 import 'babel-polyfill'
 
 // window.Vue = require('vue');
 import Vue from 'vue'
 import Vuetify from 'vuetify'
+import VueRouter from 'vue-router'
+import Vuex from 'vuex'
+// import AdminApp from './components/admin/AdminApp'
+// import Dashboard from './components/admin/Dashboard'
+import {routes} from './routes'
+
 Vue.use(Vuetify);
-/**
- * The following block of code may be used to automatically register your
- * Vue components. It will recursively scan this directory for the Vue
- * components and automatically register them with their "basename".
- *
- * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
- */
+Vue.use(VueRouter);
+Vue.use(Vuex);
+
+// Vue Router
+const router = new VueRouter({
+  routes,
+  mode: 'history',
+})
 
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 Vue.component('admin-header', require('./components/admin/AdminHeader.vue').default);
+// Vue.component('admin-app', require('./components/admin/AdminApp.vue').default);
+// Vue.component('admin-dashboard', require('./components/admin/Dashboard.vue').default);
 
-Vue.component('create-post', require('./components/admin/posts/CreatePost.vue').default);
-Vue.component('post-list', require('./components/admin/posts/PostList.vue').default);
+// Vue.component('create-post', require('./components/admin/posts/CreatePost.vue').default);
+// Vue.component('post-list', require('./components/admin/posts/PostList.vue').default);
 Vue.component('category-list', require('./components/admin/CategoryList.vue').default);
 
 Vue.component('snack-bar', require('./components/SnackBar.vue').default);
@@ -32,14 +35,12 @@ Vue.component('snack-bar', require('./components/SnackBar.vue').default);
 // Public
 // Vue.component('login-form', require('./components/LoginForm.vue').default);
 
-/**
- * Next, we will create a fresh Vue application instance and attach it to
- * the page. Then, you may begin adding components to this application
- * or customize the JavaScript scaffolding to fit your unique needs.
- */
-
 const app = new Vue({
     el: '#app',
+    router,
+    component: {
+      // Dashboard
+    },
     vuetify: new Vuetify({
       theme: {
         themes: {
