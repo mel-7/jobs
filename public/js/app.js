@@ -3485,7 +3485,7 @@ __webpack_require__.r(__webpack_exports__);
           };
         }
 
-        axios.post('/admin/product/category/update', postData).then(function (response) {
+        axios.post('/admin/post/category/update', postData).then(function (response) {
           // Update Table
           _this4.getProductCategoriesTree();
 
@@ -3562,7 +3562,7 @@ __webpack_require__.r(__webpack_exports__);
           }
         });
       } else if (this.mainAction == 'delete') {
-        axios["delete"]('/admin/product/category/destroy/' + this.deleteID).then(function (response) {
+        axios["delete"]('/admin/post/category/destroy/' + this.deleteID).then(function (response) {
           _this4.successUI(response.data.message);
 
           _this4.getProductCategoriesList(0);

@@ -389,7 +389,7 @@
               parent : p
             }
           }
-          axios.post('/admin/product/category/update', postData)
+          axios.post('/admin/post/category/update', postData)
           .then(response => {
             // Update Table
             this.getProductCategoriesTree();
@@ -459,7 +459,7 @@
             }
           });
         }else if(this.mainAction == 'delete'){
-          axios.delete('/admin/product/category/destroy/'+this.deleteID)
+          axios.delete('/admin/post/category/destroy/'+this.deleteID)
           .then(response => {
             this.successUI(response.data.message);
             this.getProductCategoriesList(0);

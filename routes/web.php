@@ -34,5 +34,7 @@ Route::group(['prefix'=>'admin','as'=>'admin.'], function(){
     // Category Routes
     Route::get('/post/categories', 'CategoryController@index')->name('categories');
     Route::post('/post/category/store', 'CategoryController@store')->name('addcategory');
+    Route::post('/post/category/update', 'CategoryController@update')->name('updatecategory');
+    Route::delete('/post/category/destroy/{id}', 'CategoryController@destroy')->name('destroycategory');
 
 });

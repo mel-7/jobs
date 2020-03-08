@@ -72,10 +72,8 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        $category = Category::create($this->validateRequest()); // Working
-        // return request
+        $category = Category::create($this->validateRequest());
         return response()->json([
-            'request' => $category,
             'message' => 'Product category has been added'
         ], 200);
     }
@@ -109,9 +107,13 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        $category = Category::where('id', '=', $request->id)->firstOrFail();   
+        $category->update($this->validateRequest());
+        return response()->json([
+            'message'   => 'Product Category has been updated',
+        ], 200);
     }
 
     /**
@@ -122,7 +124,20 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $parentCheck = Category::where('parent', '=', $id)->doesntExist();
+        $responseMsg = '';
+        $responseCode = 0;
+        if($parentCheck){
+            Category::where('id', '=', $id)->firstOrFail()->delete();
+            $responseMsg = 'Product category has been Deleted';
+            $responseCode = 200;
+        }else{
+            $responseMsg = 'Unable to delete category with children associated';
+            $responseCode = 422;
+        }
+        return response()->json([
+            'message' => $responseMsg
+        ], $responseCode);
     }
 
 
