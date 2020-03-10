@@ -3,7 +3,7 @@ import PostList from './components/admin/posts/PostList'
 import CreatePost from './components/admin/posts/CreatePost'
 import CategoryList from './components/admin/posts/CategoryList'
 import CustomFields from './components/admin/posts/CustomFields'
-// import EditPost from './components/admin/posts/EditPost'
+import EditPost from './components/admin/posts/EditPost'
 export const routes = [
     {
         path: '/admin/dashboard',
@@ -17,11 +17,11 @@ export const routes = [
         path: '/admin/post/create',
         component: CreatePost,
     },
-    // {
-    //     path: '/admin/post/edit/:id',
-    //     name: 'EditPost',
-    //     component: EditPost,
-    // },
+    {
+        path: '/admin/post/edit/:id',
+        name: 'EditPost',
+        component: EditPost,
+    },
     {
         path: '/admin/post/categories',
         component: CategoryList,

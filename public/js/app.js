@@ -3846,12 +3846,11 @@ __webpack_require__.r(__webpack_exports__);
   mounted: function mounted() {
     console.log(this.singlePost);
   },
-  created: function created() {
-    var _this = this;
-
-    axios.get('/admin/post/edit/' + this.$route.params.id).then(function (response) {
-      _this.post = response.data; // console.log(response.data);
-    });
+  created: function created() {// axios.get('/admin/post/edit/'+this.$route.params.id)
+    // .then((response) => {
+    //     this.post = response.data;
+    //     // console.log(response.data);
+    // });
   },
   methods: {}
 });
@@ -95923,11 +95922,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_admin_posts_CreatePost__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/admin/posts/CreatePost */ "./resources/js/components/admin/posts/CreatePost.vue");
 /* harmony import */ var _components_admin_posts_CategoryList__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/admin/posts/CategoryList */ "./resources/js/components/admin/posts/CategoryList.vue");
 /* harmony import */ var _components_admin_posts_CustomFields__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/admin/posts/CustomFields */ "./resources/js/components/admin/posts/CustomFields.vue");
+/* harmony import */ var _components_admin_posts_EditPost__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/admin/posts/EditPost */ "./resources/js/components/admin/posts/EditPost.vue");
 
 
 
 
- // import EditPost from './components/admin/posts/EditPost'
+
 
 var routes = [{
   path: '/admin/dashboard',
@@ -95938,12 +95938,11 @@ var routes = [{
 }, {
   path: '/admin/post/create',
   component: _components_admin_posts_CreatePost__WEBPACK_IMPORTED_MODULE_2__["default"]
-}, // {
-//     path: '/admin/post/edit/:id',
-//     name: 'EditPost',
-//     component: EditPost,
-// },
-{
+}, {
+  path: '/admin/post/edit/:id',
+  name: 'EditPost',
+  component: _components_admin_posts_EditPost__WEBPACK_IMPORTED_MODULE_5__["default"]
+}, {
   path: '/admin/post/categories',
   component: _components_admin_posts_CategoryList__WEBPACK_IMPORTED_MODULE_3__["default"]
 }, {
@@ -95971,8 +95970,8 @@ var routes = [{
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! c:\xampp7.3.15\htdocs\jobs\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! c:\xampp7.3.15\htdocs\jobs\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! c:\xampp7.3.14\htdocs\jobs\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! c:\xampp7.3.14\htdocs\jobs\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

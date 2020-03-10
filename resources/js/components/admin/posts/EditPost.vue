@@ -20,11 +20,11 @@ export default {
         console.log(this.singlePost);
     },
     created(){
-        axios.get('/admin/post/edit/'+this.$route.params.id)
-        .then((response) => {
-            this.post = response.data;
-            // console.log(response.data);
-        });
+        // axios.get('/admin/post/edit/'+this.$route.params.id)
+        // .then((response) => {
+        //     this.post = response.data;
+        //     // console.log(response.data);
+        // });
     },
     methods: {
 
