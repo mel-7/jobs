@@ -3643,7 +3643,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
@@ -3652,19 +3651,16 @@ __webpack_require__.r(__webpack_exports__);
   props: ['id'],
   data: function data() {
     return {
-      postID: this.id,
       post: []
     };
   },
   created: function created() {
     var _this = this;
 
-    axios.get('/api/admin/post/edit/' + this.postID).then(function (response) {
-      // this.post = response.data;
-      _this.post = JSON.stringify(response.data); // console.log(this.post);
+    axios.get('/api/admin/post/edit/' + this.id).then(function (response) {
+      _this.post = JSON.stringify(response.data);
     });
-  },
-  methods: {}
+  }
 });
 
 /***/ }),
@@ -3680,7 +3676,6 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _SnackBar_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../SnackBar.vue */ "./resources/js/components/SnackBar.vue");
 /* harmony import */ var _helpers_errorBag_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../helpers/errorBag.js */ "./resources/js/helpers/errorBag.js");
-//
 //
 //
 //
@@ -3776,6 +3771,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
+      pageAction: 'publish',
       pageTitle: 'Create Job a Post',
       baseURL: window.location.origin,
       p: [],
@@ -3818,14 +3814,13 @@ __webpack_require__.r(__webpack_exports__);
   mounted: function mounted() {
     var height = document.querySelector('header.v-app-bar').offsetHeight + document.querySelector('.secondary-header').offsetHeight;
     document.querySelector('.page-content').style.height = "calc(100vh - " + height + "px - 24px)";
-    this.pageLoaded();
+
+    if (this.postObject) {
+      this.loading = true;
+      this.pageAction = 'update';
+    }
   },
   methods: {
-    pageLoaded: function pageLoaded() {
-      if (this.postObject) {
-        this.loading = true;
-      }
-    },
     clearAlert: function clearAlert() {
       this.sbStatus = false; // SnackBar
 
@@ -3848,7 +3843,7 @@ __webpack_require__.r(__webpack_exports__);
     generateSlug: function generateSlug() {
       this.slug = this.position && slugify(this.position);
     },
-    publish: function publish() {
+    save: function save() {
       var _this2 = this;
 
       this.loading = true;
@@ -3946,16 +3941,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'PostList',
   data: function data() {
@@ -3999,7 +3984,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     getProducts: function getProducts(p) {
       var _this = this;
 
-      // Get the data
       axios.get("/api/posts/?page=" + p).then(function (response) {
         _this.posts = response.data.data;
         _this.page = response.data.current_page;
@@ -4008,9 +3992,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         console.log("Error: " + error);
       });
     },
-    newItem: function newItem() {},
     editItem: function editItem(i) {
-      console.log(i.id);
       this.$router.push({
         name: 'EditPost',
         params: {
@@ -15086,7 +15068,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../../node_modules/c
 
 
 // module
-exports.push([module.i, "\ntable td a[data-v-ada7aa76]:hover{\n   border-bottom: 1px dotted;\n   transition: .1s ease-out;\n}\n", ""]);
+exports.push([module.i, "\ntable td[data-v-ada7aa76]:hover{\n   border-bottom: 1px dotted;\n   transition: .1s ease-out;\n}\n", ""]);
 
 // exports
 
@@ -37422,6 +37404,21 @@ var render = function() {
                 [
                   _c("v-toolbar-title", [_vm._v(_vm._s(_vm.pageTitle))]),
                   _vm._v(" "),
+                  _vm.pageAction === "update"
+                    ? _c(
+                        "v-btn",
+                        {
+                          staticClass: "ml-2",
+                          attrs: {
+                            small: "",
+                            href: _vm.postURL,
+                            target: "_blank"
+                          }
+                        },
+                        [_vm._v("Preview")]
+                      )
+                    : _vm._e(),
+                  _vm._v(" "),
                   _c("v-spacer"),
                   _vm._v(" "),
                   _c(
@@ -37438,14 +37435,21 @@ var render = function() {
                     [_vm._v("Save as Draft")]
                   ),
                   _vm._v(" "),
-                  _c(
-                    "v-btn",
-                    {
-                      staticClass: "ml-2",
-                      attrs: { small: "", href: _vm.postURL, target: "_blank" }
-                    },
-                    [_vm._v("Preview")]
-                  ),
+                  _vm.pageAction === "update"
+                    ? _c(
+                        "v-btn",
+                        {
+                          staticClass: "ml-2",
+                          attrs: { small: "", color: "error" },
+                          on: {
+                            click: function($event) {
+                              return _vm.trash()
+                            }
+                          }
+                        },
+                        [_vm._v("Trash")]
+                      )
+                    : _vm._e(),
                   _vm._v(" "),
                   _c(
                     "v-btn",
@@ -37458,11 +37462,11 @@ var render = function() {
                       },
                       on: {
                         click: function($event) {
-                          return _vm.publish()
+                          return _vm.save(_vm.pageAction)
                         }
                       }
                     },
-                    [_vm._v("Publish")]
+                    [_vm._v(_vm._s(_vm.pageAction))]
                   )
                 ],
                 1
@@ -37671,13 +37675,21 @@ var render = function() {
               proxy: true
             },
             {
-              key: "item.title",
+              key: "item.position",
               fn: function(ref) {
                 var item = ref.item
                 return [
-                  _c("a", { attrs: { href: "/admin/post/" + item.id } }, [
-                    _vm._v(_vm._s(item.title))
-                  ])
+                  _c(
+                    "a",
+                    {
+                      on: {
+                        click: function($event) {
+                          return _vm.editItem(item)
+                        }
+                      }
+                    },
+                    [_vm._v(_vm._s(item.position))]
+                  )
                 ]
               }
             },

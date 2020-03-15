@@ -7,19 +7,16 @@
             :page.sync="page"
             :items-per-page="itemsPerPage"
             hide-default-footer
-            class="elevation-1"
-            >
+            class="elevation-1">
             <template v-slot:top>
                <v-toolbar flat color="transparent">
                   <v-toolbar-title>Job Posts</v-toolbar-title>
                   <v-spacer></v-spacer>
-                   
-                  <!-- <v-btn class="primary" ><router-link to="/admin/post/create" class="white--text router">New</router-link></v-btn> -->
                   <v-btn class="primary" to="/admin/post/create">New</v-btn>
                </v-toolbar>
             </template>
-            <template v-slot:item.title="{ item }">
-               <a v-bind:href="'/admin/post/'+item.id">{{ item.title }}</a>
+            <template v-slot:item.position="{ item }">
+               <a @click="editItem(item)">{{ item.position }}</a>
             </template>
             <template v-slot:item.action="{ item }">
                <v-icon small @click="editItem(item)">mdi-pencil</v-icon>
@@ -27,22 +24,15 @@
             </template>
          </v-data-table>
          <v-pagination
-               v-if="pageCount > 1"
-               class="mt-3"
-               v-model="page"
-               :length="pageCount"
-               @input="onPageChange"
+            v-if="pageCount > 1"
+            class="mt-3"
+            v-model="page"
+            :length="pageCount"
+            @input="onPageChange"
          ></v-pagination>
       </div>
    </div>
-   <!-- <snack-bar :snackbar-type="sbType" :snackbar-text="sbText" :snackbar-status="sbStatus"></snack-bar> -->
 </template>
-<style scoped>
-   table td a:hover{
-      border-bottom: 1px dotted;
-      transition: .1s ease-out;
-   }
-</style>
 <script>
 export default {
    name: 'PostList',
@@ -50,11 +40,9 @@ export default {
       return {
          // Base URL to be changed in vuex
          baseURL : window.location.origin,
-
          posts : [],
          page: 1,
          pageCount: 1,
-
          // Data Table
          itemsPerPage: 10,
          page: 1,
@@ -93,9 +81,7 @@ export default {
          this.getProducts(this.page);
       },
       getProducts(p) {
-         // Get the data
-        axios
-        .get("/api/posts/?page=" + p)
+        axios.get("/api/posts/?page=" + p)
         .then(response => {
             this.posts = response.data.data;
             this.page = response.data.current_page;
@@ -105,11 +91,7 @@ export default {
             console.log("Error: " + error);
         });
       },
-      newItem(){
-
-      },
       editItem(i) {
-         console.log(i.id);
          this.$router.push({name:'EditPost',params:{id:i.id}})
       }
    },
@@ -118,3 +100,9 @@ export default {
    }
 }
 </script>
+<style scoped>
+   table td:hover{
+      border-bottom: 1px dotted;
+      transition: .1s ease-out;
+   }
+</style>

@@ -7,10 +7,11 @@
             <div class="secondary-header" style="width:100%;border-bottom:1px solid #ddd;">
                 <v-toolbar dense flat class="grey lighten-4">
                     <v-toolbar-title>{{pageTitle}}</v-toolbar-title>
+                    <v-btn v-if="pageAction === 'update'" small class="ml-2" :href="postURL" target="_blank">Preview</v-btn>
                     <v-spacer></v-spacer>
                     <v-btn small text class="primary--text" @click="draft()">Save as Draft</v-btn>
-                    <v-btn small class="ml-2" :href="postURL" target="_blank">Preview</v-btn>
-                    <v-btn small color="primary" class="ml-2" :disabled="!valid" @click="publish()">Publish</v-btn>
+                    <v-btn v-if="pageAction === 'update'" small color="error" class="ml-2" @click="trash()">Trash</v-btn>
+                    <v-btn small color="primary" class="ml-2" :disabled="!valid" @click="save(pageAction)">{{pageAction}}</v-btn>
                 </v-toolbar>
             </div>     
             <div class="col page-content" style="width:100%;overflow-y:scroll;">
@@ -39,7 +40,6 @@
                                     required
                                     @mousedown="generateSlug"
                                     @focus="generateSlug"
-                                    
                                     :rules="slugRules"
                                     :error="slugError"
                                     :error-messages="slugErrMsg"
@@ -72,7 +72,6 @@
         <snack-bar :snackbar-type="sbType" :snackbar-text="sbText" :snackbar-status="sbStatus"></snack-bar>
     </div>
 </template>
-
 <script>
 import SnackBar from '../../SnackBar.vue';
 import ErrorBag from "../../../helpers/errorBag.js";
@@ -96,6 +95,7 @@ export default {
     },
     data() {
         return {
+            pageAction: 'publish',
             pageTitle: 'Create Job a Post',
 
             baseURL : window.location.origin,
@@ -140,14 +140,11 @@ export default {
     mounted(){
         const height = document.querySelector('header.v-app-bar').offsetHeight + document.querySelector('.secondary-header').offsetHeight;
         document.querySelector('.page-content').style.height = "calc(100vh - "+height+"px - 24px)";
-        this.pageLoaded();
+        if(this.postObject) {
+            this.loading = true; this.pageAction = 'update';
+        }
     },
     methods:{
-        pageLoaded(){
-            if(this.postObject){
-                this.loading = true;
-            }
-        },
         clearAlert(){
             this.sbStatus = false; // SnackBar
             this.positionError = false;
@@ -167,7 +164,7 @@ export default {
         generateSlug(){
             this.slug = this.position && slugify(this.position);
         },
-        publish(){
+        save(){
             this.loading = true;
             let position = this.position && this.position.trim();
             let postData = [];
@@ -212,6 +209,3 @@ export default {
     }
 };
 </script>
-
-<style>
-</style>
