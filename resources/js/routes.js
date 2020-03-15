@@ -21,6 +21,7 @@ export const routes = [
         path: '/admin/post/edit/:id',
         name: 'EditPost',
         component: EditPost,
+        props: true
     },
     {
         path: '/admin/post/categories',

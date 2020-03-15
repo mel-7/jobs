@@ -28,9 +28,10 @@ Vue.component('admin-header', require('./components/admin/AdminHeader.vue').defa
 
 // Vue.component('create-post', require('./components/admin/posts/CreatePost.vue').default);
 // Vue.component('post-list', require('./components/admin/posts/PostList.vue').default);
-Vue.component('edit-post', require('./components/admin/posts/EditPost.vue').default);
+// Vue.component('edit-post', require('./components/admin/posts/EditPost.vue').default);
 // Vue.component('category-list', require('./components/admin/CategoryList.vue').default);
 
+Vue.component('post-form', require('./components/admin/posts/PostForm.vue').default);
 Vue.component('snack-bar', require('./components/SnackBar.vue').default);
 
 // Public

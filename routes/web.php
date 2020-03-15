@@ -24,21 +24,21 @@ Route::get('/home', 'HomeController@index')->name('home');
  * Admin Routes
  * 
  */
-// Route::group(['prefix'=>'admin','as'=>'admin.'], function(){
-//     // ->middleware('can:accessAdminModel,user')
-//     Route::get('/dashboard', 'adminController@dashboard')->name('dashboard');
-//     Route::get('/posts', 'PostController@index')->name('posts');
-//     Route::get('/post/create', 'PostController@create')->name('create_post');
-//     Route::post('/post/store', 'PostController@store')->name('store_post');
-//     Route::get('/post/edit/{id}', 'PostController@edit')->name('edit_post');
+Route::group(['prefix'=>'admin','as'=>'admin.'], function(){
+    // ->middleware('can:accessAdminModel,user')
+    // Route::get('/dashboard', 'adminController@dashboard')->name('dashboard');
+    // Route::get('/posts', 'PostController@index')->name('posts');
+    Route::get('/post/create', 'PostController@create')->name('create_post');
+    Route::post('/post/store', 'PostController@store')->name('store_post');
+    // Route::get('/post/edit/{id}', 'PostController@edit')->name('edit_post');
     
-//     // Category Routes
-//     Route::get('/post/categories', 'CategoryController@index')->name('categories');
-//     Route::post('/post/category/store', 'CategoryController@store')->name('addcategory');
-//     Route::post('/post/category/update', 'CategoryController@update')->name('updatecategory');
-//     Route::delete('/post/category/destroy/{id}', 'CategoryController@destroy')->name('destroycategory');
+    // Category Routes
+    // Route::get('/post/categories', 'CategoryController@index')->name('categories');
+    Route::post('/post/category/store', 'CategoryController@store')->name('addcategory');
+    Route::post('/post/category/update', 'CategoryController@update')->name('updatecategory');
+    Route::delete('/post/category/destroy/{id}', 'CategoryController@destroy')->name('destroycategory');
 
-// });
+});
 
 
 /**

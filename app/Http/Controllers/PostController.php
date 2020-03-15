@@ -10,7 +10,7 @@ class PostController extends Controller
     public function __construct()
     {
         // $this->middleware('auth');
-        $this->middleware('auth')->except(['postAPI']);
+        $this->middleware('auth')->except(['postAPI', 'edit']);
         // $this->middleware('auth')->only(['index']);
     }
 
@@ -77,14 +77,15 @@ class PostController extends Controller
     public function edit($id)
     {
         // https://www.mynotepaper.com/laravel-vue-crud-single-page-application-tutorial
-        // $post = Post::find($id);
-        $post = Post::where('id', '=', $id)->firstOrFail();
+        $post = Post::find($id);
+        // $post = Post::where('id', '=', $id)->firstOrFail();
+        return $post;
         // return response()->json($post);
         // return response()->json([
         //     'post'  => $post,
         //     'message' => 'Job post has been created'
         // ], 200);
-        return view('admin.posts.edit', compact('post'));
+        // return view('admin.posts.edit', compact('post'));
     }
 
     /**

@@ -3595,6 +3595,89 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _CreatePost__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./CreatePost */ "./resources/js/components/admin/posts/CreatePost.vue");
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  components: {
+    createPost: _CreatePost__WEBPACK_IMPORTED_MODULE_0__["default"]
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/admin/posts/CustomFields.vue?vue&type=script&lang=js&":
+/*!***********************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/admin/posts/CustomFields.vue?vue&type=script&lang=js& ***!
+  \***********************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/admin/posts/EditPost.vue?vue&type=script&lang=js&":
+/*!*******************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/admin/posts/EditPost.vue?vue&type=script&lang=js& ***!
+  \*******************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _PostForm__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./PostForm */ "./resources/js/components/admin/posts/PostForm.vue");
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  components: {
+    postForm: _PostForm__WEBPACK_IMPORTED_MODULE_0__["default"]
+  },
+  props: ['id'],
+  data: function data() {
+    return {
+      postID: this.id,
+      post: []
+    };
+  },
+  created: function created() {
+    var _this = this;
+
+    axios.get('/api/admin/post/edit/' + this.postID).then(function (response) {
+      // this.post = response.data;
+      _this.post = JSON.stringify(response.data); // console.log(this.post);
+    });
+  },
+  methods: {}
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/admin/posts/PostForm.vue?vue&type=script&lang=js&":
+/*!*******************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/admin/posts/PostForm.vue?vue&type=script&lang=js& ***!
+  \*******************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _SnackBar_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../SnackBar.vue */ "./resources/js/components/SnackBar.vue");
 /* harmony import */ var _helpers_errorBag_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../helpers/errorBag.js */ "./resources/js/helpers/errorBag.js");
 //
@@ -3675,12 +3758,27 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
+  props: ['postObject'],
   components: {
     SnackBar: _SnackBar_vue__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
+  watch: {
+    'postObject': function postObject() {
+      this.p = JSON.parse(this.postObject);
+      this.pageTitle = 'Edit ' + this.p.position;
+      this.postURL = '';
+      this.id = this.p.id;
+      this.position = this.p.position;
+      this.slug = this.p.slug;
+      this.content = this.p.content;
+      this.loading = false;
+    }
+  },
   data: function data() {
     return {
+      pageTitle: 'Create Job a Post',
       baseURL: window.location.origin,
+      p: [],
       // v-models
       postURL: '',
       position: '',
@@ -3720,8 +3818,14 @@ __webpack_require__.r(__webpack_exports__);
   mounted: function mounted() {
     var height = document.querySelector('header.v-app-bar').offsetHeight + document.querySelector('.secondary-header').offsetHeight;
     document.querySelector('.page-content').style.height = "calc(100vh - " + height + "px - 24px)";
+    this.pageLoaded();
   },
   methods: {
+    pageLoaded: function pageLoaded() {
+      if (this.postObject) {
+        this.loading = true;
+      }
+    },
     clearAlert: function clearAlert() {
       this.sbStatus = false; // SnackBar
 
@@ -3792,67 +3896,6 @@ __webpack_require__.r(__webpack_exports__);
       });
     }
   }
-});
-
-/***/ }),
-
-/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/admin/posts/CustomFields.vue?vue&type=script&lang=js&":
-/*!***********************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/admin/posts/CustomFields.vue?vue&type=script&lang=js& ***!
-  \***********************************************************************************************************************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-//
-//
-//
-//
-//
-//
-//
-//
-/* harmony default export */ __webpack_exports__["default"] = ({});
-
-/***/ }),
-
-/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/admin/posts/EditPost.vue?vue&type=script&lang=js&":
-/*!*******************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/admin/posts/EditPost.vue?vue&type=script&lang=js& ***!
-  \*******************************************************************************************************************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-//
-//
-//
-//
-//
-//
-//
-//
-/* harmony default export */ __webpack_exports__["default"] = ({
-  name: 'EditPost',
-  props: ['post'],
-  data: function data() {
-    return {
-      postID: this.id,
-      singlePost: this.post
-    };
-  },
-  mounted: function mounted() {
-    console.log(this.singlePost);
-  },
-  created: function created() {// axios.get('/admin/post/edit/'+this.$route.params.id)
-    // .then((response) => {
-    //     this.post = response.data;
-    //     // console.log(response.data);
-    // });
-  },
-  methods: {}
 });
 
 /***/ }),
@@ -37248,6 +37291,89 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
+  return _c("post-form")
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/admin/posts/CustomFields.vue?vue&type=template&id=69da2571&":
+/*!***************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/admin/posts/CustomFields.vue?vue&type=template&id=69da2571& ***!
+  \***************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _vm._m(0)
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col" }, [
+      _c("div", { staticClass: "col-12" }, [
+        _vm._v("\n        This is Custom Fields\n    ")
+      ])
+    ])
+  }
+]
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/admin/posts/EditPost.vue?vue&type=template&id=40c20d31&":
+/*!***********************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/admin/posts/EditPost.vue?vue&type=template&id=40c20d31& ***!
+  \***********************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("post-form", { attrs: { "post-object": _vm.post } })
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/admin/posts/PostForm.vue?vue&type=template&id=753303eb&":
+/*!***********************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/admin/posts/PostForm.vue?vue&type=template&id=753303eb& ***!
+  \***********************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
   return _c(
     "div",
     { staticStyle: { width: "100%" } },
@@ -37294,7 +37420,7 @@ var render = function() {
                   attrs: { dense: "", flat: "" }
                 },
                 [
-                  _c("v-toolbar-title", [_vm._v("Create Job a Post")]),
+                  _c("v-toolbar-title", [_vm._v(_vm._s(_vm.pageTitle))]),
                   _vm._v(" "),
                   _c("v-spacer"),
                   _vm._v(" "),
@@ -37474,69 +37600,6 @@ var render = function() {
     ],
     1
   )
-}
-var staticRenderFns = []
-render._withStripped = true
-
-
-
-/***/ }),
-
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/admin/posts/CustomFields.vue?vue&type=template&id=69da2571&":
-/*!***************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/admin/posts/CustomFields.vue?vue&type=template&id=69da2571& ***!
-  \***************************************************************************************************************************************************************************************************************************/
-/*! exports provided: render, staticRenderFns */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _vm._m(0)
-}
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col" }, [
-      _c("div", { staticClass: "col-12" }, [
-        _vm._v("\n        This is Custom Fields\n    ")
-      ])
-    ])
-  }
-]
-render._withStripped = true
-
-
-
-/***/ }),
-
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/admin/posts/EditPost.vue?vue&type=template&id=40c20d31&":
-/*!***********************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/admin/posts/EditPost.vue?vue&type=template&id=40c20d31& ***!
-  \***********************************************************************************************************************************************************************************************************************/
-/*! exports provided: render, staticRenderFns */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "col" }, [
-    _c("div", { staticClass: "col-12" }, [
-      _vm._v("\n        edit post " + _vm._s(_vm.singlePost) + "\n    ")
-    ])
-  ])
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -95143,9 +95206,10 @@ vue__WEBPACK_IMPORTED_MODULE_1___default.a.component('admin-header', __webpack_r
 // Vue.component('admin-dashboard', require('./components/admin/Dashboard.vue').default);
 // Vue.component('create-post', require('./components/admin/posts/CreatePost.vue').default);
 // Vue.component('post-list', require('./components/admin/posts/PostList.vue').default);
+// Vue.component('edit-post', require('./components/admin/posts/EditPost.vue').default);
+// Vue.component('category-list', require('./components/admin/CategoryList.vue').default);
 
-vue__WEBPACK_IMPORTED_MODULE_1___default.a.component('edit-post', __webpack_require__(/*! ./components/admin/posts/EditPost.vue */ "./resources/js/components/admin/posts/EditPost.vue")["default"]); // Vue.component('category-list', require('./components/admin/CategoryList.vue').default);
-
+vue__WEBPACK_IMPORTED_MODULE_1___default.a.component('post-form', __webpack_require__(/*! ./components/admin/posts/PostForm.vue */ "./resources/js/components/admin/posts/PostForm.vue")["default"]);
 vue__WEBPACK_IMPORTED_MODULE_1___default.a.component('snack-bar', __webpack_require__(/*! ./components/SnackBar.vue */ "./resources/js/components/SnackBar.vue")["default"]); // Public
 // Vue.component('login-form', require('./components/LoginForm.vue').default);
 
@@ -95747,6 +95811,75 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/components/admin/posts/PostForm.vue":
+/*!**********************************************************!*\
+  !*** ./resources/js/components/admin/posts/PostForm.vue ***!
+  \**********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _PostForm_vue_vue_type_template_id_753303eb___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./PostForm.vue?vue&type=template&id=753303eb& */ "./resources/js/components/admin/posts/PostForm.vue?vue&type=template&id=753303eb&");
+/* harmony import */ var _PostForm_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./PostForm.vue?vue&type=script&lang=js& */ "./resources/js/components/admin/posts/PostForm.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _PostForm_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _PostForm_vue_vue_type_template_id_753303eb___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _PostForm_vue_vue_type_template_id_753303eb___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/admin/posts/PostForm.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/admin/posts/PostForm.vue?vue&type=script&lang=js&":
+/*!***********************************************************************************!*\
+  !*** ./resources/js/components/admin/posts/PostForm.vue?vue&type=script&lang=js& ***!
+  \***********************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_PostForm_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../node_modules/vue-loader/lib??vue-loader-options!./PostForm.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/admin/posts/PostForm.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_PostForm_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/admin/posts/PostForm.vue?vue&type=template&id=753303eb&":
+/*!*****************************************************************************************!*\
+  !*** ./resources/js/components/admin/posts/PostForm.vue?vue&type=template&id=753303eb& ***!
+  \*****************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_PostForm_vue_vue_type_template_id_753303eb___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../node_modules/vue-loader/lib??vue-loader-options!./PostForm.vue?vue&type=template&id=753303eb& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/admin/posts/PostForm.vue?vue&type=template&id=753303eb&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_PostForm_vue_vue_type_template_id_753303eb___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_PostForm_vue_vue_type_template_id_753303eb___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
 /***/ "./resources/js/components/admin/posts/PostList.vue":
 /*!**********************************************************!*\
   !*** ./resources/js/components/admin/posts/PostList.vue ***!
@@ -95941,7 +96074,8 @@ var routes = [{
 }, {
   path: '/admin/post/edit/:id',
   name: 'EditPost',
-  component: _components_admin_posts_EditPost__WEBPACK_IMPORTED_MODULE_5__["default"]
+  component: _components_admin_posts_EditPost__WEBPACK_IMPORTED_MODULE_5__["default"],
+  props: true
 }, {
   path: '/admin/post/categories',
   component: _components_admin_posts_CategoryList__WEBPACK_IMPORTED_MODULE_3__["default"]
@@ -95970,8 +96104,8 @@ var routes = [{
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! c:\xampp7.3.14\htdocs\jobs\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! c:\xampp7.3.14\htdocs\jobs\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\xampp7.3.14\htdocs\jobs\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\xampp7.3.14\htdocs\jobs\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

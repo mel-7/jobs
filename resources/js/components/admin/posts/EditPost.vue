@@ -1,37 +1,30 @@
 <template>
-  <div class="col">
-      <div class="col-12">
-          edit post {{singlePost}}
-      </div>
-  </div>
+    <post-form :post-object="post"></post-form>
 </template>
 
 <script>
+import postForm from './PostForm';
 export default {
-    name: 'EditPost',
-    props: ['post'],
-    data() {
-      return {
-          postID: this.id,
-          singlePost: this.post,
-      }
+    components:{
+        postForm
     },
-    mounted(){
-        console.log(this.singlePost);
+    props: ['id'],
+    data() {
+        return {
+            postID: this.id,
+            post: [],
+        }
     },
     created(){
-        // axios.get('/admin/post/edit/'+this.$route.params.id)
-        // .then((response) => {
-        //     this.post = response.data;
-        //     // console.log(response.data);
-        // });
+        axios.get('/api/admin/post/edit/'+this.postID)
+        .then((response) => {
+            // this.post = response.data;
+            this.post = JSON.stringify(response.data);
+            // console.log(this.post);
+        });
     },
     methods: {
 
     }
 }
 </script>
-
-<style>
-
-</style>
