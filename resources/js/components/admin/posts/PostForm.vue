@@ -45,14 +45,16 @@
                                     :error-messages="slugErrMsg"
                                     @change="clearAlert"
                                 ></v-text-field>
-                                <v-textarea
+                                <!-- <v-textarea
+                                    id=""
                                     v-model="content"
                                     single-line
                                     outlined
                                     dense
                                     name="input-7-4"
                                     label="content"
-                                ></v-textarea>
+                                ></v-textarea> -->
+                                <editor />
                             </v-card-text>
                         </v-card>
                     </div>
@@ -73,12 +75,13 @@
     </div>
 </template>
 <script>
+import Editor from '../../Editor';
 import SnackBar from '../../SnackBar.vue';
 import ErrorBag from "../../../helpers/errorBag.js";
-
 export default {
     props: ['postObject'],
     components: {
+      Editor,
       SnackBar
     },
     watch: {

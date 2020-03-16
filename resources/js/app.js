@@ -33,6 +33,7 @@ Vue.component('admin-header', require('./components/admin/AdminHeader.vue').defa
 
 Vue.component('post-form', require('./components/admin/posts/PostForm.vue').default);
 Vue.component('snack-bar', require('./components/SnackBar.vue').default);
+Vue.component('editor', require('./components/Editor.vue').default);
 
 // Public
 // Vue.component('login-form', require('./components/LoginForm.vue').default);
