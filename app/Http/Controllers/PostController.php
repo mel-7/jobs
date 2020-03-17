@@ -119,6 +119,7 @@ class PostController extends Controller
         return request()->validate([
             'position' => ['required', 'min:1', 'max:50', 'string'],
             'slug' => ['min:1', 'max:50', 'string', 'alpha_dash', 'unique:posts'],
+            'status' => [''],
             'content' => [''],
         ]);
 

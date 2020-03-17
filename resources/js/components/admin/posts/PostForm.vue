@@ -45,15 +45,6 @@
                                     :error-messages="slugErrMsg"
                                     @change="clearAlert"
                                 ></v-text-field>
-                                <!-- <v-textarea
-                                    id=""
-                                    v-model="content"
-                                    single-line
-                                    outlined
-                                    dense
-                                    name="input-7-4"
-                                    label="content"
-                                ></v-textarea> -->
                                 <div id="codex-editor"></div>
                             </v-card-text>
                         </v-card>
@@ -150,13 +141,12 @@ export default {
         const height = document.querySelector('header.v-app-bar').offsetHeight + document.querySelector('.secondary-header').offsetHeight;
         document.querySelector('.page-content').style.height = "calc(100vh - "+height+"px - 24px)";
         
-
+        // Check if has postObject
         if(this.postObject) {
             this.loading = true; this.pageAction = 'update';
         }else{
             this.setupEditorJs();
         }
-     
     },
     methods:{
         setupEditorJs(c){
@@ -211,6 +201,7 @@ export default {
             // Get the Editor Content first
             editor.save().then(savedData => {
                 postData = {
+                    status : 'publish',
                     slug : this.slug,
                     position : this.position && this.position.trim(),
                     content : this.content = JSON.stringify(savedData),

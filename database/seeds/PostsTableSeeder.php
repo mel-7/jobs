@@ -14,8 +14,8 @@ class PostsTableSeeder extends Seeder
         $post = new \App\Post([
             'position'  => 'Chef',
             'slug'      => 'chef',
-            'content'   => 'Short Descrption',
-            'status'    => 1,
+            'content'   => null,
+            'status'    => 'publish',
             'author'    => 1,
             'company'   => 1
         ]);
@@ -23,8 +23,8 @@ class PostsTableSeeder extends Seeder
         $post = new \App\Post([
             'position'  => 'CEO',
             'slug'      => 'ceo',
-            'content'   => 'Short Descrption',
-            'status'    => 1,
+            'content'   => null,
+            'status'    => 'publish',
             'author'    => 1,
             'company'   => 1
         ]);
@@ -32,8 +32,8 @@ class PostsTableSeeder extends Seeder
         $post = new \App\Post([
             'position'  => 'CFO',
             'slug'      => 'cfo',
-            'content'   => 'Short Descrption',
-            'status'    => 1,
+            'content'   => null,
+            'status'    => 'publish',
             'author'    => 1,
             'company'   => 1
         ]);
@@ -41,8 +41,8 @@ class PostsTableSeeder extends Seeder
         $post = new \App\Post([
             'position'  => 'Grandiose Staff',
             'slug'      => 'grandiose-staff',
-            'content'   => 'Short Descrption',
-            'status'    => 1,
+            'content'   => null,
+            'status'    => 'publish',
             'author'    => 1,
             'company'   => 3
         ]);
@@ -50,8 +50,8 @@ class PostsTableSeeder extends Seeder
         $post = new \App\Post([
             'position'  => 'Sales',
             'slug'      => 'sales',
-            'content'   => 'Short Descrption',
-            'status'    => 1,
+            'content'   => null,
+            'status'    => 'publish',
             'author'    => 1,
             'company'   => 4
         ]);

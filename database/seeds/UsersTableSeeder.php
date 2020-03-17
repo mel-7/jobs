@@ -13,7 +13,7 @@ class UsersTableSeeder extends Seeder
     {
         $user = new \App\User([
             'name'     => 'Romel Indemne',
-            'email'    => 'indemnedev@gmail.com',
+            'email'    => 'admin@admin.com',
             'password' => Hash::make('123456789'),
             'phone'    => '05012345678',
             'role'     => 1
@@ -21,7 +21,7 @@ class UsersTableSeeder extends Seeder
         $user->save();
         $user = new \App\User([
             'name'     => 'Test Account',
-            'email'    => 'indemnetest@gmail.com',
+            'email'    => 'test@test.com',
             'password' => Hash::make('123456789'),
             'phone'    => '05012345678',
             'role'     => 5
