@@ -924,6 +924,8 @@
 
 /*! ./zh-Hant */
 
+/*! For license information please see editor.js.LICENSE */
+
 /*! exports provided: Application */
 
 /*! exports provided: Application, Breakpoint, Goto, Icons, Lang, Presets, Theme */
@@ -2993,6 +2995,24 @@
  * Released under MIT license <https://lodash.com/license>
  * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
  * Copyright Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
+ */
+
+/**
+ * Base Paragraph Block for the Editor.js.
+ * Represents simple paragraph
+ *
+ * @author CodeX (team@codex.so)
+ * @copyright CodeX 2018
+ * @license The MIT License (MIT)
+ */
+
+/**
+ * Header block for the Editor.js.
+ *
+ * @author CodeX (team@ifmo.su)
+ * @copyright CodeX 2018
+ * @license The MIT License (MIT)
+ * @version 2.0.0
  */
 
 /**

@@ -1,13 +1,5 @@
 <template>
-  <div>
-    <div class="editor-wrapper">
-      <div class id="codex-editor"/>
-    </div>
-    <button style="margin-left: 30%;" type="button" name="button" @click="save()">save</button>
-    <div class="editor-wrapper">
-      <pre>{{value}}</pre>
-    </div>
-  </div>
+  <div id="codex-editor"></div>
 </template>
 
 <script>
@@ -18,14 +10,17 @@ import List from "@editorjs/list";
 export default {
   data() {
     return {
-      value: null
+      value: null,
     };
   },
+  created() {
+    this.$root.$refs.editor = this;
+  },
   methods: {
-    save: function() {
+    saveEditor: function() {
       editor.save().then(savedData => {
-        console.log(savedData);
-        this.value = savedData;
+        // console.log(savedData);
+        console.log(JSON.stringify(savedData));
       });
     },
     myEditor: function() {
@@ -47,7 +42,7 @@ export default {
           paragraph: {
             class: Paragraph,
             config: {
-              placeholder: "."
+              placeholder: "content"
             }
           }
         },
@@ -65,24 +60,3 @@ export default {
   }
 };
 </script>
-
-<style lang="css" scoped >
-.editor-wrapper {
-    padding: 30px 0;
-    width: 100%;
-    border: 1px solid #f5f5f5;
-    box-sizing: border-box;
-    border-radius: 4px;
-}
-.ce-block--focused {
-  background: linear-gradient(
-    90deg,
-    rgba(2, 0, 36, 1) 0%,
-    rgba(9, 9, 121, 0.5438550420168067) 35%,
-    rgba(0, 212, 255, 1) 100%
-  );
-}
-#codex-editor .ce-block__content{
-    max-width: calc(100% - 30px) !important;
-}
-</style>

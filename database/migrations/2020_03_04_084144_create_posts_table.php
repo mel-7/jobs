@@ -17,7 +17,7 @@ class CreatePostsTable extends Migration
             $table->bigIncrements('id');
             $table->string('position');
             $table->string('slug')->unique();
-            $table->string('content')->nullable();
+            $table->text('content')->nullable();
             $table->string('status')->nullable();
             $table->string('featured_image')->nullable();
             $table->unsignedInteger('author')->nullable();

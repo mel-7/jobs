@@ -54,13 +54,13 @@
                                     name="input-7-4"
                                     label="content"
                                 ></v-textarea> -->
-                                <editor />
+                                <div id="codex-editor"></div>
                             </v-card-text>
                         </v-card>
                     </div>
                     <div class="col-md-4 col-12">
                         <v-card>
-                            <v-card-text>
+                            <v-card-text>   
                                 <v-text-field
                                     label="First name"
                                     required
@@ -75,25 +75,31 @@
     </div>
 </template>
 <script>
-import Editor from '../../Editor';
+/* Editor JS */
+import EditorJS from "@editorjs/editorjs";
+import Header from "@editorjs/header";
+import Paragraph from "@editorjs/paragraph";
+import List from "@editorjs/list";
+
 import SnackBar from '../../SnackBar.vue';
 import ErrorBag from "../../../helpers/errorBag.js";
 export default {
     props: ['postObject'],
     components: {
-      Editor,
       SnackBar
     },
     watch: {
         'postObject'(){
             this.p = JSON.parse(this.postObject);
+            this.content = JSON.parse(this.p.content);
             this.pageTitle = 'Edit '+this.p.position;
             this.postURL = '';
             this.id = this.p.id;
             this.position = this.p.position;
             this.slug = this.p.slug;
-            this.content = this.p.content;
             this.loading = false;
+            // Initialize Editor JS
+            this.setupEditorJs(this.content);
         }
     },
     data() {
@@ -143,11 +149,43 @@ export default {
     mounted(){
         const height = document.querySelector('header.v-app-bar').offsetHeight + document.querySelector('.secondary-header').offsetHeight;
         document.querySelector('.page-content').style.height = "calc(100vh - "+height+"px - 24px)";
+        
+
         if(this.postObject) {
             this.loading = true; this.pageAction = 'update';
+        }else{
+            this.setupEditorJs();
         }
+     
     },
     methods:{
+        setupEditorJs(c){
+            if(!c) c = {};
+            window.editor = new EditorJS({
+                holder: "codex-editor",
+                autofocus: false,
+                initialBlock: "paragraph",
+                tools: {
+                    header: {
+                        class: Header,
+                        shortcut: "CMD+SHIFT+H"
+                    },
+                    list: {
+                        class: List
+                    },
+                    paragraph: {
+                        class: Paragraph,
+                        config: {
+                            placeholder: "content"
+                        }
+                    }
+                },
+                data: c
+            });
+        },
+        draft(){
+            console.log('draft');
+        },
         clearAlert(){
             this.sbStatus = false; // SnackBar
             this.positionError = false;
@@ -169,44 +207,46 @@ export default {
         },
         save(){
             this.loading = true;
-            let position = this.position && this.position.trim();
             let postData = [];
-            postData = {
-                slug : this.slug,
-                position : position,
-                content : this.content,
-            }
-            console.log(postData)
-            axios.post('/admin/post/store', postData)
-            .then(response => {
-                this.successUI(response.data.message);
-                console.log(response.data);
-            })
-            .catch(error => {
-                this.loading = false;
-                if(error.response.status == 403){
-                // SnackBar
-                this.sbStatus = true;
-                this.sbType = 'error';
-                this.sbText = error;
-                console.log(error);
+            // Get the Editor Content first
+            editor.save().then(savedData => {
+                postData = {
+                    slug : this.slug,
+                    position : this.position && this.position.trim(),
+                    content : this.content = JSON.stringify(savedData),
                 }
-                if (error.response && error.response.status == 422) {
-                    this.errors.setErrors( error.response.data.errors );
-                    // SnackBar
-                    this.sbStatus = true;
-                    this.sbType = 'error';
-                    this.sbText = 'Error adding product category';
-                    // Input error messages
-                    if(this.errors.hasError('slug') ){
-                        this.slugError = true;
-                        this.slugErrMsg = this.errors.first('slug');
+                console.log(postData)
+                axios.post('/admin/post/store', postData)
+                .then(response => {
+                    this.successUI(response.data.message);
+                    console.log(response.data);
+                })
+                .catch(error => {
+                    this.loading = false;
+                    console.log(error);
+                    if(error.response.status == 403){
+                        // SnackBar
+                        this.sbStatus = true;
+                        this.sbType = 'error';
+                        this.sbText = error;
                     }
-                    if(this.errors.hasError('position') ){
-                        this.positionError = true;
-                        this.positionErrMsg = this.errors.first('position');
+                    if (error.response && error.response.status == 422) {
+                        this.errors.setErrors( error.response.data.errors );
+                        // SnackBar
+                        this.sbStatus = true;
+                        this.sbType = 'error';
+                        this.sbText = 'Error adding product category';
+                        // Input error messages
+                        if(this.errors.hasError('slug') ){
+                            this.slugError = true;
+                            this.slugErrMsg = this.errors.first('slug');
+                        }
+                        if(this.errors.hasError('position') ){
+                            this.positionError = true;
+                            this.positionErrMsg = this.errors.first('position');
+                        }
                     }
-                }
+                });
             });
         },
     }
