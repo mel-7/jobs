@@ -9,7 +9,7 @@
                     <v-toolbar-title>{{pageTitle}}</v-toolbar-title>
                     <v-btn v-if="pageAction === 'update'" small class="ml-2" :href="postURL" target="_blank">Preview</v-btn>
                     <v-spacer></v-spacer>
-                    <v-btn small text class="primary--text" @click="draft()">Save as Draft</v-btn>
+                    <v-btn small text class="primary--text" :disabled="!valid" @click="save('draft')">Save as Draft</v-btn>
                     <v-btn v-if="pageAction === 'update'" small color="error" class="ml-2" @click="trash()">Trash</v-btn>
                     <v-btn small color="primary" class="ml-2" :disabled="!valid" @click="save(pageAction)">{{pageAction}}</v-btn>
                 </v-toolbar>
@@ -175,9 +175,6 @@ export default {
                 data: c
             });
         },
-        draft(){
-            console.log('draft');
-        },
         clearAlert(){
             this.sbStatus = false; // SnackBar
             this.positionError = false;
@@ -205,7 +202,41 @@ export default {
         generateSlug(){
             this.slug = this.position && slugify(this.position);
         },
+        postRequest(controller, data){        
+            if(controller === 'update'){
+                data['id'] = this.id;
+                if(this.originalSlug === this.slug){ // check the slug
+                    delete data['slug'];
+                }            
+            }
+            console.log(data);
+            axios.post('/admin/post/'+controller+'/', data)
+            .then(response => {
+                this.successUI(response.data.message);
+                this.originalSlug = this.slug;
+            })
+            .catch(error => {
+                console.log(error);
+                if(error.response.status == 403){
+                    this.errorUI(error);
+                }
+                if (error.response && error.response.status == 422) {
+                    this.errors.setErrors( error.response.data.errors );
+                    this.errorUI('Unprocessable Entity');
+                    // Input error messages
+                    if(this.errors.hasError('slug') ){
+                        this.slugError = true;
+                        this.slugErrMsg = this.errors.first('slug');
+                    }
+                    if(this.errors.hasError('position') ){
+                        this.positionError = true;
+                        this.positionErrMsg = this.errors.first('position');
+                    }
+                }
+            });
+        },
         save(action){
+            this.clearAlert();
             this.loading = true;
             editor.save().then(savedData => { // Render the content inside Editorjs first
                 let postData = [];
@@ -216,64 +247,15 @@ export default {
                     content : this.content = JSON.stringify(savedData),
                 }
                 if(action === 'publish'){ // Create
-                    console.log(postData)
-
-                    axios.post('/admin/post/store', postData)
-                    .then(response => {
-                        this.successUI(response.data.message);
-                        console.log(response.data);
-                    })
-                    .catch(error => {
-                        console.log(error);
-                        if(error.response.status == 403){
-                            this.errorUI(error);
-                        }
-                        if (error.response && error.response.status == 422) {
-                            this.errors.setErrors( error.response.data.errors );
-                            this.errorUI('Error adding product category');
-                            // Input error messages
-                            if(this.errors.hasError('slug') ){
-                                this.slugError = true;
-                                this.slugErrMsg = this.errors.first('slug');
-                            }
-                            if(this.errors.hasError('position') ){
-                                this.positionError = true;
-                                this.positionErrMsg = this.errors.first('position');
-                            }
-                        }
-                    });
+                    this.postRequest('store', postData);
                 }else if(action === 'update'){ // update
-                    postData['id'] = this.id;
-                    if(this.originalSlug === this.slug){ // check the slug
-                        delete postData['slug'];
-                    }
-                    axios.post('/admin/post/update', postData)
-                    .then(response => {
-                        this.successUI(response.data.message);
-                        console.log(response.data);
-                    })
-                    .catch(error => {
-                        console.log(error);
-                        if(error.response.status == 403){
-                            this.errorUI(error);
-                        }
-                        if (error.response && error.response.status == 422) {
-                            this.errors.setErrors( error.response.data.errors );
-                            this.errorUI('Error adding product category');
-                            // Input error messages
-                            if(this.errors.hasError('slug') ){
-                                this.slugError = true;
-                                this.slugErrMsg = this.errors.first('slug');
-                            }
-                            if(this.errors.hasError('position') ){
-                                this.positionError = true;
-                                this.positionErrMsg = this.errors.first('position');
-                            }
-                        }
-                    });
+                    this.postRequest('update', postData);
+                }else if(action === 'draft'){ // draft
+                    postData.status = 'draft';
+                    let routeController = (this.pageAction === 'publish') ? 'store' : 'update';  
+                    this.postRequest(routeController, postData);
                 }
             });
-     
         },
     }
 };

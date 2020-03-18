@@ -3922,9 +3922,6 @@ __webpack_require__.r(__webpack_exports__);
         data: c
       });
     },
-    draft: function draft() {
-      console.log('draft');
-    },
     clearAlert: function clearAlert() {
       this.sbStatus = false; // SnackBar
 
@@ -3957,88 +3954,75 @@ __webpack_require__.r(__webpack_exports__);
     generateSlug: function generateSlug() {
       this.slug = this.position && slugify(this.position);
     },
-    save: function save(action) {
+    postRequest: function postRequest(controller, data) {
       var _this3 = this;
 
+      if (controller === 'update') {
+        data['id'] = this.id;
+
+        if (this.originalSlug === this.slug) {
+          // check the slug
+          delete data['slug'];
+        }
+      }
+
+      console.log(data);
+      axios.post('/admin/post/' + controller + '/', data).then(function (response) {
+        _this3.successUI(response.data.message);
+
+        _this3.originalSlug = _this3.slug;
+      })["catch"](function (error) {
+        console.log(error);
+
+        if (error.response.status == 403) {
+          _this3.errorUI(error);
+        }
+
+        if (error.response && error.response.status == 422) {
+          _this3.errors.setErrors(error.response.data.errors);
+
+          _this3.errorUI('Unprocessable Entity'); // Input error messages
+
+
+          if (_this3.errors.hasError('slug')) {
+            _this3.slugError = true;
+            _this3.slugErrMsg = _this3.errors.first('slug');
+          }
+
+          if (_this3.errors.hasError('position')) {
+            _this3.positionError = true;
+            _this3.positionErrMsg = _this3.errors.first('position');
+          }
+        }
+      });
+    },
+    save: function save(action) {
+      var _this4 = this;
+
+      this.clearAlert();
       this.loading = true;
       editor.save().then(function (savedData) {
         // Render the content inside Editorjs first
         var postData = [];
         postData = {
           status: 'publish',
-          slug: _this3.slug,
-          position: _this3.position && _this3.position.trim(),
-          content: _this3.content = JSON.stringify(savedData)
+          slug: _this4.slug,
+          position: _this4.position && _this4.position.trim(),
+          content: _this4.content = JSON.stringify(savedData)
         };
 
         if (action === 'publish') {
           // Create
-          console.log(postData);
-          axios.post('/admin/post/store', postData).then(function (response) {
-            _this3.successUI(response.data.message);
-
-            console.log(response.data);
-          })["catch"](function (error) {
-            console.log(error);
-
-            if (error.response.status == 403) {
-              _this3.errorUI(error);
-            }
-
-            if (error.response && error.response.status == 422) {
-              _this3.errors.setErrors(error.response.data.errors);
-
-              _this3.errorUI('Error adding product category'); // Input error messages
-
-
-              if (_this3.errors.hasError('slug')) {
-                _this3.slugError = true;
-                _this3.slugErrMsg = _this3.errors.first('slug');
-              }
-
-              if (_this3.errors.hasError('position')) {
-                _this3.positionError = true;
-                _this3.positionErrMsg = _this3.errors.first('position');
-              }
-            }
-          });
+          _this4.postRequest('store', postData);
         } else if (action === 'update') {
           // update
-          postData['id'] = _this3.id;
+          _this4.postRequest('update', postData);
+        } else if (action === 'draft') {
+          // draft
+          postData.status = 'draft';
+          var routeController = _this4.pageAction === 'publish' ? 'store' : 'update';
 
-          if (_this3.originalSlug === _this3.slug) {
-            // check the slug
-            delete postData['slug'];
-          }
-
-          axios.post('/admin/post/update', postData).then(function (response) {
-            _this3.successUI(response.data.message);
-
-            console.log(response.data);
-          })["catch"](function (error) {
-            console.log(error);
-
-            if (error.response.status == 403) {
-              _this3.errorUI(error);
-            }
-
-            if (error.response && error.response.status == 422) {
-              _this3.errors.setErrors(error.response.data.errors);
-
-              _this3.errorUI('Error adding product category'); // Input error messages
-
-
-              if (_this3.errors.hasError('slug')) {
-                _this3.slugError = true;
-                _this3.slugErrMsg = _this3.errors.first('slug');
-              }
-
-              if (_this3.errors.hasError('position')) {
-                _this3.positionError = true;
-                _this3.positionErrMsg = _this3.errors.first('position');
-              }
-            }
-          });
+          _this4.postRequest(routeController, postData);
         }
       });
     }
@@ -34949,10 +34933,10 @@ var render = function() {
                     "v-btn",
                     {
                       staticClass: "primary--text",
-                      attrs: { small: "", text: "" },
+                      attrs: { small: "", text: "", disabled: !_vm.valid },
                       on: {
                         click: function($event) {
-                          return _vm.draft()
+                          return _vm.save("draft")
                         }
                       }
                     },
