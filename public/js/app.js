@@ -3837,6 +3837,7 @@ __webpack_require__.r(__webpack_exports__);
       this.id = this.p.id;
       this.position = this.p.position;
       this.slug = this.p.slug;
+      this.originalSlug = this.p.slug;
       this.loading = false; // Initialize Editor JS
 
       this.setupEditorJs(this.content);
@@ -3852,6 +3853,7 @@ __webpack_require__.r(__webpack_exports__);
       postURL: '',
       position: '',
       slug: '',
+      originalSlug: '',
       content: '',
       // Error Handling
       errors: new _helpers_errorBag_js__WEBPACK_IMPORTED_MODULE_5__["default"](),
@@ -3942,57 +3944,102 @@ __webpack_require__.r(__webpack_exports__);
         _this.sbText = msg;
       }, 100);
     },
+    errorUI: function errorUI(msg) {
+      var _this2 = this;
+
+      this.loading = false;
+      setTimeout(function () {
+        _this2.sbStatus = true;
+        _this2.sbType = 'error';
+        _this2.sbText = msg;
+      }, 100);
+    },
     generateSlug: function generateSlug() {
       this.slug = this.position && slugify(this.position);
     },
-    save: function save() {
-      var _this2 = this;
+    save: function save(action) {
+      var _this3 = this;
 
       this.loading = true;
-      var postData = []; // Get the Editor Content first
-
       editor.save().then(function (savedData) {
+        // Render the content inside Editorjs first
+        var postData = [];
         postData = {
           status: 'publish',
-          slug: _this2.slug,
-          position: _this2.position && _this2.position.trim(),
-          content: _this2.content = JSON.stringify(savedData)
+          slug: _this3.slug,
+          position: _this3.position && _this3.position.trim(),
+          content: _this3.content = JSON.stringify(savedData)
         };
-        console.log(postData);
-        axios.post('/admin/post/store', postData).then(function (response) {
-          _this2.successUI(response.data.message);
 
-          console.log(response.data);
-        })["catch"](function (error) {
-          _this2.loading = false;
-          console.log(error);
+        if (action === 'publish') {
+          // Create
+          console.log(postData);
+          axios.post('/admin/post/store', postData).then(function (response) {
+            _this3.successUI(response.data.message);
 
-          if (error.response.status == 403) {
-            // SnackBar
-            _this2.sbStatus = true;
-            _this2.sbType = 'error';
-            _this2.sbText = error;
-          }
+            console.log(response.data);
+          })["catch"](function (error) {
+            console.log(error);
 
-          if (error.response && error.response.status == 422) {
-            _this2.errors.setErrors(error.response.data.errors); // SnackBar
-
-
-            _this2.sbStatus = true;
-            _this2.sbType = 'error';
-            _this2.sbText = 'Error adding product category'; // Input error messages
-
-            if (_this2.errors.hasError('slug')) {
-              _this2.slugError = true;
-              _this2.slugErrMsg = _this2.errors.first('slug');
+            if (error.response.status == 403) {
+              _this3.errorUI(error);
             }
 
-            if (_this2.errors.hasError('position')) {
-              _this2.positionError = true;
-              _this2.positionErrMsg = _this2.errors.first('position');
+            if (error.response && error.response.status == 422) {
+              _this3.errors.setErrors(error.response.data.errors);
+
+              _this3.errorUI('Error adding product category'); // Input error messages
+
+
+              if (_this3.errors.hasError('slug')) {
+                _this3.slugError = true;
+                _this3.slugErrMsg = _this3.errors.first('slug');
+              }
+
+              if (_this3.errors.hasError('position')) {
+                _this3.positionError = true;
+                _this3.positionErrMsg = _this3.errors.first('position');
+              }
             }
+          });
+        } else if (action === 'update') {
+          // update
+          postData['id'] = _this3.id;
+
+          if (_this3.originalSlug === _this3.slug) {
+            // check the slug
+            delete postData['slug'];
           }
-        });
+
+          axios.post('/admin/post/update', postData).then(function (response) {
+            _this3.successUI(response.data.message);
+
+            console.log(response.data);
+          })["catch"](function (error) {
+            console.log(error);
+
+            if (error.response.status == 403) {
+              _this3.errorUI(error);
+            }
+
+            if (error.response && error.response.status == 422) {
+              _this3.errors.setErrors(error.response.data.errors);
+
+              _this3.errorUI('Error adding product category'); // Input error messages
+
+
+              if (_this3.errors.hasError('slug')) {
+                _this3.slugError = true;
+                _this3.slugErrMsg = _this3.errors.first('slug');
+              }
+
+              if (_this3.errors.hasError('position')) {
+                _this3.positionError = true;
+                _this3.positionErrMsg = _this3.errors.first('position');
+              }
+            }
+          });
+        }
       });
     }
   }

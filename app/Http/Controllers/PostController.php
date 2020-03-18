@@ -95,9 +95,14 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        $post = Post::where('id', '=', $request->id)->first();   
+        $post->update($this->validateRequest());
+        return response()->json([
+            'post' => $request,
+            'message'   => 'Post has been updated',
+        ], 200);
     }
 
     /**

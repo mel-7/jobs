@@ -30,6 +30,7 @@ Route::group(['prefix'=>'admin','as'=>'admin.'], function(){
     // Route::get('/posts', 'PostController@index')->name('posts');
     Route::get('/post/create', 'PostController@create')->name('create_post');
     Route::post('/post/store', 'PostController@store')->name('store_post');
+    Route::post('/post/update', 'PostController@update')->name('update_post');
     // Route::get('/post/edit/{id}', 'PostController@edit')->name('edit_post');
     
     // Category Routes

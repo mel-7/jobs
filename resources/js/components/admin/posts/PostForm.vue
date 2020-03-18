@@ -88,6 +88,7 @@ export default {
             this.id = this.p.id;
             this.position = this.p.position;
             this.slug = this.p.slug;
+            this.originalSlug = this.p.slug;
             this.loading = false;
             // Initialize Editor JS
             this.setupEditorJs(this.content);
@@ -104,6 +105,7 @@ export default {
             postURL: '',
             position: '',
             slug: '',
+            originalSlug: '',
             content: '',
 
             // Error Handling
@@ -192,53 +194,86 @@ export default {
                 this.sbText = msg;
             }, 100);
         },
+        errorUI(msg){
+            this.loading = false;
+            setTimeout(() => {
+                this.sbStatus = true;
+                this.sbType = 'error';
+                this.sbText = msg;
+            }, 100);
+        },
         generateSlug(){
             this.slug = this.position && slugify(this.position);
         },
-        save(){
+        save(action){
             this.loading = true;
-            let postData = [];
-            // Get the Editor Content first
-            editor.save().then(savedData => {
+            editor.save().then(savedData => { // Render the content inside Editorjs first
+                let postData = [];
                 postData = {
                     status : 'publish',
                     slug : this.slug,
                     position : this.position && this.position.trim(),
                     content : this.content = JSON.stringify(savedData),
                 }
-                console.log(postData)
-                axios.post('/admin/post/store', postData)
-                .then(response => {
-                    this.successUI(response.data.message);
-                    console.log(response.data);
-                })
-                .catch(error => {
-                    this.loading = false;
-                    console.log(error);
-                    if(error.response.status == 403){
-                        // SnackBar
-                        this.sbStatus = true;
-                        this.sbType = 'error';
-                        this.sbText = error;
-                    }
-                    if (error.response && error.response.status == 422) {
-                        this.errors.setErrors( error.response.data.errors );
-                        // SnackBar
-                        this.sbStatus = true;
-                        this.sbType = 'error';
-                        this.sbText = 'Error adding product category';
-                        // Input error messages
-                        if(this.errors.hasError('slug') ){
-                            this.slugError = true;
-                            this.slugErrMsg = this.errors.first('slug');
+                if(action === 'publish'){ // Create
+                    console.log(postData)
+
+                    axios.post('/admin/post/store', postData)
+                    .then(response => {
+                        this.successUI(response.data.message);
+                        console.log(response.data);
+                    })
+                    .catch(error => {
+                        console.log(error);
+                        if(error.response.status == 403){
+                            this.errorUI(error);
                         }
-                        if(this.errors.hasError('position') ){
-                            this.positionError = true;
-                            this.positionErrMsg = this.errors.first('position');
+                        if (error.response && error.response.status == 422) {
+                            this.errors.setErrors( error.response.data.errors );
+                            this.errorUI('Error adding product category');
+                            // Input error messages
+                            if(this.errors.hasError('slug') ){
+                                this.slugError = true;
+                                this.slugErrMsg = this.errors.first('slug');
+                            }
+                            if(this.errors.hasError('position') ){
+                                this.positionError = true;
+                                this.positionErrMsg = this.errors.first('position');
+                            }
                         }
+                    });
+                }else if(action === 'update'){ // update
+                    postData['id'] = this.id;
+                    if(this.originalSlug === this.slug){ // check the slug
+                        delete postData['slug'];
                     }
-                });
+                    axios.post('/admin/post/update', postData)
+                    .then(response => {
+                        this.successUI(response.data.message);
+                        console.log(response.data);
+                    })
+                    .catch(error => {
+                        console.log(error);
+                        if(error.response.status == 403){
+                            this.errorUI(error);
+                        }
+                        if (error.response && error.response.status == 422) {
+                            this.errors.setErrors( error.response.data.errors );
+                            this.errorUI('Error adding product category');
+                            // Input error messages
+                            if(this.errors.hasError('slug') ){
+                                this.slugError = true;
+                                this.slugErrMsg = this.errors.first('slug');
+                            }
+                            if(this.errors.hasError('position') ){
+                                this.positionError = true;
+                                this.positionErrMsg = this.errors.first('position');
+                            }
+                        }
+                    });
+                }
             });
+     
         },
     }
 };
