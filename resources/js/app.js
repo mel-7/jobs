@@ -38,6 +38,9 @@ Vue.component('snack-bar', require('./components/SnackBar.vue').default);
 
 // Public
 // Vue.component('login-form', require('./components/LoginForm.vue').default);
+Vue.component('search-job', require('./components//frontend/SearchJob.vue').default);
+Vue.component('job-list', require('./components//frontend/JobList.vue').default);
+Vue.component('side-bar', require('./components//frontend/SideBar.vue').default);
 
 const app = new Vue({
     el: '#app',

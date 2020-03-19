@@ -12,12 +12,15 @@
 */
 
 Route::get('/', function () {
-    return view('homepage');
+    return view('pages.home');
 });
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+/**
+ * Loggedin Users/Applicants
+ */
+Route::get('/u/dashboard', 'applicantsController@dashboard')->name('user_dashboard');
 
 /**
  * 
