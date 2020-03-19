@@ -44,4 +44,10 @@ if (token) {
 //     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
 //     encrypted: true
 // });
-document.addEventListener("DOMContentLoaded",function(){setTimeout(function(){document.getElementById("ldr").style.display="none"},300)});
+document.addEventListener("DOMContentLoaded",function(){
+    if(document.getElementById("ldr")){
+        setTimeout(function(){
+            document.getElementById("ldr").style.display="none"
+        },300);
+    }
+});

@@ -3,6 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
         <!-- Fonts -->
         <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -49,6 +50,11 @@
                     </div>
                 </v-content>
             </v-app>
+        </div>
+        <div id="ldr">
+            <div class="loader">
+                <img src="https://cdn.shortpixel.ai/spai/q_glossy+ret_img+to_webp/https://mel-7.com/wp-content/uploads/2019/03/romel-indemne.svg" alt="Romel Indemne">
+            </div>
         </div>
         <script src="{{ asset('js/app.js') }}" defer></script>
     </body>
