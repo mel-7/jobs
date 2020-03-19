@@ -113,9 +113,13 @@ class PostController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $post = Post::where('id', '=', $id)->firstOrFail();
+        $post->delete();
+        return response()->json([
+            'Post' => $post,
+            'message' => 'Post has been deleted'
+        ], 200);
     }
-
     /**
      * Form Validation
      */

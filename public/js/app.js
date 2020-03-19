@@ -3135,9 +3135,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  name: 'Dashboard'
+  name: "Dashboard"
 });
 
 /***/ }),
@@ -4040,6 +4039,8 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _SnackBar_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../SnackBar.vue */ "./resources/js/components/SnackBar.vue");
+/* harmony import */ var _helpers_errorBag_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../helpers/errorBag.js */ "./resources/js/helpers/errorBag.js");
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 //
@@ -4077,12 +4078,48 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'PostList',
   data: function data() {
     var _ref;
 
     return _ref = {
+      // Delete
+      dialogId: '',
+      deleteTitle: '',
+      dialog: false,
+      loading: false,
+      // SnackBar
+      sbType: '',
+      sbText: '',
+      sbStatus: false,
+      errors: new _helpers_errorBag_js__WEBPACK_IMPORTED_MODULE_1__["default"](),
       // Base URL to be changed in vuex
       baseURL: window.location.origin,
       posts: [],
@@ -4128,12 +4165,50 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         console.log("Error: " + error);
       });
     },
+    snackBarUI: function snackBarUI(status, type, msg) {
+      this.sbStatus = status;
+      this.sbType = type;
+      this.sbText = msg;
+    },
     editItem: function editItem(i) {
       this.$router.push({
         name: 'EditPost',
         params: {
           id: i.id
         }
+      });
+    },
+    deleteItem: function deleteItem(i) {
+      this.dialogId = i.id;
+      this.deleteTitle = i.position;
+      this.dialog = true;
+    },
+    confirmDelete: function confirmDelete() {
+      var _this2 = this;
+
+      this.loading = true;
+      axios["delete"]('/admin/post/destroy/' + this.dialogId).then(function (response) {
+        _this2.dialog = false;
+        _this2.loading = false;
+
+        _this2.snackBarUI(true, 'success', response.data.message);
+
+        _this2.getProducts(_this2.page);
+      })["catch"](function (error) {
+        if (error.response.status == 403) {
+          _this2.snackBarUI(true, 'error', error);
+        }
+
+        if (error.response && error.response.status == 422) {
+          _this2.errors.setErrors(error.response.data.errors);
+
+          _this2.snackBarUI(true, 'error', 'Unprocessable Entity');
+        }
+
+        _this2.snackBarUI(true, 'error', 'Error deleting product category');
+
+        _this2.loading = false;
+        _this2.dialog = false;
       });
     }
   },
@@ -34211,11 +34286,7 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "col" }, [
-      _c("div", { staticClass: "col-12" }, [
-        _c("h3", [_vm._v("Editor")]),
-        _vm._v(" "),
-        _c("div", { attrs: { border: "", id: "codex-editor" } })
-      ])
+      _c("div", { staticClass: "col-12" }, [_c("h3", [_vm._v("Dashboard")])])
     ])
   }
 ]
@@ -35120,126 +35191,218 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "col" }, [
-    _c(
-      "div",
-      { staticClass: "col-12" },
-      [
-        _c("v-data-table", {
-          staticClass: "elevation-1",
-          attrs: {
-            headers: _vm.headers,
-            items: _vm.posts,
-            page: _vm.page,
-            "items-per-page": _vm.itemsPerPage,
-            "hide-default-footer": ""
-          },
-          on: {
-            "update:page": function($event) {
-              _vm.page = $event
-            }
-          },
-          scopedSlots: _vm._u([
-            {
-              key: "top",
-              fn: function() {
-                return [
+  return _c(
+    "div",
+    { staticClass: "col" },
+    [
+      _c(
+        "div",
+        { staticClass: "col-12" },
+        [
+          _c("v-data-table", {
+            staticClass: "elevation-1",
+            attrs: {
+              headers: _vm.headers,
+              items: _vm.posts,
+              page: _vm.page,
+              "items-per-page": _vm.itemsPerPage,
+              "hide-default-footer": ""
+            },
+            on: {
+              "update:page": function($event) {
+                _vm.page = $event
+              }
+            },
+            scopedSlots: _vm._u([
+              {
+                key: "top",
+                fn: function() {
+                  return [
+                    _c(
+                      "v-toolbar",
+                      { attrs: { flat: "", color: "transparent" } },
+                      [
+                        _c("v-toolbar-title", [_vm._v("Job Posts")]),
+                        _vm._v(" "),
+                        _c("v-spacer"),
+                        _vm._v(" "),
+                        _c(
+                          "v-btn",
+                          {
+                            staticClass: "primary",
+                            attrs: { to: "/admin/post/create" }
+                          },
+                          [_vm._v("New")]
+                        )
+                      ],
+                      1
+                    )
+                  ]
+                },
+                proxy: true
+              },
+              {
+                key: "item.position",
+                fn: function(ref) {
+                  var item = ref.item
+                  return [
+                    _c(
+                      "a",
+                      {
+                        on: {
+                          click: function($event) {
+                            return _vm.editItem(item)
+                          }
+                        }
+                      },
+                      [_vm._v(_vm._s(item.position))]
+                    )
+                  ]
+                }
+              },
+              {
+                key: "item.action",
+                fn: function(ref) {
+                  var item = ref.item
+                  return [
+                    _c(
+                      "v-icon",
+                      {
+                        attrs: { small: "" },
+                        on: {
+                          click: function($event) {
+                            return _vm.editItem(item)
+                          }
+                        }
+                      },
+                      [_vm._v("mdi-pencil")]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "v-icon",
+                      {
+                        attrs: { small: "" },
+                        on: {
+                          click: function($event) {
+                            return _vm.deleteItem(item)
+                          }
+                        }
+                      },
+                      [_vm._v("mdi-trash-can")]
+                    )
+                  ]
+                }
+              }
+            ])
+          }),
+          _vm._v(" "),
+          _vm.pageCount > 1
+            ? _c("v-pagination", {
+                staticClass: "mt-3",
+                attrs: { length: _vm.pageCount },
+                on: { input: _vm.onPageChange },
+                model: {
+                  value: _vm.page,
+                  callback: function($$v) {
+                    _vm.page = $$v
+                  },
+                  expression: "page"
+                }
+              })
+            : _vm._e()
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "v-dialog",
+        {
+          attrs: { "max-width": "500px" },
+          model: {
+            value: _vm.dialog,
+            callback: function($$v) {
+              _vm.dialog = $$v
+            },
+            expression: "dialog"
+          }
+        },
+        [
+          _c(
+            "v-card",
+            { attrs: { loading: _vm.loading } },
+            [
+              _c(
+                "v-form",
+                {
+                  ref: "form",
+                  on: {
+                    submit: function($event) {
+                      $event.preventDefault()
+                      return _vm.confirmDelete(_vm.dialogId)
+                    }
+                  }
+                },
+                [
+                  _c("v-card-title", [
+                    _c("span", { staticClass: "headline" }, [
+                      _vm._v("Delete " + _vm._s(_vm.deleteTitle))
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("v-card-text", [
+                    _vm._v("\n               Are you sure you want to delete "),
+                    _c("strong", [_vm._v(_vm._s(_vm.deleteTitle))]),
+                    _vm._v("?\n            ")
+                  ]),
+                  _vm._v(" "),
                   _c(
-                    "v-toolbar",
-                    { attrs: { flat: "", color: "transparent" } },
+                    "v-card-actions",
                     [
-                      _c("v-toolbar-title", [_vm._v("Job Posts")]),
-                      _vm._v(" "),
                       _c("v-spacer"),
                       _vm._v(" "),
                       _c(
                         "v-btn",
                         {
-                          staticClass: "primary",
-                          attrs: { to: "/admin/post/create" }
+                          attrs: { color: "blue darken-1", text: "" },
+                          on: {
+                            click: function($event) {
+                              _vm.dialog = false
+                            }
+                          }
                         },
-                        [_vm._v("New")]
+                        [_vm._v("Cancel")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-btn",
+                        {
+                          attrs: { color: "primary", text: "", type: "submit" }
+                        },
+                        [_vm._v("Delete")]
                       )
                     ],
                     1
                   )
-                ]
-              },
-              proxy: true
-            },
-            {
-              key: "item.position",
-              fn: function(ref) {
-                var item = ref.item
-                return [
-                  _c(
-                    "a",
-                    {
-                      on: {
-                        click: function($event) {
-                          return _vm.editItem(item)
-                        }
-                      }
-                    },
-                    [_vm._v(_vm._s(item.position))]
-                  )
-                ]
-              }
-            },
-            {
-              key: "item.action",
-              fn: function(ref) {
-                var item = ref.item
-                return [
-                  _c(
-                    "v-icon",
-                    {
-                      attrs: { small: "" },
-                      on: {
-                        click: function($event) {
-                          return _vm.editItem(item)
-                        }
-                      }
-                    },
-                    [_vm._v("mdi-pencil")]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-icon",
-                    {
-                      attrs: { small: "" },
-                      on: {
-                        click: function($event) {
-                          return _vm.toDeleteItem(item)
-                        }
-                      }
-                    },
-                    [_vm._v("mdi-trash-can")]
-                  )
-                ]
-              }
-            }
-          ])
-        }),
-        _vm._v(" "),
-        _vm.pageCount > 1
-          ? _c("v-pagination", {
-              staticClass: "mt-3",
-              attrs: { length: _vm.pageCount },
-              on: { input: _vm.onPageChange },
-              model: {
-                value: _vm.page,
-                callback: function($$v) {
-                  _vm.page = $$v
-                },
-                expression: "page"
-              }
-            })
-          : _vm._e()
-      ],
-      1
-    )
-  ])
+                ],
+                1
+              )
+            ],
+            1
+          )
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c("snack-bar", {
+        attrs: {
+          "snackbar-type": _vm.sbType,
+          "snackbar-text": _vm.sbText,
+          "snackbar-status": _vm.sbStatus
+        }
+      })
+    ],
+    1
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
