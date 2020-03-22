@@ -15,20 +15,20 @@ mix.js('resources/js/app.js', 'public/js')
    .sass('resources/sass/app.scss', 'public/css');
 
    
-if (mix.inProduction()) {
+// if (mix.inProduction()) {
 
-   mix.version();
+//    mix.version();
 
-   mix.webpackConfig({
-       module: {
-           rules: [{
-               test: /\.js?$/,
-               exclude: /(bower_components)/,
-               use: [{
-                   loader: 'babel-loader',
-                   options: mix.config.babel()
-               }]
-           }]
-       }
-   });
-}
+//    mix.webpackConfig({
+//        module: {
+//            rules: [{
+//                test: /\.js?$/,
+//                exclude: /(bower_components)/,
+//                use: [{
+//                    loader: 'babel-loader',
+//                    options: mix.config.babel()
+//                }]
+//            }]
+//        }
+//    });
+// }
