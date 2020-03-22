@@ -1,6 +1,6 @@
 <template>
    <div class="col">
-      <div class="col-12">
+      <div class="col-12 col-md-8">
          <v-data-table
             :headers="headers"
             :items="users"
@@ -72,7 +72,8 @@ export default {
                     text: "ID",
                     value: "id",
                     width: "1%",
-                    align: "left"
+                    align: "left",
+                    sortable: false,
                 },
                 {
                     text: "Name",
@@ -83,12 +84,6 @@ export default {
                 {
                     text: "Email",
                     value: "email",
-                    width: "10%",
-                    align: "left"
-                },
-                {
-                    text: "Phone",
-                    value: "phone",
                     width: "10%",
                     align: "left"
                 },

@@ -4228,6 +4228,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _SnackBar_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../SnackBar.vue */ "./resources/js/components/SnackBar.vue");
+/* harmony import */ var _helpers_errorBag_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../helpers/errorBag.js */ "./resources/js/helpers/errorBag.js");
 //
 //
 //
@@ -4292,6 +4294,34 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -4299,59 +4329,115 @@ __webpack_require__.r(__webpack_exports__);
       valid: false,
       pageAction: 'publish',
       pageTitle: 'Create a User',
-      // errors : new ErrorBag,
+      errors: new _helpers_errorBag_js__WEBPACK_IMPORTED_MODULE_1__["default"](),
+      // SnackBar
+      sbType: '',
+      sbText: '',
+      sbStatus: false,
       emailError: false,
       emailErrMsg: '',
       nameError: false,
       nameErrMsg: '',
       passwordError: false,
       passwordErrMsg: '',
-      email: '',
-      name: '',
-      password: '',
-      // Rules
-      passwordRules: [function (value) {
-        return !!value || 'Required';
-      }, function (value) {
-        return value && value.length < 50 || 'Max 50 characters';
-      }, function (value) {
-        return value && value.length > 1 || 'Min 1 characters';
-      }],
-      emailRules: [function (value) {
-        return !!value || 'Required';
-      }, function (value) {
-        return value && value.length < 50 || 'Max 50 characters';
-      }, function (value) {
-        return value && value.length > 1 || 'Min 1 characters';
-      }],
-      nameRules: [function (value) {
-        return !!value || 'Required';
-      }, function (value) {
-        return value && value.length < 50 || 'Max 50 characters';
-      }, function (value) {
-        return value && value.length > 1 || 'Min 1 characters';
-      }],
+      errorMessages: '',
+      email: null,
+      name: null,
+      password: null,
+      phone: null,
+      showpass: false,
+      formHasErrors: false,
       csrf: document.querySelector('meta[name="csrf-token"]').getAttribute("content")
     };
   },
+  computed: {
+    form: function form() {
+      return {
+        name: this.name,
+        email: this.email,
+        password: this.password,
+        phone: this.phone // address_1: this.address_1,
+        // address_2: this.address_2,
+        // state: this.state,
+        // zip: this.zip,
+        // country: this.country,
+
+      };
+    }
+  },
   methods: {
-    clearAlert: function clearAlert() {},
-    save: function save(action) {
+    clearAlert: function clearAlert() {
+      this.sbStatus = false; // SnackBar
+
+      this.positionError = false;
+      this.positionErrMsg = '';
+      this.slugError = false;
+      this.slugErrMsg = '';
+      this.errors.clearAll();
+    },
+    successUI: function successUI(msg) {
+      var _this = this;
+
+      this.loading = false;
+      setTimeout(function () {
+        _this.sbStatus = true;
+        _this.sbType = 'success';
+        _this.sbText = msg;
+      }, 100);
+    },
+    errorUI: function errorUI(msg) {
+      var _this2 = this;
+
+      this.loading = false;
+      setTimeout(function () {
+        _this2.sbStatus = true;
+        _this2.sbType = 'error';
+        _this2.sbText = msg;
+      }, 100);
+    },
+    postRequest: function postRequest(controller, data) {
+      var _this3 = this;
+
+      if (controller === 'store') {
+        axios.post('/admin/user/' + controller, data).then(function (response) {
+          _this3.successUI(response.data.message);
+
+          console.log(response);
+        })["catch"](function (error) {
+          _this3.errors.setErrors(error.response.data.errors);
+
+          _this3.errorUI('Error on User creation');
+
+          var errorFields = Object.keys(_this3.errors.errors);
+          console.log(_this3.errors.firstKey()); // console.log(this.errors.errors.email[0]);
+
+          console.log(errorFields);
+          Object.keys(_this3.form).forEach(function (f) {
+            console.log(f);
+
+            if (errorFields.includes(f)) {
+              _this3.formHasErrors = true;
+            } // if (!this.form[f]) this.formHasErrors = true
+
+
+            _this3.$refs[f].validate(true);
+          }); // Object.keys(this.form).forEach(f => {
+          //     if (!this.form[f]) this.formHasErrors = true
+          //     this.$refs[f].validate(true)
+          // })
+        });
+      }
+    },
+    submit: function submit(action) {
       var postData = {
         email: this.email,
         name: this.name,
-        password: this.password
+        password: this.password,
+        phone: this.phone
       };
-      console.log('postData: ' + postData);
 
       if (action === 'publish') {
-        axios.post('/admin/user/store', postData).then(function (response) {
-          // this.successUI(response.data.message);
-          // this.originalSlug = this.slug;
-          console.log(response);
-        })["catch"](function (error) {
-          console.log(error);
-        });
+        this.postRequest('store', postData);
       }
     }
   },
@@ -4444,7 +4530,8 @@ __webpack_require__.r(__webpack_exports__);
         text: "ID",
         value: "id",
         width: "1%",
-        align: "left"
+        align: "left",
+        sortable: false
       }, {
         text: "Name",
         value: "name",
@@ -4453,11 +4540,6 @@ __webpack_require__.r(__webpack_exports__);
       }, {
         text: "Email",
         value: "email",
-        width: "10%",
-        align: "left"
-      }, {
-        text: "Phone",
-        value: "phone",
         width: "10%",
         align: "left"
       }, {
@@ -35999,7 +36081,7 @@ var render = function() {
                       },
                       on: {
                         click: function($event) {
-                          return _vm.save(_vm.pageAction)
+                          return _vm.submit(_vm.pageAction)
                         }
                       }
                     },
@@ -36032,34 +36114,30 @@ var render = function() {
                           "v-card-text",
                           [
                             _c("v-text-field", {
-                              attrs: {
-                                outlined: "",
-                                dense: "",
-                                label: "email",
-                                required: "",
-                                rules: _vm.emailRules,
-                                error: _vm.emailError,
-                                "error-messages": _vm.emailErrMsg
-                              },
-                              on: { change: _vm.clearAlert },
-                              model: {
-                                value: _vm.email,
-                                callback: function($$v) {
-                                  _vm.email = $$v
-                                },
-                                expression: "email"
-                              }
-                            }),
-                            _vm._v(" "),
-                            _c("v-text-field", {
+                              ref: "name",
                               attrs: {
                                 outlined: "",
                                 dense: "",
                                 label: "name",
                                 required: "",
-                                rules: _vm.nameRules,
-                                error: _vm.nameError,
-                                "error-messages": _vm.nameErrMsg
+                                rules: [
+                                  function(value) {
+                                    return !!value || "Required"
+                                  },
+                                  function(value) {
+                                    return (
+                                      (value && value.length < 50) ||
+                                      "Max 50 characters"
+                                    )
+                                  },
+                                  function(value) {
+                                    return (
+                                      (value && value.length > 1) ||
+                                      "Min 1 characters"
+                                    )
+                                  }
+                                ],
+                                "error-messages": _vm.errorMessages
                               },
                               on: { change: _vm.clearAlert },
                               model: {
@@ -36072,23 +36150,109 @@ var render = function() {
                             }),
                             _vm._v(" "),
                             _c("v-text-field", {
+                              ref: "email",
                               attrs: {
                                 outlined: "",
                                 dense: "",
-                                label: "name",
+                                label: "email",
                                 required: "",
-                                type: "password",
-                                rules: _vm.passwordRules,
-                                error: _vm.passwordError,
-                                "error-messages": _vm.passwordErrMsg
+                                rules: [
+                                  function(value) {
+                                    return !!value || "Required"
+                                  },
+                                  function(value) {
+                                    return (
+                                      /.+@.+\..+/.test(value) ||
+                                      "E-mail must be valid"
+                                    )
+                                  },
+                                  function(value) {
+                                    return (
+                                      (value && value.length < 50) ||
+                                      "Max 50 characters"
+                                    )
+                                  },
+                                  function(value) {
+                                    return (
+                                      (value && value.length > 1) ||
+                                      "Min 1 characters"
+                                    )
+                                  }
+                                ],
+                                "error-messages": _vm.errorMessages
                               },
                               on: { change: _vm.clearAlert },
+                              model: {
+                                value: _vm.email,
+                                callback: function($$v) {
+                                  _vm.email = $$v
+                                },
+                                expression: "email"
+                              }
+                            }),
+                            _vm._v(" "),
+                            _c("v-text-field", {
+                              ref: "password",
+                              attrs: {
+                                "append-icon": _vm.showpass
+                                  ? "mdi-eye"
+                                  : "mdi-eye-off",
+                                type: _vm.showpass ? "text" : "password",
+                                outlined: "",
+                                dense: "",
+                                label: "password",
+                                required: "",
+                                rules: [
+                                  function(value) {
+                                    return !!value || "Required"
+                                  },
+                                  function(value) {
+                                    return (
+                                      (value && value.length < 50) ||
+                                      "Max 50 characters"
+                                    )
+                                  },
+                                  function(value) {
+                                    return (
+                                      (value && value.length > 1) ||
+                                      "Min 1 characters"
+                                    )
+                                  }
+                                ],
+                                "error-messages": _vm.errorMessages
+                              },
+                              on: {
+                                change: _vm.clearAlert,
+                                "click:append": function($event) {
+                                  _vm.showpass = !_vm.showpass
+                                }
+                              },
                               model: {
                                 value: _vm.password,
                                 callback: function($$v) {
                                   _vm.password = $$v
                                 },
                                 expression: "password"
+                              }
+                            }),
+                            _vm._v(" "),
+                            _c("v-text-field", {
+                              ref: "phone",
+                              attrs: {
+                                type: "tel",
+                                outlined: "",
+                                dense: "",
+                                label: "phone",
+                                required: "",
+                                "error-messages": _vm.errorMessages
+                              },
+                              on: { change: _vm.clearAlert },
+                              model: {
+                                value: _vm.phone,
+                                callback: function($$v) {
+                                  _vm.phone = $$v
+                                },
+                                expression: "phone"
                               }
                             })
                           ],
@@ -36104,7 +36268,15 @@ var render = function() {
             ]
           )
         ]
-      )
+      ),
+      _vm._v(" "),
+      _c("snack-bar", {
+        attrs: {
+          "snackbar-type": _vm.sbType,
+          "snackbar-text": _vm.sbText,
+          "snackbar-status": _vm.sbStatus
+        }
+      })
     ],
     1
   )
@@ -36134,7 +36306,7 @@ var render = function() {
   return _c("div", { staticClass: "col" }, [
     _c(
       "div",
-      { staticClass: "col-12" },
+      { staticClass: "col-12 col-md-8" },
       [
         _c("v-data-table", {
           staticClass: "elevation-1",
