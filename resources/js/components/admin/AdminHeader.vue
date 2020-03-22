@@ -91,7 +91,7 @@
                         <v-list-item-title>Users</v-list-item-title>
                     </template>
                     <v-list class="grey lighten-3">
-                        <v-list-item @click="0">
+                        <v-list-item  to="/admin/users">
                             <v-list-item-icon class="pl-5">
                                 <v-icon small>mdi-account</v-icon>
                             </v-list-item-icon>

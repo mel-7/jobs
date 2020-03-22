@@ -24,4 +24,5 @@ Route::get('/category/tree', 'CategoryController@categoryTreeAPI')->name('catego
 
 Route::group(['prefix'=>'admin','as'=>'admin.'], function(){
     Route::get('/post/edit/{id}', 'PostController@edit')->name('edit_post');
+    Route::get('/users', 'UserController@usersAPI')->name('users');
 });

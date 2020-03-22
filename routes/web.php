@@ -29,15 +29,19 @@ Route::get('/u/dashboard', 'applicantsController@dashboard')->name('user_dashboa
  */
 Route::group(['prefix'=>'admin','as'=>'admin.'], function(){
     // ->middleware('can:accessAdminModel,user')
-    // Route::get('/dashboard', 'adminController@dashboard')->name('dashboard');
-    // Route::get('/posts', 'PostController@index')->name('posts');
+
+    // Users
+    Route::post('/user/store', 'UserController@store')->name('store_user');
+
+
+    // Post
     Route::get('/post/create', 'PostController@create')->name('create_post');
     Route::post('/post/store', 'PostController@store')->name('store_post');
     Route::post('/post/update', 'PostController@update')->name('update_post');
     Route::delete('/post/destroy/{id}', 'PostController@destroy')->name('delete_post');
     // Route::get('/post/edit/{id}', 'PostController@edit')->name('edit_post');
     
-    // Category Routes
+    // Category
     // Route::get('/post/categories', 'CategoryController@index')->name('categories');
     Route::post('/post/category/store', 'CategoryController@store')->name('addcategory');
     Route::post('/post/category/update', 'CategoryController@update')->name('updatecategory');

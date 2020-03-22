@@ -1,9 +1,11 @@
-import Dashboard from './components/admin/Dashboard'
-import PostList from './components/admin/posts/PostList'
-import CreatePost from './components/admin/posts/CreatePost'
-import CategoryList from './components/admin/posts/CategoryList'
-import CustomFields from './components/admin/posts/CustomFields'
-import EditPost from './components/admin/posts/EditPost'
+import Dashboard from './components/admin/Dashboard';
+import PostList from './components/admin/posts/PostList';
+import CreatePost from './components/admin/posts/CreatePost';
+import CategoryList from './components/admin/posts/CategoryList';
+import CustomFields from './components/admin/posts/CustomFields';
+import EditPost from './components/admin/posts/EditPost';
+import UserList from './components/admin/users/UserList';
+import UserForm from './components/admin/users/UserForm';
 export const routes = [
     {
         path: '/admin/dashboard',
@@ -30,5 +32,13 @@ export const routes = [
     {
         path: '/admin/post/customfields',
         component: CustomFields,
+    },
+    {
+        path: '/admin/users',
+        component: UserList,
+    },
+    {
+        path: '/admin/user/create',
+        component: UserForm,
     }
 ]
