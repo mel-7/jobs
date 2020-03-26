@@ -30,7 +30,6 @@
                         :rules="emailrules"
                         autofocus
                         @error('email')
-                        {{-- placeholder="{{ old('email')}}" {{ $message }} --}}
                             value="{{ old('email') }}"
                             autofocus
                             error
