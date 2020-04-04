@@ -5,32 +5,7 @@
                 <h2 class="text--primary mb-3">{{ item.position }}</h2>
                 <p><span>IT</span></p>
                 <div class="text--primary" v-if="item.content != null">
-                    <!-- {{ JSON.parse(item.content).blocks }} -->
-                    <div v-for="block in JSON.parse(item.content).blocks" :key="block.id">
-                        <template v-if="block.type == 'header'">
-                            <template v-if="block.data.level == 1">
-                                <h1>{{ block.data.text }}</h1>
-                            </template>
-                            <template v-else-if="block.data.level == 2">
-                                <h2>{{ block.data.text }}</h2>
-                            </template>
-                        </template>
-                        <template v-else-if="block.type == 'paragraph'">
-                            <p v-html="block.data.text"></p>
-                        </template>
-                        <template v-else-if="block.type == 'list'">
-                            <template v-if="block.data.style == 'ordered'">
-                                <ol>
-                                    <li v-for="list in block.data.items" :key="list.id" v-html="list"></li>
-                                </ol>
-                            </template>
-                            <template v-if="block.data.style == 'unordered'">
-                                <ul>
-                                    <li v-for="list in block.data.items" :key="list.id"  v-html="list"></li>
-                                </ul>
-                            </template>
-                        </template>
-                    </div>
+                    {{item.content}}
                 </div>
                 <div v-else>no content</div>
             </v-card-text>

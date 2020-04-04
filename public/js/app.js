@@ -4609,31 +4609,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -36624,67 +36599,13 @@ var render = function() {
             _c("p", [_c("span", [_vm._v("IT")])]),
             _vm._v(" "),
             item.content != null
-              ? _c(
-                  "div",
-                  { staticClass: "text--primary" },
-                  _vm._l(JSON.parse(item.content).blocks, function(block) {
-                    return _c(
-                      "div",
-                      { key: block.id },
-                      [
-                        block.type == "header"
-                          ? [
-                              block.data.level == 1
-                                ? [_c("h1", [_vm._v(_vm._s(block.data.text))])]
-                                : block.data.level == 2
-                                ? [_c("h2", [_vm._v(_vm._s(block.data.text))])]
-                                : _vm._e()
-                            ]
-                          : block.type == "paragraph"
-                          ? [
-                              _c("p", {
-                                domProps: { innerHTML: _vm._s(block.data.text) }
-                              })
-                            ]
-                          : block.type == "list"
-                          ? [
-                              block.data.style == "ordered"
-                                ? [
-                                    _c(
-                                      "ol",
-                                      _vm._l(block.data.items, function(list) {
-                                        return _c("li", {
-                                          key: list.id,
-                                          domProps: { innerHTML: _vm._s(list) }
-                                        })
-                                      }),
-                                      0
-                                    )
-                                  ]
-                                : _vm._e(),
-                              _vm._v(" "),
-                              block.data.style == "unordered"
-                                ? [
-                                    _c(
-                                      "ul",
-                                      _vm._l(block.data.items, function(list) {
-                                        return _c("li", {
-                                          key: list.id,
-                                          domProps: { innerHTML: _vm._s(list) }
-                                        })
-                                      }),
-                                      0
-                                    )
-                                  ]
-                                : _vm._e()
-                            ]
-                          : _vm._e()
-                      ],
-                      2
-                    )
-                  }),
-                  0
-                )
+              ? _c("div", { staticClass: "text--primary" }, [
+                  _vm._v(
+                    "\n                " +
+                      _vm._s(item.content) +
+                      "\n            "
+                  )
+                ])
               : _c("div", [_vm._v("no content")])
           ]),
           _vm._v(" "),
