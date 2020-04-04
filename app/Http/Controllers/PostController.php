@@ -52,7 +52,8 @@ class PostController extends Controller
 
         // return request
         return response()->json([
-            'post'  => $request,
+            'request' => $request,
+            'post'  => $post,
             'message' => 'Job post has been created'
         ], 200);
     }
@@ -100,7 +101,8 @@ class PostController extends Controller
         $post = Post::where('id', '=', $request->id)->first();
         $post->update($this->validateRequest());
         return response()->json([
-            'post' => $request,
+            'post' => $post,
+            'request' => $request,
             'message'   => 'Post has been updated',
         ], 200);
     }
