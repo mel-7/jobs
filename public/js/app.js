@@ -3906,12 +3906,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   mounted: function mounted() {
     var height = document.querySelector('header.v-app-bar').offsetHeight + document.querySelector('.secondary-header').offsetHeight;
-    document.querySelector('.page-content').style.height = "calc(100vh - " + height + "px - 24px)"; // Check if has postObject
-    // if(this.getEditData) {
-    //     this.loading = true;
-    //     this.pageAction = 'update';
-    // }
-    // console.log(this.$route.params.id);
+    document.querySelector('.page-content').style.height = "calc(100vh - " + height + "px - 24px)";
   },
   methods: {
     getPostToEdit: function getPostToEdit() {
@@ -3928,8 +3923,7 @@ __webpack_require__.r(__webpack_exports__);
         _this.originalSlug = _this.p.slug;
         _this.content = _this.p.content;
         _this.postURL = '';
-        _this.loading = false;
-        console.log(_this.p);
+        _this.loading = false; // console.log(this.p);
       });
     },
     clearAlert: function clearAlert() {
@@ -3967,14 +3961,10 @@ __webpack_require__.r(__webpack_exports__);
     postRequest: function postRequest(controller, data) {
       var _this4 = this;
 
-      console.log(controller);
-      console.log(data);
       axios.post('/admin/post/' + controller, data).then(function (response) {
         _this4.successUI(response.data.message);
 
         _this4.originalSlug = _this4.slug;
-        console.log(response);
-        console.log(response.data.message);
       })["catch"](function (error) {
         console.log(error);
 
@@ -4009,12 +3999,7 @@ __webpack_require__.r(__webpack_exports__);
         slug: this.slug,
         position: this.position && this.position.trim(),
         content: this.content
-      }; // if(controller === 'update'){
-      //     data['id'] = this.id;
-      //     if(this.originalSlug === this.slug){ // check the slug
-      //         delete data['slug'];
-      //     }
-      // }
+      };
 
       if (action === 'publish') {
         // Create
@@ -4028,7 +4013,6 @@ __webpack_require__.r(__webpack_exports__);
           delete postData.slug;
         }
 
-        console.log(postData);
         this.postRequest('update', postData);
       } else if (action === 'draft') {
         // draft

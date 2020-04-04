@@ -135,14 +135,6 @@ export default {
     mounted(){
         const height = document.querySelector('header.v-app-bar').offsetHeight + document.querySelector('.secondary-header').offsetHeight;
         document.querySelector('.page-content').style.height = "calc(100vh - "+height+"px - 24px)";
-
-        // Check if has postObject
-        // if(this.getEditData) {
-        //     this.loading = true;
-        //     this.pageAction = 'update';
-        // }
-        // console.log(this.$route.params.id);
-
     },
     methods:{
         getPostToEdit() {
@@ -158,7 +150,7 @@ export default {
                 this.content = this.p.content;
                 this.postURL = '';
                 this.loading = false;
-                console.log(this.p);
+                // console.log(this.p);
             });
         },
         clearAlert(){
@@ -189,14 +181,10 @@ export default {
             this.slug = this.position && slugify(this.position);
         },
         postRequest(controller, data){
-            console.log(controller);
-            console.log(data);
             axios.post('/admin/post/'+controller, data)
             .then(response => {
                 this.successUI(response.data.message);
                 this.originalSlug = this.slug;
-                console.log(response);
-                console.log(response.data.message);
             })
             .catch(error => {
                 console.log(error);
@@ -228,12 +216,6 @@ export default {
                 position : this.position && this.position.trim(),
                 content : this.content
             }
-            // if(controller === 'update'){
-            //     data['id'] = this.id;
-            //     if(this.originalSlug === this.slug){ // check the slug
-            //         delete data['slug'];
-            //     }
-            // }
             if(action === 'publish'){ // Create
                 this.postRequest('store', postData);
             }else if(action === 'update'){ // update
@@ -241,7 +223,6 @@ export default {
                 if(this.originalSlug === this.slug){ // check the slug
                     delete postData.slug;
                 }
-                console.log(postData)
                 this.postRequest('update', postData);
             }else if(action === 'draft'){ // draft
                 postData.status = 'draft';
