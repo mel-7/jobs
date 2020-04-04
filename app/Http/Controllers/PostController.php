@@ -48,12 +48,12 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        $post = Post::create($this->validateRequest());
+        // $post = Post::create($this->validateRequest());
 
         // return request
         return response()->json([
             'request' => $request,
-            'post'  => $post,
+            // 'post'  => $post,
             'message' => 'Job post has been created'
         ], 200);
     }

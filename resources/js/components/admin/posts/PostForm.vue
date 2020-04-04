@@ -196,7 +196,7 @@ export default {
                 this.successUI(response.data.message);
                 this.originalSlug = this.slug;
                 console.log(response);
-                console.log(response.data.message);
+                // console.log(response.data.message);
             })
             .catch(error => {
                 console.log(error);
