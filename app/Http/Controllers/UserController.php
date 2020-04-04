@@ -15,6 +15,12 @@ class UserController extends Controller
         // $this->middleware('auth')->only(['index']);
     }
 
+    public function userToken()
+    {
+        $token = $user->createToken('token-name');
+        return $token->plainTextToken;
+    }
+
     public function usersAPI()
     {
         $users = User::paginate(10);
@@ -28,7 +34,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        
+
     }
 
     /**
