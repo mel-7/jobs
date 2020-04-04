@@ -3757,19 +3757,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
     postForm: _PostForm__WEBPACK_IMPORTED_MODULE_0__["default"]
-  },
-  props: ['id'],
-  data: function data() {
-    return {
-      post: []
-    };
-  },
-  created: function created() {
-    var _this = this;
-
-    axios.get('/api/admin/post/edit/' + this.id).then(function (response) {
-      _this.post = JSON.stringify(response.data);
-    });
   }
 });
 
@@ -3863,22 +3850,32 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['postObject'],
+  // props: ['postObject'],
   components: {
     SnackBar: _SnackBar_vue__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
-  watch: {
-    'postObject': function postObject() {
-      this.p = JSON.parse(this.postObject);
-      this.content = this.p.content;
-      this.pageTitle = 'Edit ' + this.p.position;
-      this.postURL = '';
-      this.id = this.p.id;
-      this.position = this.p.position;
-      this.slug = this.p.slug;
-      this.originalSlug = this.p.slug;
-      this.loading = false;
+  created: function created() {
+    if (this.$route.params.id) {
+      this.getPostToEdit();
+      this.pageAction = 'update';
     }
+  },
+  // computed: {
+  //     getEditData: function () {
+  //         return this.postObject;
+  //     }
+  // },
+  watch: {// 'postObject'(){
+    //     this.p = JSON.parse(this.postObject);
+    //     this.content = this.p.content;
+    //     this.pageTitle = 'Edit '+this.p.position;
+    //     this.postURL = '';
+    //     this.id = this.p.id;
+    //     this.position = this.p.position;
+    //     this.slug = this.p.slug;
+    //     this.originalSlug = this.p.slug;
+    //     this.loading = false;
+    // }
   },
   data: function data() {
     return {
@@ -3926,13 +3923,30 @@ __webpack_require__.r(__webpack_exports__);
   mounted: function mounted() {
     var height = document.querySelector('header.v-app-bar').offsetHeight + document.querySelector('.secondary-header').offsetHeight;
     document.querySelector('.page-content').style.height = "calc(100vh - " + height + "px - 24px)"; // Check if has postObject
-
-    if (this.postObject) {
-      this.loading = true;
-      this.pageAction = 'update';
-    }
+    // if(this.getEditData) {
+    //     this.loading = true;
+    //     this.pageAction = 'update';
+    // }
+    // console.log(this.$route.params.id);
   },
   methods: {
+    getPostToEdit: function getPostToEdit() {
+      var _this = this;
+
+      axios.get("/api/admin/post/edit/" + this.$route.params.id).then(function (response) {
+        // this.post = JSON.stringify(response.data);
+        _this.p = response.data; //     this.p = JSON.parse(this.postObject);
+
+        _this.pageTitle = 'Edit ' + _this.p.position;
+        _this.id = _this.p.id;
+        _this.position = _this.p.position;
+        _this.slug = _this.p.slug;
+        _this.originalSlug = _this.p.slug;
+        _this.content = _this.p.content;
+        _this.postURL = '';
+        _this.loading = false;
+      });
+    },
     clearAlert: function clearAlert() {
       this.sbStatus = false; // SnackBar
 
@@ -3943,30 +3957,30 @@ __webpack_require__.r(__webpack_exports__);
       this.errors.clearAll();
     },
     successUI: function successUI(msg) {
-      var _this = this;
-
-      this.loading = false;
-      setTimeout(function () {
-        _this.sbStatus = true;
-        _this.sbType = 'success';
-        _this.sbText = msg;
-      }, 100);
-    },
-    errorUI: function errorUI(msg) {
       var _this2 = this;
 
       this.loading = false;
       setTimeout(function () {
         _this2.sbStatus = true;
-        _this2.sbType = 'error';
+        _this2.sbType = 'success';
         _this2.sbText = msg;
+      }, 100);
+    },
+    errorUI: function errorUI(msg) {
+      var _this3 = this;
+
+      this.loading = false;
+      setTimeout(function () {
+        _this3.sbStatus = true;
+        _this3.sbType = 'error';
+        _this3.sbText = msg;
       }, 100);
     },
     generateSlug: function generateSlug() {
       this.slug = this.position && slugify(this.position);
     },
     postRequest: function postRequest(controller, data) {
-      var _this3 = this;
+      var _this4 = this;
 
       if (controller === 'update') {
         data['id'] = this.id;
@@ -3979,30 +3993,30 @@ __webpack_require__.r(__webpack_exports__);
 
       console.log(data);
       axios.post('/admin/post/' + controller + '/', data).then(function (response) {
-        _this3.successUI(response.data.message);
+        _this4.successUI(response.data.message);
 
-        _this3.originalSlug = _this3.slug;
+        _this4.originalSlug = _this4.slug;
       })["catch"](function (error) {
         console.log(error);
 
         if (error.response.status == 403) {
-          _this3.errorUI(error);
+          _this4.errorUI(error);
         }
 
         if (error.response && error.response.status == 422) {
-          _this3.errors.setErrors(error.response.data.errors);
+          _this4.errors.setErrors(error.response.data.errors);
 
-          _this3.errorUI('Unprocessable Entity'); // Input error messages
+          _this4.errorUI('Unprocessable Entity'); // Input error messages
 
 
-          if (_this3.errors.hasError('slug')) {
-            _this3.slugError = true;
-            _this3.slugErrMsg = _this3.errors.first('slug');
+          if (_this4.errors.hasError('slug')) {
+            _this4.slugError = true;
+            _this4.slugErrMsg = _this4.errors.first('slug');
           }
 
-          if (_this3.errors.hasError('position')) {
-            _this3.positionError = true;
-            _this3.positionErrMsg = _this3.errors.first('position');
+          if (_this4.errors.hasError('position')) {
+            _this4.positionError = true;
+            _this4.positionErrMsg = _this4.errors.first('position');
           }
         }
       });
@@ -35627,7 +35641,7 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("post-form", { attrs: { "post-object": _vm.post } })
+  return _c("post-form")
 }
 var staticRenderFns = []
 render._withStripped = true

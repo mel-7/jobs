@@ -76,22 +76,33 @@
 import SnackBar from '../../SnackBar.vue';
 import ErrorBag from "../../../helpers/errorBag.js";
 export default {
-    props: ['postObject'],
+    // props: ['postObject'],
     components: {
       SnackBar
     },
-    watch: {
-        'postObject'(){
-            this.p = JSON.parse(this.postObject);
-            this.content = this.p.content;
-            this.pageTitle = 'Edit '+this.p.position;
-            this.postURL = '';
-            this.id = this.p.id;
-            this.position = this.p.position;
-            this.slug = this.p.slug;
-            this.originalSlug = this.p.slug;
-            this.loading = false;
+    created(){
+        if(this.$route.params.id){
+            this.getPostToEdit();
+            this.pageAction = 'update';
         }
+    },
+    // computed: {
+    //     getEditData: function () {
+    //         return this.postObject;
+    //     }
+    // },
+    watch: {
+        // 'postObject'(){
+        //     this.p = JSON.parse(this.postObject);
+        //     this.content = this.p.content;
+        //     this.pageTitle = 'Edit '+this.p.position;
+        //     this.postURL = '';
+        //     this.id = this.p.id;
+        //     this.position = this.p.position;
+        //     this.slug = this.p.slug;
+        //     this.originalSlug = this.p.slug;
+        //     this.loading = false;
+        // }
     },
     data() {
         return {
@@ -143,11 +154,29 @@ export default {
         document.querySelector('.page-content').style.height = "calc(100vh - "+height+"px - 24px)";
 
         // Check if has postObject
-        if(this.postObject) {
-            this.loading = true; this.pageAction = 'update';
-        }
+        // if(this.getEditData) {
+        //     this.loading = true;
+        //     this.pageAction = 'update';
+        // }
+        // console.log(this.$route.params.id);
+
     },
     methods:{
+        getPostToEdit() {
+            axios.get("/api/admin/post/edit/" + this.$route.params.id).then(response => {
+                // this.post = JSON.stringify(response.data);
+                this.p = response.data;
+                //     this.p = JSON.parse(this.postObject);
+                this.pageTitle = 'Edit '+this.p.position;
+                this.id = this.p.id;
+                this.position = this.p.position;
+                this.slug = this.p.slug;
+                this.originalSlug = this.p.slug;
+                this.content = this.p.content;
+                this.postURL = '';
+                this.loading = false;
+            });
+        },
         clearAlert(){
             this.sbStatus = false; // SnackBar
             this.positionError = false;
