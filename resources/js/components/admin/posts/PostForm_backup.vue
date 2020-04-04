@@ -13,7 +13,7 @@
                     <v-btn v-if="pageAction === 'update'" small color="error" class="ml-2" @click="trash()">Trash</v-btn>
                     <v-btn small color="primary" class="ml-2" :disabled="!valid" @click="save(pageAction)">{{pageAction}}</v-btn>
                 </v-toolbar>
-            </div>
+            </div>     
             <div class="col page-content" style="width:100%;overflow-y:scroll;">
                 <div class="d-flex">
                     <div class="col-md-8 col-12">
@@ -30,7 +30,7 @@
                                     :error="positionError"
                                     :error-messages="positionErrMsg"
                                     @change="clearAlert"
-                                ></v-text-field>
+                                ></v-text-field>                          
                                 <v-text-field
                                     single-line
                                     outlined
@@ -45,20 +45,13 @@
                                     :error-messages="slugErrMsg"
                                     @change="clearAlert"
                                 ></v-text-field>
-                                <v-textarea
-                                    dense
-                                    v-model="content"
-                                    label="content"
-                                    outlined
-                                    name="input-7-4"
-                                    @change="clearAlert"
-                                ></v-textarea>
+                                <div id="codex-editor"></div>
                             </v-card-text>
                         </v-card>
                     </div>
                     <div class="col-md-4 col-12">
                         <v-card>
-                            <v-card-text>
+                            <v-card-text>   
                                 <v-text-field
                                     label="First name"
                                     required
@@ -73,6 +66,12 @@
     </div>
 </template>
 <script>
+/* Editor JS */
+import EditorJS from "@editorjs/editorjs";
+import Header from "@editorjs/header";
+import Paragraph from "@editorjs/paragraph";
+import List from "@editorjs/list";
+
 import SnackBar from '../../SnackBar.vue';
 import ErrorBag from "../../../helpers/errorBag.js";
 export default {
@@ -83,7 +82,7 @@ export default {
     watch: {
         'postObject'(){
             this.p = JSON.parse(this.postObject);
-            this.content = this.p.content;
+            this.content = JSON.parse(this.p.content);
             this.pageTitle = 'Edit '+this.p.position;
             this.postURL = '';
             this.id = this.p.id;
@@ -91,6 +90,8 @@ export default {
             this.slug = this.p.slug;
             this.originalSlug = this.p.slug;
             this.loading = false;
+            // Initialize Editor JS
+            this.setupEditorJs(this.content);
         }
     },
     data() {
@@ -141,13 +142,39 @@ export default {
     mounted(){
         const height = document.querySelector('header.v-app-bar').offsetHeight + document.querySelector('.secondary-header').offsetHeight;
         document.querySelector('.page-content').style.height = "calc(100vh - "+height+"px - 24px)";
-
+        
         // Check if has postObject
         if(this.postObject) {
             this.loading = true; this.pageAction = 'update';
+        }else{
+            this.setupEditorJs();
         }
     },
     methods:{
+        setupEditorJs(c){
+            if(!c) c = {};
+            window.editor = new EditorJS({
+                holder: "codex-editor",
+                autofocus: false,
+                initialBlock: "paragraph",
+                tools: {
+                    header: {
+                        class: Header,
+                        shortcut: "CMD+SHIFT+H"
+                    },
+                    list: {
+                        class: List
+                    },
+                    paragraph: {
+                        class: Paragraph,
+                        config: {
+                            placeholder: "content"
+                        }
+                    }
+                },
+                data: c
+            });
+        },
         clearAlert(){
             this.sbStatus = false; // SnackBar
             this.positionError = false;
@@ -175,12 +202,12 @@ export default {
         generateSlug(){
             this.slug = this.position && slugify(this.position);
         },
-        postRequest(controller, data){
+        postRequest(controller, data){        
             if(controller === 'update'){
                 data['id'] = this.id;
                 if(this.originalSlug === this.slug){ // check the slug
                     delete data['slug'];
-                }
+                }            
             }
             console.log(data);
             axios.post('/admin/post/'+controller+'/', data)
@@ -211,24 +238,24 @@ export default {
         save(action){
             this.clearAlert();
             this.loading = true;
-
-            let postData = [];
-            postData = {
-                status : 'publish',
-                slug : this.slug,
-                position : this.position && this.position.trim(),
-                content : this.content
-            }
-            if(action === 'publish'){ // Create
-                this.postRequest('store', postData);
-            }else if(action === 'update'){ // update
-                this.postRequest('update', postData);
-            }else if(action === 'draft'){ // draft
-                postData.status = 'draft';
-                let routeController = (this.pageAction === 'publish') ? 'store' : 'update';
-                this.postRequest(routeController, postData);
-            }
-
+            editor.save().then(savedData => { // Render the content inside Editorjs first
+                let postData = [];
+                postData = {
+                    status : 'publish',
+                    slug : this.slug,
+                    position : this.position && this.position.trim(),
+                    content : this.content = JSON.stringify(savedData),
+                }
+                if(action === 'publish'){ // Create
+                    this.postRequest('store', postData);
+                }else if(action === 'update'){ // update
+                    this.postRequest('update', postData);
+                }else if(action === 'draft'){ // draft
+                    postData.status = 'draft';
+                    let routeController = (this.pageAction === 'publish') ? 'store' : 'update';  
+                    this.postRequest(routeController, postData);
+                }
+            });
         },
     }
 };
