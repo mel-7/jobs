@@ -3969,11 +3969,12 @@ __webpack_require__.r(__webpack_exports__);
 
       console.log(controller);
       console.log(data);
-      axios.post('/admin/post/store', data).then(function (response) {
+      axios.post('/admin/post/' + controller, data).then(function (response) {
         _this4.successUI(response.data.message);
 
         _this4.originalSlug = _this4.slug;
-        console.log(response); // console.log(response.data.message);
+        console.log(response);
+        console.log(response.data.message);
       })["catch"](function (error) {
         console.log(error);
 
@@ -94385,12 +94386,13 @@ window._ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
 
 window.slugify = __webpack_require__(/*! @sindresorhus/slugify */ "./node_modules/@sindresorhus/slugify/index.js");
 window.axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js"); // axios.defaults.withCredentials = true;
-// window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
-window.axios.defaults.headers.common.accept = 'application/json';
+window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'; // efaults.headers.common.accept = 'application/json';
+
 var token = document.head.querySelector('meta[name="csrf-token"]');
 
-if (token) {// window.axios.defaults.headers.common['X-CSRF-TOKEN'] = token.content;
+if (token) {
+  window.axios.defaults.headers.common['X-CSRF-TOKEN'] = token.content;
 } else {
   console.error('CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token');
 }
