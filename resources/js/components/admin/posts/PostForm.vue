@@ -86,26 +86,9 @@ export default {
             this.pageAction = 'update';
         }
     },
-    // computed: {
-    //     getEditData: function () {
-    //         return this.postObject;
-    //     }
-    // },
-    watch: {
-        // 'postObject'(){
-        //     this.p = JSON.parse(this.postObject);
-        //     this.content = this.p.content;
-        //     this.pageTitle = 'Edit '+this.p.position;
-        //     this.postURL = '';
-        //     this.id = this.p.id;
-        //     this.position = this.p.position;
-        //     this.slug = this.p.slug;
-        //     this.originalSlug = this.p.slug;
-        //     this.loading = false;
-        // }
-    },
     data() {
         return {
+            id: '',
             pageAction: 'publish',
             pageTitle: 'Create Job a Post',
 
@@ -175,6 +158,7 @@ export default {
                 this.content = this.p.content;
                 this.postURL = '';
                 this.loading = false;
+                console.log(this.p);
             });
         },
         clearAlert(){
@@ -205,17 +189,14 @@ export default {
             this.slug = this.position && slugify(this.position);
         },
         postRequest(controller, data){
-            if(controller === 'update'){
-                data['id'] = this.id;
-                if(this.originalSlug === this.slug){ // check the slug
-                    delete data['slug'];
-                }
-            }
+            console.log(controller);
             console.log(data);
             axios.post('/admin/post/'+controller+'/', data)
             .then(response => {
                 this.successUI(response.data.message);
                 this.originalSlug = this.slug;
+                console.log(response);
+                console.log(response.data.message);
             })
             .catch(error => {
                 console.log(error);
@@ -240,17 +221,27 @@ export default {
         save(action){
             this.clearAlert();
             this.loading = true;
-
             let postData = [];
             postData = {
-                status : 'publish',
+                status : action,
                 slug : this.slug,
                 position : this.position && this.position.trim(),
                 content : this.content
             }
+            // if(controller === 'update'){
+            //     data['id'] = this.id;
+            //     if(this.originalSlug === this.slug){ // check the slug
+            //         delete data['slug'];
+            //     }
+            // }
             if(action === 'publish'){ // Create
                 this.postRequest('store', postData);
             }else if(action === 'update'){ // update
+                postData.id = this.id;
+                if(this.originalSlug === this.slug){ // check the slug
+                    delete postData.slug;
+                }
+                console.log(postData)
                 this.postRequest('update', postData);
             }else if(action === 'draft'){ // draft
                 postData.status = 'draft';

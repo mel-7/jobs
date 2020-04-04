@@ -3860,25 +3860,9 @@ __webpack_require__.r(__webpack_exports__);
       this.pageAction = 'update';
     }
   },
-  // computed: {
-  //     getEditData: function () {
-  //         return this.postObject;
-  //     }
-  // },
-  watch: {// 'postObject'(){
-    //     this.p = JSON.parse(this.postObject);
-    //     this.content = this.p.content;
-    //     this.pageTitle = 'Edit '+this.p.position;
-    //     this.postURL = '';
-    //     this.id = this.p.id;
-    //     this.position = this.p.position;
-    //     this.slug = this.p.slug;
-    //     this.originalSlug = this.p.slug;
-    //     this.loading = false;
-    // }
-  },
   data: function data() {
     return {
+      id: '',
       pageAction: 'publish',
       pageTitle: 'Create Job a Post',
       baseURL: window.location.origin,
@@ -3945,6 +3929,7 @@ __webpack_require__.r(__webpack_exports__);
         _this.content = _this.p.content;
         _this.postURL = '';
         _this.loading = false;
+        console.log(_this.p);
       });
     },
     clearAlert: function clearAlert() {
@@ -3982,20 +3967,14 @@ __webpack_require__.r(__webpack_exports__);
     postRequest: function postRequest(controller, data) {
       var _this4 = this;
 
-      if (controller === 'update') {
-        data['id'] = this.id;
-
-        if (this.originalSlug === this.slug) {
-          // check the slug
-          delete data['slug'];
-        }
-      }
-
+      console.log(controller);
       console.log(data);
       axios.post('/admin/post/' + controller + '/', data).then(function (response) {
         _this4.successUI(response.data.message);
 
         _this4.originalSlug = _this4.slug;
+        console.log(response);
+        console.log(response.data.message);
       })["catch"](function (error) {
         console.log(error);
 
@@ -4026,17 +4005,30 @@ __webpack_require__.r(__webpack_exports__);
       this.loading = true;
       var postData = [];
       postData = {
-        status: 'publish',
+        status: action,
         slug: this.slug,
         position: this.position && this.position.trim(),
         content: this.content
-      };
+      }; // if(controller === 'update'){
+      //     data['id'] = this.id;
+      //     if(this.originalSlug === this.slug){ // check the slug
+      //         delete data['slug'];
+      //     }
+      // }
 
       if (action === 'publish') {
         // Create
         this.postRequest('store', postData);
       } else if (action === 'update') {
         // update
+        postData.id = this.id;
+
+        if (this.originalSlug === this.slug) {
+          // check the slug
+          delete postData.slug;
+        }
+
+        console.log(postData);
         this.postRequest('update', postData);
       } else if (action === 'draft') {
         // draft
