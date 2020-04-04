@@ -191,7 +191,7 @@ export default {
         postRequest(controller, data){
             console.log(controller);
             console.log(data);
-            axios.post('/admin/post/'+controller+'/', data)
+            axios.post('/admin/post/store', data)
             .then(response => {
                 this.successUI(response.data.message);
                 this.originalSlug = this.slug;

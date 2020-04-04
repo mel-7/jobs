@@ -3969,7 +3969,7 @@ __webpack_require__.r(__webpack_exports__);
 
       console.log(controller);
       console.log(data);
-      axios.post('/admin/post/' + controller + '/', data).then(function (response) {
+      axios.post('/admin/post/store', data).then(function (response) {
         _this4.successUI(response.data.message);
 
         _this4.originalSlug = _this4.slug;
