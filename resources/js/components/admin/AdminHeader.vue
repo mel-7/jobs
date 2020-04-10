@@ -2,7 +2,7 @@
     <div>
         <v-app-bar app clipped-left dense dark>
             <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
-            <span class="ml-3 mr-5">Ghassan Aboud Group</span>
+            <span class="ml-3 mr-5">AZJOBS</span>
             <v-spacer></v-spacer>
             <v-menu
                 v-model="menu"
@@ -27,7 +27,7 @@
                         </v-list-item-avatar>
                         <v-list-item-content>
                             <v-list-item-title> {{ authUser.name }} </v-list-item-title>
-                            <v-list-item-subtitle>{{ authUser.email }}</v-list-item-subtitle> 
+                            <v-list-item-subtitle>{{ authUser.email }}</v-list-item-subtitle>
                         </v-list-item-content>
                         </v-list-item>
                     </v-list>
@@ -54,7 +54,7 @@
                     </v-list-item>
                 </router-link>
 
-                <v-list-group prepend-icon="mdi-format-list-text">  
+                <v-list-group prepend-icon="mdi-format-list-text">
                     <template v-slot:activator>
                         <v-list-item-title>Job Posts</v-list-item-title>
                     </template>
@@ -86,7 +86,7 @@
                     </v-list>
                 </v-list-group>
 
-                <v-list-group prepend-icon="mdi-account-group">  
+                <v-list-group prepend-icon="mdi-account-group">
                     <template v-slot:activator>
                         <v-list-item-title>Users</v-list-item-title>
                     </template>

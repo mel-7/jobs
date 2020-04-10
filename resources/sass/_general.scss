@@ -6,3 +6,9 @@
 //         color: $gayellow !important;
 //     }
 // }
+
+/* Layout */
+body.page header .container,
+body.page main .container{
+    max-width: 1200px;
+}

@@ -89,13 +89,17 @@ const app = new Vue({
       }
     },
     methods: {
-      clearAlert(){
+        clearAlert(){
 
-      },
-      validate () {
-        if (this.$refs.form.validate()) {
-          this.snackbar = true;
-        }
-      }
+        },
+        validate () {
+            if (this.$refs.form.validate()) {
+            this.snackbar = true;
+            }
+        },
+        logout: function (event) {
+            event.preventDefault();
+            document.getElementById('logout-form').submit();
+        },
     }
 });

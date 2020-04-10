@@ -34559,9 +34559,7 @@ var render = function() {
             }
           }),
           _vm._v(" "),
-          _c("span", { staticClass: "ml-3 mr-5" }, [
-            _vm._v("Ghassan Aboud Group")
-          ]),
+          _c("span", { staticClass: "ml-3 mr-5" }, [_vm._v("AZJOBS")]),
           _vm._v(" "),
           _c("v-spacer"),
           _vm._v(" "),
@@ -94339,6 +94337,10 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_1___default.a({
       if (this.$refs.form.validate()) {
         this.snackbar = true;
       }
+    },
+    logout: function logout(event) {
+      event.preventDefault();
+      document.getElementById('logout-form').submit();
     }
   }
 });
