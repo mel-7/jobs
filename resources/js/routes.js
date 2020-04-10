@@ -6,6 +6,11 @@ import CustomFields from './components/admin/posts/CustomFields';
 import EditPost from './components/admin/posts/EditPost';
 import UserList from './components/admin/users/UserList';
 import UserForm from './components/admin/users/UserForm';
+
+import Cv from './components/applicants/Cv';
+import Account from './components/applicants/Account';
+import MyApplications from './components/applicants/MyApplications';
+
 export const routes = [
     {
         path: '/admin/dashboard',
@@ -40,5 +45,29 @@ export const routes = [
     {
         path: '/admin/user/create',
         component: UserForm,
-    }
+    },
+
+    /**
+     * Applicants Route
+     */
+    {
+        path: '/u',
+        name: 'Account',
+        component: Account,
+    },
+    {
+        path: '/u/account',
+        name: 'Account',
+        component: Account,
+    },
+    {
+        path: '/u/cv',
+        name: 'Cv',
+        component: Cv,
+    },
+    {
+        path: '/u/my-applications',
+        name: 'MyApplications',
+        component: MyApplications,
+    },
 ]

@@ -1,5 +1,5 @@
 <template>
-<div class="col-3">
+<div class="col-4">
   <v-card
     class="mx-auto"
     max-width="500"

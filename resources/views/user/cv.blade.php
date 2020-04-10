@@ -1,10 +1,10 @@
 @extends('layouts.app')
+
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
-        {{-- <search-job></search-job> --}}
-        <side-bar></side-bar>
-        <job-list></job-list>
+        <applicant-side-nav></applicant-side-nav>
+        <router-view></router-view>
     </div>
 </div>
 @endsection

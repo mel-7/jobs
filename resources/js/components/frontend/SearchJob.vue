@@ -1,5 +1,5 @@
 <template>
-    <div class="col-12">
+    <div class="mb-5">
         <v-text-field
             label="Find Jobs"
             single-line
@@ -8,7 +8,7 @@
             dense
             color="primary"
             class="ml-auto"
-            style="max-width:480px;"
+            width="100%"
         ></v-text-field>
     </div>
 </template>

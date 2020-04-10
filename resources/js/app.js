@@ -15,11 +15,6 @@ Vue.use(Vuetify);
 Vue.use(VueRouter);
 Vue.use(Vuex);
 
-// Vue Router
-const router = new VueRouter({
-  routes,
-  mode: 'history',
-})
 
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
@@ -38,9 +33,18 @@ Vue.component('snack-bar', require('./components/SnackBar.vue').default);
 
 // Public
 Vue.component('login-form', require('./components/LoginForm.vue').default);
-Vue.component('search-job', require('./components//frontend/SearchJob.vue').default);
-Vue.component('job-list', require('./components//frontend/JobList.vue').default);
-Vue.component('side-bar', require('./components//frontend/SideBar.vue').default);
+Vue.component('search-job', require('./components/frontend/SearchJob.vue').default);
+Vue.component('job-list', require('./components/frontend/JobList.vue').default);
+Vue.component('side-bar', require('./components/frontend/SideBar.vue').default);
+
+Vue.component('applicant-side-nav', require('./components/applicants/ApplicantSideNav.vue').default);
+
+// Vue Router
+const router = new VueRouter({
+    routes,
+    mode: 'history',
+  })
+
 
 const app = new Vue({
     el: '#app',

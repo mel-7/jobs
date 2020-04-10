@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class applicantsController extends Controller
+class ApplicantsController extends Controller
 {
 
     public function __construct()
@@ -12,9 +12,24 @@ class applicantsController extends Controller
         $this->middleware('auth');
     }
 
-    public function dashboard()
+    // public function dashboard()
+    // {
+    //     return view('user.dashboard');
+    // }
+
+    public function cv()
     {
-        return view('user.dashboard');
+        return view('user.cv');
+    }
+
+    public function account()
+    {
+        return view('user.account');
+    }
+
+    public function myApplications()
+    {
+        return view('user.myapplications');
     }
 
     /**

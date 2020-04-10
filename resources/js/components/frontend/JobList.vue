@@ -1,5 +1,6 @@
 <template>
-    <div class="col-9">
+    <div class="col-8">
+        <search-job></search-job>
         <v-card v-for="item in posts" :key="item.id" class="mx-auto mb-6">
             <v-card-text>
                 <h2 class="text--primary mb-3">{{ item.position }}</h2>

@@ -20,12 +20,18 @@ Auth::routes();
 /**
  * Loggedin Users/Applicants
  */
-Route::get('/u/dashboard', 'applicantsController@dashboard')->name('user_dashboard');
+Route::group(['prefix'=>'u','as'=>'user.'], function(){
+    Route::get('/', 'applicantsController@account')->name('account');
+    Route::get('/account', 'applicantsController@account')->name('account');
+    Route::get('/cv', 'applicantsController@cv')->name('cv');
+    Route::get('/my-applications', 'applicantsController@myApplications')->name('myapplications');
+    // Route::get('/dashboard', 'applicantsController@dashboard')->name('dashboard');
+});
 
 /**
- * 
+ *
  * Admin Routes
- * 
+ *
  */
 Route::group(['prefix'=>'admin','as'=>'admin.'], function(){
     // ->middleware('can:accessAdminModel,user')
@@ -40,7 +46,7 @@ Route::group(['prefix'=>'admin','as'=>'admin.'], function(){
     Route::post('/post/update', 'PostController@update')->name('update_post');
     Route::delete('/post/destroy/{id}', 'PostController@destroy')->name('delete_post');
     // Route::get('/post/edit/{id}', 'PostController@edit')->name('edit_post');
-    
+
     // Category
     // Route::get('/post/categories', 'CategoryController@index')->name('categories');
     Route::post('/post/category/store', 'CategoryController@store')->name('addcategory');

@@ -8,7 +8,8 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>azjobs.ph</title>
+    {{-- <title>{{ config('app.name', 'AZJOBS') }}</title> --}}
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -21,7 +22,7 @@
     <div id="app">
         <v-app>
             @if (\Route::current()->getName() != 'login')
-                <header class="elevation-3">
+                <header class="elevation-3 mb-10">
                     <div class="container py-0">
                         <div class="row">
                             <div class="col-4 py-0 d-flex align-center">
@@ -43,13 +44,14 @@
                                 </div>
                             @else
                                 <div class="d-flex align-center px-3">
+                                    {{-- v-model="menu" --}}
                                     <v-menu
-                                        v-model="menu"
                                         :close-on-content-click="false"
                                         :nudge-width="150"
                                         transition="slide-y-transition"
                                         offset-y
-                                        :nudge-bottom="3"
+                                        left
+                                        :nudge-bottom="5"
                                     >
                                         <template v-slot:activator="{ on }">
                                             <v-btn text icon v-on="on">
@@ -70,6 +72,24 @@
                                                 </v-list-item-content>
                                                 </v-list-item>
                                             </v-list>
+                                            <v-divider></v-divider>
+                                            <v-list dense>
+                                                <v-list-item href="{{ URL::to('/u/cv') }}">
+                                                    <v-list-item-content>
+                                                        <v-list-item-title>CV</v-list-item-title>
+                                                    </v-list-item-content>
+                                                </v-list-item>
+                                                <v-list-item href="{{ URL::to('/u/account') }}">
+                                                    <v-list-item-content>
+                                                        <v-list-item-title>Account</v-list-item-title>
+                                                    </v-list-item-content>
+                                                </v-list-item>
+                                                <v-list-item href="{{ URL::to('/u/my-applications') }}">
+                                                    <v-list-item-content>
+                                                        <v-list-item-title>My Applications</v-list-item-title>
+                                                    </v-list-item-content>
+                                                </v-list-item>
+                                              </v-list>
                                             <v-divider></v-divider>
                                             <v-card-actions>
                                                 <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
