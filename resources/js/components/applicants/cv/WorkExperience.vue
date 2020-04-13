@@ -13,8 +13,8 @@
         <h4 class="title d-flex align-center">
           {{ JSON.parse(item.value).jobtitle }}
           <v-spacer></v-spacer>
-          <!-- edit(item) -->
-          <v-btn v-if="formview == false" text small fab color="primary" @click="formview = true">
+          <!-- @click="formview = true" -->
+          <v-btn v-if="formview == false" text small fab color="primary" @click="edit(item)">
             <v-icon>mdi-pencil</v-icon>
           </v-btn>
         </h4>
@@ -26,7 +26,22 @@
         <v-divider></v-divider>
       </template>
 
-      <!-- <v-dialog v-model="dialog" persistent max-width="600px">
+
+
+      <!-- <template v-else>
+        <form :formview="false" lazy-validation :ref="'form'+item.id" class="pb-5">
+          <v-text-field name="jobtitle" :ref="'title_'+item.id" type="text" v-model="jobTitle" label="Full Name"></v-text-field>
+          <v-text-field name="company" type="text" v-model="company" label="Company"></v-text-field>
+          <v-text-field name="city" type="text" v-model="city" label="City"></v-text-field>
+          <v-textarea name="description" :value="JSON.parse(item.value).description" label="description" row-height="30"></v-textarea>
+          <v-btn type="submit" class="mr-2" @click="formview = false">Cancel</v-btn>
+          <v-btn color="primary" @click.prevent="saveData(item.id, action)">Save</v-btn>
+        </form>
+        <v-divider class="mb-5 error--text"></v-divider>
+      </template> -->
+    </div>
+
+      <v-dialog v-model="dialog" persistent max-width="600px">
         <v-card>
           <v-card-title>
             <span class="headline">Edit Work Experience</span>
@@ -83,20 +98,7 @@
             <v-btn color="primary" text @click="dialog = false">Save</v-btn>
           </v-card-actions>
         </v-card>
-      </v-dialog> -->
-
-      <template v-else>
-        <form :formview="false" lazy-validation ref="form" class="pb-5">
-          <v-text-field name="jobtitle" :ref="'title_'+item.id" type="text" v-model="jobTitle" label="Full Name"></v-text-field>
-          <v-text-field name="company" type="text" v-model="company" label="Company"></v-text-field>
-          <v-text-field name="city" type="text" v-model="city" label="City"></v-text-field>
-          <v-textarea name="description" :value="JSON.parse(item.value).description" label="description" row-height="30"></v-textarea>
-          <v-btn type="submit" class="mr-2" @click="formview = false">Cancel</v-btn>
-          <v-btn color="primary" @click.prevent="save(item, action)">Save</v-btn>
-        </form>
-        <v-divider class="mb-5 error--text"></v-divider>
-      </template>
-    </div>
+      </v-dialog>
   </div>
 </template>
 
@@ -113,13 +115,13 @@ export default {
       formview: false,
       valid: true,
       experience: [],
-      // dataItem: {
-      //     id: '',
-      //     user: 0,
-      //     type: '',
-      //     value: ''
-      // },
       dialogItem: {
+        jobtitle: "",
+        company: "",
+        date: "",
+        description: ""
+      },
+      dataItem: {
         jobtitle: "",
         company: "",
         date: "",
@@ -153,6 +155,9 @@ export default {
           console.log(error.response);
           console.log("error");
         });
+    },
+    saveData(i, action){
+        console.log(i)
     }
     // saveDate(d) {
     //   this.date = new Date().toISOString().substr(0, 7);
