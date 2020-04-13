@@ -37,7 +37,14 @@ Vue.component('search-job', require('./components/frontend/SearchJob.vue').defau
 Vue.component('job-list', require('./components/frontend/JobList.vue').default);
 Vue.component('side-bar', require('./components/frontend/SideBar.vue').default);
 
+/**
+ * Applicants Portal
+ */
 Vue.component('applicant-side-nav', require('./components/applicants/ApplicantSideNav.vue').default);
+Vue.component('personal-details', require('./components/applicants/cv/PersonalDetails.vue').default);
+Vue.component('work-experience', require('./components/applicants/cv/WorkExperience.vue').default);
+
+
 
 // Vue Router
 const router = new VueRouter({

@@ -3,16 +3,17 @@
 @section('content')
 <v-container id="g-login" class="py-12 d-flex flex-column align-center">
     <v-col cols="12" sm="6" md="4" class="d-flex flex-column align-center">
-        <a href="/">
-            <v-img max-width="300px" src="img/gag.png"></v-img>
+        <a href="/" style="text-decoration:none;">
+            AZJOBS
+            {{-- <v-img max-width="300px" src="img/gag.png"></v-img> --}}
         </a>
     </v-col>
-    <v-col cols="12" sm="6" md="4">
+    <v-col cols="12" sm="6" md="6">
         <v-card id="loginform">
             <v-card-title class="px-5 pt-5 pb-0">Login</v-card-title>
             <v-card-text class="py-5 px-5">
-                <v-form 
-                method="POST" 
+                <v-form
+                method="POST"
                 action="{{ route('login') }}"
                 ref="form"
                 v-model="valid"
@@ -61,7 +62,7 @@
                         color="primary"
                         class="mt-0">
                     </v-checkbox>
-                    <v-btn 
+                    <v-btn
                         width="100%"
                         height="55"
                         large

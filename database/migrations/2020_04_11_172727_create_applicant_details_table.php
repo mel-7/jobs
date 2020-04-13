@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCustomFieldsTable extends Migration
+class CreateApplicantDetailsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,9 @@ class CreateCustomFieldsTable extends Migration
      */
     public function up()
     {
-        Schema::create('custom_fields', function (Blueprint $table) {
+        Schema::create('applicant_details', function (Blueprint $table) {
             $table->id();
-            $table->string('model');
+            $table->unsignedInteger('user');
             $table->string('type');
             $table->longText('value');
             $table->timestamps();
@@ -29,6 +29,6 @@ class CreateCustomFieldsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('custom_fields');
+        Schema::dropIfExists('applicant_details');
     }
 }

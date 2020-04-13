@@ -1,24 +1,21 @@
 <template>
-   <div class="col-md-8">
-        <div class="card">
-            <div class="card-header">CV</div>
-
-            <div class="card-body">
-                This is account page
-            </div>
-        </div>
-    </div>
+  <div class="col-md-8">
+    <v-card class="mx-auto pa-5" width="100%">
+      <personal-details class="my-5"></personal-details>
+      <v-divider></v-divider>
+      <work-experience class="my-5"></work-experience>
+    </v-card>
+  </div>
 </template>
 
 <script>
 export default {
-    name: "Cv",
-    mounted() {
-        console.log('Cv')
-    }
-}
+  name: "Cv"
+};
 </script>
 
-<style>
-
+<style lang="css" scoped>
+.border-bottom {
+  border-bottom: 2px solid;
+}
 </style>

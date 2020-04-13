@@ -26,8 +26,9 @@
                     <div class="container py-0">
                         <div class="row">
                             <div class="col-4 py-0 d-flex align-center">
-                                <a href="{{ URL::to('/') }}">
-                                    <v-img max-width="150px" src="{{ URL::to('/img/gag.png') }}"></v-img>
+                                <a href="{{ URL::to('/') }}" style="text-decoration:none;line-height:75px;">
+                                    AZJOBS
+                                    {{-- <v-img max-width="150px" src="{{ URL::to('/img/gag.png') }}"></v-img> --}}
                                 </a>
                             </div>
                             <v-spacer></v-spacer>

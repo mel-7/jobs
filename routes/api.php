@@ -50,3 +50,9 @@ Route::group(['prefix'=>'admin','as'=>'admin.'], function(){
     Route::get('/post/edit/{id}', 'PostController@edit')->name('edit_post');
     Route::get('/users', 'UserController@usersAPI')->name('users');
 });
+
+
+/**
+ * Applicant Details
+ */
+// Route::get('/applicant_details', 'ApplicantDetailsController@applicantDetailsAPI')->name('applicant_details');

@@ -35,6 +35,7 @@ Route::group(['prefix'=>'u','as'=>'user.'], function(){
  */
 Route::group(['prefix'=>'admin','as'=>'admin.'], function(){
     // ->middleware('can:accessAdminModel,user')
+    Route::get('/', 'AdminController@dashboard')->name('dashboard');
 
     // Users
     Route::post('/user/store', 'UserController@store')->name('store_user');
@@ -64,3 +65,9 @@ Route::group(['prefix'=>'admin','as'=>'admin.'], function(){
         return view('layouts.admin');
     })->where('any', '.*');
 });
+
+
+/**
+ * Applicant Details
+ */
+Route::get('/applicant/experience/{id}', 'ApplicantsController@getWorkExperience')->name('work_experience');

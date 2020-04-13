@@ -77,12 +77,6 @@
                             </v-list-item-icon>
                             <v-list-item-title>Categories</v-list-item-title>
                         </v-list-item>
-                        <v-list-item to="/admin/post/customfields">
-                            <v-list-item-icon class="pl-5">
-                                <v-icon small>mdi-checkbox-multiple-blank-outline</v-icon>
-                            </v-list-item-icon>
-                            <v-list-item-title>Custom Fields</v-list-item-title>
-                        </v-list-item>
                     </v-list>
                 </v-list-group>
 
@@ -120,6 +114,13 @@
                     <v-list-item-action>
                     <v-badge color="success" small content="6"></v-badge>
                     </v-list-item-action>
+                </v-list-item>
+
+                <v-list-item to="/admin/post/customfields">
+                    <v-list-item-icon>
+                        <v-icon >mdi-checkbox-multiple-blank-outline</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-title>Custom Fields</v-list-item-title>
                 </v-list-item>
             </v-list>
         </v-navigation-drawer>

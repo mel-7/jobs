@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Applicant_details;
 use Illuminate\Http\Request;
 
 class ApplicantsController extends Controller
@@ -107,4 +108,19 @@ class ApplicantsController extends Controller
     {
         //
     }
+
+    public function getWorkExperience($id)
+    {
+        // $ad = Applicant_details::where('user', '=', 1);
+        $ad = Applicant_details::where([
+                'user' => $id,
+                'type' => 'work_experience'
+            ])->get();
+
+        return response()->json([
+            'ex' => $ad,
+        ], 200);
+        // return $ad;
+    }
+
 }
