@@ -70,4 +70,5 @@ Route::group(['prefix'=>'admin','as'=>'admin.'], function(){
 /**
  * Applicant Details
  */
-Route::get('/applicant/experience/{id}', 'ApplicantsController@getWorkExperience')->name('work_experience');
+Route::get('/applicant/experience/{id}', 'ApplicantsController@getWorkExperience')->name('get_work_experience');
+Route::post('/applicant/experience/save', 'ApplicantsController@saveWorkExperience')->name('save_work_experience');

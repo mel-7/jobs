@@ -25,80 +25,65 @@
         <p class="body-1 my-3">{{ JSON.parse(item.value).description }}</p>
         <v-divider></v-divider>
       </template>
-
-
-
-      <!-- <template v-else>
-        <form :formview="false" lazy-validation :ref="'form'+item.id" class="pb-5">
-          <v-text-field name="jobtitle" :ref="'title_'+item.id" type="text" v-model="jobTitle" label="Full Name"></v-text-field>
-          <v-text-field name="company" type="text" v-model="company" label="Company"></v-text-field>
-          <v-text-field name="city" type="text" v-model="city" label="City"></v-text-field>
-          <v-textarea name="description" :value="JSON.parse(item.value).description" label="description" row-height="30"></v-textarea>
-          <v-btn type="submit" class="mr-2" @click="formview = false">Cancel</v-btn>
-          <v-btn color="primary" @click.prevent="saveData(item.id, action)">Save</v-btn>
-        </form>
-        <v-divider class="mb-5 error--text"></v-divider>
-      </template> -->
     </div>
-
-      <v-dialog v-model="dialog" persistent max-width="600px">
-        <v-card>
-          <v-card-title>
-            <span class="headline">Edit Work Experience</span>
-          </v-card-title>
-          <v-card-text>
-            <v-container>
-              <v-row>
-                <v-col cols="12">
-                  <v-text-field dense label="Job Title" required v-model="dialogItem.jobtitle"></v-text-field>
-                </v-col>
-                <v-col cols="12">
-                  <v-text-field dense label="Company" v-model="dialogItem.company"></v-text-field>
-                </v-col>
-                <v-col cols="12">
-                  <v-text-field dense label="City" v-model="dialogItem.city"></v-text-field>
-                </v-col>
-                <v-col cols="12">
-                  <v-menu
-                    ref="menu"
-                    v-model="menu"
-                    :close-on-click="false"
-                    :close-on-content-click="false"
-                    :return-value.sync="date"
-                    transition="scale-transition"
-                    offset-y
-                    max-width="290px"
-                    min-width="290px"
-                  >
-                    <template v-slot:activator="{ on }">
-                      <v-text-field
-                        v-model="date"
-                        label="Picker in menu"
-                        prepend-icon="mdi-calendar"
-                        readonly
-                        v-on="on"
-                      ></v-text-field>
-                    </template>
-                    <v-date-picker v-model="date" color="primary" type="month" no-title scrollable>
-                      <v-spacer></v-spacer>
-                      <v-btn text color="primary" @click="menu = false">Cancel</v-btn>
-                      <v-btn text color="primary" @click="$refs.menu[item.id -1].save(date)">OK</v-btn>
-                    </v-date-picker>
-                  </v-menu>
-                </v-col>
-                <v-col cols="12">
-                  <v-textarea label="Description" v-model="dialogItem.description"></v-textarea>
-                </v-col>
-              </v-row>
-            </v-container>
-          </v-card-text>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn color="blue darken-1" text @click="dialog = false">Close</v-btn>
-            <v-btn color="primary" text @click="dialog = false">Save</v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
+    <v-dialog v-model="dialog" persistent max-width="600px">
+      <v-card>
+        <v-card-title>
+          <span class="headline">Edit Work Experience</span>
+        </v-card-title>
+        <v-card-text>
+          <v-container>
+            <v-row>
+              <v-col cols="12">
+                <v-text-field dense label="Job Title" required v-model="dialogItem.jobtitle"></v-text-field>
+              </v-col>
+              <v-col cols="12">
+                <v-text-field dense label="Company" v-model="dialogItem.company"></v-text-field>
+              </v-col>
+              <v-col cols="12">
+                <v-text-field dense label="City" v-model="dialogItem.city"></v-text-field>
+              </v-col>
+              <v-col cols="12">
+                <v-menu
+                  ref="menu"
+                  v-model="menu"
+                  :close-on-click="false"
+                  :close-on-content-click="false"
+                  :return-value.sync="date"
+                  transition="scale-transition"
+                  offset-y
+                  max-width="290px"
+                  min-width="290px"
+                >
+                  <template v-slot:activator="{ on }">
+                    <v-text-field
+                      v-model="date"
+                      label="Picker in menu"
+                      prepend-icon="mdi-calendar"
+                      readonly
+                      v-on="on"
+                    ></v-text-field>
+                  </template>
+                  <v-date-picker v-model="date" color="primary" type="month" no-title scrollable>
+                    <v-spacer></v-spacer>
+                    <v-btn text color="primary" @click="menu = false">Cancel</v-btn>
+                    <v-btn text color="primary" @click="$refs.menu[item.id -1].save(date)">OK</v-btn>
+                  </v-date-picker>
+                </v-menu>
+              </v-col>
+              <v-col cols="12">
+                <v-textarea label="Description" v-model="dialogItem.description"></v-textarea>
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="blue darken-1" text @click="dialog = false">Close</v-btn>
+          <v-btn color="primary" text @click="saveData(dialogItem)">Save</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -116,6 +101,7 @@ export default {
       valid: true,
       experience: [],
       dialogItem: {
+        id: "",
         jobtitle: "",
         company: "",
         date: "",
@@ -139,16 +125,15 @@ export default {
   methods: {
     edit(i) {
       this.dialogItem = Object.assign({}, JSON.parse(i.value));
+      this.dialogItem.id = i.id;
       this.dialog = true;
-      console.log(this.dialogItem);
-      //   this.formview = true;
     },
     getExperience() {
       axios
         .get("/applicant/experience/2")
         .then(response => {
           this.experience = response.data.ex;
-          console.log(this.experience[0].value);
+          // console.log(this.experience[0].value);
           //   this.dataItem = Object.assign({}, this.experience);
         })
         .catch(error => {
@@ -156,8 +141,31 @@ export default {
           console.log("error");
         });
     },
-    saveData(i, action){
-        console.log(i)
+    saveData(i) {
+      // console.log(i);
+      let postData = [];
+      let valueData = {
+        jobtitle : i.jobtitle,
+        company : i.company,
+        city : i.city,
+        description : i.description,
+      };
+      postData = {
+          id : i.id,
+          user: 2,
+          type : 'work_experience',
+          value: JSON.stringify(valueData),
+      }
+      console.log(postData)
+      axios
+        .post("/applicant/experience/save", postData)
+        .then(response => {
+          console.log(response.data);
+        })
+        .catch(error => {
+          console.log(error.response);
+          console.log("error");
+        });
     }
     // saveDate(d) {
     //   this.date = new Date().toISOString().substr(0, 7);

@@ -113,14 +113,22 @@ class ApplicantsController extends Controller
     {
         // $ad = Applicant_details::where('user', '=', 1);
         $ad = Applicant_details::where([
-                'user' => $id,
-                'type' => 'work_experience'
-            ])->get();
-
+            'user' => $id,
+            'type' => 'work_experience'
+        ])->get();
         return response()->json([
             'ex' => $ad,
         ], 200);
-        // return $ad;
+    }
+
+    public function saveWorkExperience(Request $request)
+    {
+        $ad = Applicant_details::find($request->id);
+        $ad->value = $request->value;
+        $ad->save();
+        return response()->json([
+            'message' => 'Work Experience Saved',
+        ], 200);
     }
 
 }

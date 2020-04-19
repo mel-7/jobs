@@ -4913,21 +4913,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -4940,6 +4925,7 @@ __webpack_require__.r(__webpack_exports__);
       valid: true,
       experience: [],
       dialogItem: {
+        id: "",
         jobtitle: "",
         company: "",
         date: "",
@@ -4961,22 +4947,42 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     edit: function edit(i) {
       this.dialogItem = Object.assign({}, JSON.parse(i.value));
+      this.dialogItem.id = i.id;
       this.dialog = true;
-      console.log(this.dialogItem); //   this.formview = true;
     },
     getExperience: function getExperience() {
       var _this = this;
 
       axios.get("/applicant/experience/2").then(function (response) {
-        _this.experience = response.data.ex;
-        console.log(_this.experience[0].value); //   this.dataItem = Object.assign({}, this.experience);
+        _this.experience = response.data.ex; // console.log(this.experience[0].value);
+        //   this.dataItem = Object.assign({}, this.experience);
       })["catch"](function (error) {
         console.log(error.response);
         console.log("error");
       });
     },
-    saveData: function saveData(i, action) {
-      console.log(i);
+    saveData: function saveData(i) {
+      // console.log(i);
+      var postData = [];
+      var valueData = {
+        jobtitle: i.jobtitle,
+        company: i.company,
+        city: i.city,
+        description: i.description
+      };
+      postData = {
+        id: i.id,
+        user: 2,
+        type: 'work_experience',
+        value: JSON.stringify(valueData)
+      };
+      console.log(postData);
+      axios.post("/applicant/experience/save", postData).then(function (response) {
+        console.log(response.data);
+      })["catch"](function (error) {
+        console.log(error.response);
+        console.log("error");
+      });
     } // saveDate(d) {
     //   this.date = new Date().toISOString().substr(0, 7);
     //   this.menu = false;
@@ -16249,7 +16255,7 @@ module.exports = exports;
 var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(/*! ../../../../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js");
 exports = ___CSS_LOADER_API_IMPORT___(false);
 // Module
-exports.push([module.i, "\n.border-bottom[data-v-17b468f6] {\n  border-bottom: 2px solid;\n}\n", ""]);
+exports.push([module.i, "\n.border-bottom[data-v-17b468f6] {\r\n  border-bottom: 2px solid;\n}\r\n", ""]);
 // Exports
 module.exports = exports;
 
@@ -37994,7 +38000,7 @@ var render = function() {
                       attrs: { color: "primary", text: "" },
                       on: {
                         click: function($event) {
-                          _vm.dialog = false
+                          return _vm.saveData(_vm.dialogItem)
                         }
                       }
                     },
@@ -97810,8 +97816,8 @@ var routes = [{
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\xampp7.3.15\htdocs\jobs\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! C:\xampp7.3.15\htdocs\jobs\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\xampp7.3.14.2\htdocs\jobs\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\xampp7.3.14.2\htdocs\jobs\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })
