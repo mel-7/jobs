@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Applicant_details;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 
 class ApplicantsController extends Controller
 {
@@ -125,6 +126,9 @@ class ApplicantsController extends Controller
     {
         $ad = Applicant_details::find($request->id);
         $ad->value = $request->value;
+        $ad->startdate = Carbon::parse($request->startdate);
+        $ad->todate = Carbon::parse($request->todate);
+        $ad->topresent = $request->has('topresent');
         $ad->save();
         return response()->json([
             'message' => 'Work Experience Saved',
