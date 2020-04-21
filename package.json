@@ -25,6 +25,7 @@
         "@sindresorhus/slugify": "^0.11.0",
         "axios": "^0.19",
         "babel-polyfill": "^6.26.0",
+        "moment": "^2.24.0",
         "node-sass": "^4.13.1",
         "vue-router": "^3.1.6",
         "vuetify": "^2.2.21",

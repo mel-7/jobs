@@ -12,3 +12,9 @@ body.page header .container,
 body.page main .container{
     max-width: 1000px;
 }
+
+/* Remove border */
+// .no-border .v-input__control .v-input__slot:before,
+// .no-border .v-input__control .v-input__slot:after{
+//     border-style: none;
+// }

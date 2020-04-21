@@ -7,7 +7,6 @@
         <v-icon>mdi-plus</v-icon>
       </v-btn>
     </div>
-
     <div class="card-body mb-5" v-for="item in experience" :key="item.id">
       <template v-if="formview == false">
         <h4 class="title d-flex align-center">
@@ -20,7 +19,9 @@
         <div
           class="subtitle-2"
         >{{ JSON.parse(item.value).company }} - {{ JSON.parse(item.value).city }}</div>
-        <div class="subtitle-2">January 2025 - Present</div>
+        <div
+          class="subtitle-2"
+        >{{ formatDate(item.startdate)}} - {{ item.topresent ? 'Present' : formatDate(item.todate) }}</div>
         <v-textarea
           color="primary"
           hide-details
@@ -28,6 +29,7 @@
           auto-grow
           :value="JSON.parse(item.value).description"
           style="width:100%;"
+          class="no-border"
         ></v-textarea>
         <v-divider></v-divider>
       </template>
@@ -71,6 +73,7 @@
                           prepend-icon="mdi-calendar"
                           readonly
                           v-on="on"
+                          class="mb-3"
                         ></v-text-field>
                       </template>
                       <v-date-picker
@@ -89,46 +92,56 @@
                         >OK</v-btn>
                       </v-date-picker>
                     </v-menu>
+                    <template v-if="toPresentCheckbox == false">
+                      <v-menu
+                        ref="tomenu"
+                        v-model="tomenu"
+                        :close-on-content-click="false"
+                        :return-value.sync="dialogItem.todate"
+                        transition="scale-transition"
+                        offset-y
+                        width="290px"
+                        max-width="290px"
+                        min-width="290px"
+                      >
+                        <template v-slot:activator="{ on }">
+                          <v-text-field
+                            dense
+                            v-model="dialogItem.todate"
+                            label="To"
+                            prepend-icon="mdi-calendar"
+                            readonly
+                            v-on="on"
+                          ></v-text-field>
+                        </template>
+                        <v-date-picker
+                          hide-details
+                          v-model="dialogItem.todate"
+                          color="primary"
+                          type="month"
+                          no-title
+                          scrollable
+                        >
+                          <v-spacer></v-spacer>
+                          <v-btn text color="primary" @click="tomenu = false">Cancel</v-btn>
+                          <v-btn
+                            text
+                            color="primary"
+                            @click="$refs.tomenu.save(dialogItem.todate)"
+                          >OK</v-btn>
+                        </v-date-picker>
+                      </v-menu>
+                    </template>
                   </div>
                   <div class="col-4">
-                    <v-checkbox dense v-model="topresent" label="I still work here." class="ma-0"></v-checkbox>
+                    <v-checkbox
+                      dense
+                      v-model="toPresentCheckbox"
+                      label="I still work here."
+                      class="ma-0"
+                    ></v-checkbox>
                   </div>
                 </div>
-                <v-menu
-                  v-if="topresent == 0"
-                  ref="tomenu"
-                  v-model="tomenu"
-                  :close-on-content-click="false"
-                  :return-value.sync="dialogItem.todate"
-                  transition="scale-transition"
-                  offset-y
-                  width="290px"
-                  max-width="290px"
-                  min-width="290px"
-                >
-                  <template v-slot:activator="{ on }">
-                    <v-text-field
-                      dense
-                      v-model="dialogItem.todate"
-                      label="To"
-                      prepend-icon="mdi-calendar"
-                      readonly
-                      v-on="on"
-                    ></v-text-field>
-                  </template>
-                  <v-date-picker
-                    hide-details
-                    v-model="dialogItem.todate"
-                    color="primary"
-                    type="month"
-                    no-title
-                    scrollable
-                  >
-                    <v-spacer></v-spacer>
-                    <v-btn text color="primary" @click="tomenu = false">Cancel</v-btn>
-                    <v-btn text color="primary" @click="$refs.tomenu.save(dialogItem.todate)">OK</v-btn>
-                  </v-date-picker>
-                </v-menu>
               </v-col>
               <v-col cols="12">
                 <v-textarea
@@ -152,15 +165,16 @@
 </template>
 
 <script>
+import moment from "moment";
 export default {
   data() {
     return {
       date: new Date().toISOString().substr(0, 7),
       startmenu: false,
       tomenu: false,
-      topresent: 0,
       modal: false,
       dialog: false,
+      toPresentCheckbox: false,
 
       action: "store",
       formview: false,
@@ -168,12 +182,11 @@ export default {
       experience: [],
       dialogItem: {
         id: "",
-        startdate: new Date().toISOString().substr(0, 7),
-        todate: new Date().toISOString().substr(0, 7),
-        jobtitle: "",
-        company: "",
         startdate: "",
         todate: "",
+        topresent: "",
+        jobtitle: "",
+        company: "",
         description: ""
       },
       dataItem: {
@@ -191,19 +204,35 @@ export default {
         "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book."
     };
   },
+  // watch: {
+  //   toPresentCheckbox: function(val) {
+  //     // console.log(val)
+  //   }
+  // },
   methods: {
     edit(i) {
+      this.toPresentCheckbox = false;
       this.dialogItem = Object.assign({}, JSON.parse(i.value));
       this.dialogItem.id = i.id;
+      this.dialogItem.startdate = moment(i.startdate).format("YYYY-MM");
+      this.dialogItem.todate =
+        i.todate == null
+          ? new Date().toISOString().substr(0, 7)
+          : moment(i.todate).format("YYYY-MM");
+      if (i.topresent) {
+        this.dialogItem.topresent = i.topresent;
+        this.toPresentCheckbox = true;
+      }
       this.dialog = true;
+    },
+    formatDate(d) {
+      return moment(d).format("MMMM YYYY");
     },
     getExperience() {
       axios
         .get("/applicant/experience/2")
         .then(response => {
           this.experience = response.data.ex;
-          // console.log(this.experience[0].value);
-          //   this.dataItem = Object.assign({}, this.experience);
         })
         .catch(error => {
           console.log(error.response);
@@ -223,52 +252,24 @@ export default {
         user: 2,
         type: "work_experience",
         startdate: i.startdate,
-        todate: i.todate,
-        topresent: 1,
+        todate: this.toPresentCheckbox == false ? i.todate : null,
+        topresent: this.toPresentCheckbox,
         value: JSON.stringify(valueData)
       };
-      console.log(postData);
+      // console.log(postData);
       axios
         .post("/applicant/experience/save", postData)
         .then(response => {
-          console.log(response.data);
+          // console.log(response.data);
+          this.getExperience();
+          this.dialog = false;
         })
         .catch(error => {
+          this.dialog = false;
           console.log(error.response);
           console.log("error");
         });
     }
-    // saveDate(d) {
-    //   this.date = new Date().toISOString().substr(0, 7);
-    //   this.menu = false;
-    //   console.log(d);
-    // }
-    // save(i) {
-    //   console.log(i);
-    // }
-    // save(i, action) {
-    //   console.log(i);
-    //   console.log(action);
-    //   console.log(this.$refs["title_" + i.id].value);
-
-    //   // this.dialogItem = Object.assign({}, i);
-    //   //   let data = {
-    //   //     id: "1",
-    //   //     user: 2,
-    //   //     type: "work_experience",
-    //   //     value: "asdas"
-    //   //   };
-    //   // axios
-    //   // .get("/applicant/experience/storeExperience", data )
-    //   // .then(response => {
-    //   //     this.experience = response.data.ex;
-    //   //     console.log(this.experience);
-    //   // })
-    //   // .catch(error => {
-    //   //   console.log(error.response);
-    //   //   console.log("error");
-    //   // });
-    // }
   },
   mounted() {
     this.getExperience();

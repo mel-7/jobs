@@ -127,11 +127,12 @@ class ApplicantsController extends Controller
         $ad = Applicant_details::find($request->id);
         $ad->value = $request->value;
         $ad->startdate = Carbon::parse($request->startdate);
-        $ad->todate = Carbon::parse($request->todate);
-        $ad->topresent = $request->has('topresent');
+        $ad->todate = $request->todate == null ? null : Carbon::parse($request->todate);
+        $ad->topresent = $request->topresent;
         $ad->save();
         return response()->json([
             'message' => 'Work Experience Saved',
+            // 'message' => Carbon::parse($request->todate).' '.$request->topresent,
         ], 200);
     }
 
