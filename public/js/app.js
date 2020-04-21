@@ -5029,11 +5029,6 @@ __webpack_require__.r(__webpack_exports__);
       description: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book."
     };
   },
-  // watch: {
-  //   toPresentCheckbox: function(val) {
-  //     // console.log(val)
-  //   }
-  // },
   methods: {
     newWorkExperience: function newWorkExperience() {
       this.dialogItem = [];
@@ -5085,6 +5080,12 @@ __webpack_require__.r(__webpack_exports__);
         topresent: this.toPresentCheckbox,
         value: JSON.stringify(valueData)
       };
+
+      if (!i.id) {
+        delete postData.id;
+      }
+
+      console.log(postData);
       axios.post("/applicant/experience/save", postData).then(function (response) {
         _this2.getExperience();
 
