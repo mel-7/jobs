@@ -118,7 +118,7 @@ class ApplicantsController extends Controller
             'type' => 'work_experience'
         ])->get();
         return response()->json([
-            'ex' => $ad,
+            'exp' => $ad,
         ], 200);
     }
 

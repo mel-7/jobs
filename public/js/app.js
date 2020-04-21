@@ -4996,6 +4996,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
+      theUserID: 0,
       date: new Date().toISOString().substr(0, 7),
       startmenu: false,
       tomenu: false,
@@ -5034,6 +5035,10 @@ __webpack_require__.r(__webpack_exports__);
   //   }
   // },
   methods: {
+    newWorkExperience: function newWorkExperience() {
+      this.dialogItem = [];
+      this.dialog = true;
+    },
     edit: function edit(i) {
       this.toPresentCheckbox = false;
       this.dialogItem = Object.assign({}, JSON.parse(i.value));
@@ -5054,8 +5059,8 @@ __webpack_require__.r(__webpack_exports__);
     getExperience: function getExperience() {
       var _this = this;
 
-      axios.get("/applicant/experience/2").then(function (response) {
-        _this.experience = response.data.ex;
+      axios.get("/applicant/experience/" + this.theUserID).then(function (response) {
+        _this.experience = response.data.exp;
       })["catch"](function (error) {
         console.log(error.response);
         console.log("error");
@@ -5073,16 +5078,14 @@ __webpack_require__.r(__webpack_exports__);
       };
       postData = {
         id: i.id,
-        user: 2,
+        user: this.theUserID,
         type: "work_experience",
         startdate: i.startdate,
         todate: this.toPresentCheckbox == false ? i.todate : null,
         topresent: this.toPresentCheckbox,
         value: JSON.stringify(valueData)
-      }; // console.log(postData);
-
+      };
       axios.post("/applicant/experience/save", postData).then(function (response) {
-        // console.log(response.data);
         _this2.getExperience();
 
         _this2.dialog = false;
@@ -5094,7 +5097,11 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   mounted: function mounted() {
-    this.getExperience();
+    this.theUserID = document.getElementById("app").getAttribute("data-template");
+
+    if (this.theUserID > 0) {
+      this.getExperience();
+    }
   }
 });
 
@@ -55341,7 +55348,7 @@ var render = function() {
                   attrs: { text: "", small: "", fab: "", color: "primary" },
                   on: {
                     click: function($event) {
-                      return _vm.edit()
+                      return _vm.newWorkExperience()
                     }
                   }
                 },
@@ -55406,7 +55413,7 @@ var render = function() {
                   _c("div", { staticClass: "subtitle-2" }, [
                     _vm._v(
                       _vm._s(_vm.formatDate(item.startdate)) +
-                        " - " +
+                        " to " +
                         _vm._s(
                           item.topresent
                             ? "Present"
@@ -55580,7 +55587,7 @@ var render = function() {
                                                       staticClass: "mb-3",
                                                       attrs: {
                                                         dense: "",
-                                                        label: "From",
+                                                        label: "Start Date",
                                                         "prepend-icon":
                                                           "mdi-calendar",
                                                         readonly: ""
@@ -113950,6 +113957,12 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_3__["default"]({
   routes: _routes__WEBPACK_IMPORTED_MODULE_5__["routes"],
   mode: 'history'
 });
+/**
+ * Get User ID
+ * Used on applicant's page
+ */
+// let appEl = document.getElementById('app').appEl.getAttribute('data-template');
+
 var app = new vue__WEBPACK_IMPORTED_MODULE_1___default.a({
   el: '#app',
   router: router,

@@ -52,6 +52,11 @@ const router = new VueRouter({
     mode: 'history',
   })
 
+/**
+ * Get User ID
+ * Used on applicant's page
+ */
+// let appEl = document.getElementById('app').appEl.getAttribute('data-template');
 
 const app = new Vue({
     el: '#app',

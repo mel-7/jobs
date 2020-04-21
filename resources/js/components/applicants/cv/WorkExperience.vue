@@ -3,7 +3,7 @@
     <div class="card-header mb-6 d-flex align-center">
       <h3 class="headline">Work Experience</h3>
       <v-spacer></v-spacer>
-      <v-btn v-if="formview == false" text small fab color="primary" @click="edit()">
+      <v-btn v-if="formview == false" text small fab color="primary" @click="newWorkExperience()">
         <v-icon>mdi-plus</v-icon>
       </v-btn>
     </div>
@@ -21,7 +21,7 @@
         >{{ JSON.parse(item.value).company }} - {{ JSON.parse(item.value).city }}</div>
         <div
           class="subtitle-2"
-        >{{ formatDate(item.startdate)}} - {{ item.topresent ? 'Present' : formatDate(item.todate) }}</div>
+        >{{ formatDate(item.startdate)}} to {{ item.topresent ? 'Present' : formatDate(item.todate) }}</div>
         <v-textarea
           color="primary"
           hide-details
@@ -69,7 +69,7 @@
                         <v-text-field
                           dense
                           v-model="dialogItem.startdate"
-                          label="From"
+                          label="Start Date"
                           prepend-icon="mdi-calendar"
                           readonly
                           v-on="on"
@@ -169,6 +169,8 @@ import moment from "moment";
 export default {
   data() {
     return {
+      theUserID: 0,
+
       date: new Date().toISOString().substr(0, 7),
       startmenu: false,
       tomenu: false,
@@ -210,6 +212,10 @@ export default {
   //   }
   // },
   methods: {
+    newWorkExperience() {
+      this.dialogItem = [];
+      this.dialog = true;
+    },
     edit(i) {
       this.toPresentCheckbox = false;
       this.dialogItem = Object.assign({}, JSON.parse(i.value));
@@ -230,9 +236,9 @@ export default {
     },
     getExperience() {
       axios
-        .get("/applicant/experience/2")
+        .get("/applicant/experience/"+this.theUserID)
         .then(response => {
-          this.experience = response.data.ex;
+          this.experience = response.data.exp;
         })
         .catch(error => {
           console.log(error.response);
@@ -249,18 +255,16 @@ export default {
       };
       postData = {
         id: i.id,
-        user: 2,
+        user: this.theUserID,
         type: "work_experience",
         startdate: i.startdate,
         todate: this.toPresentCheckbox == false ? i.todate : null,
         topresent: this.toPresentCheckbox,
         value: JSON.stringify(valueData)
       };
-      // console.log(postData);
       axios
         .post("/applicant/experience/save", postData)
         .then(response => {
-          // console.log(response.data);
           this.getExperience();
           this.dialog = false;
         })
@@ -272,7 +276,10 @@ export default {
     }
   },
   mounted() {
-    this.getExperience();
+    this.theUserID = document.getElementById("app").getAttribute("data-template");
+    if (this.theUserID > 0) {
+      this.getExperience();
+    }
   }
 };
 </script>

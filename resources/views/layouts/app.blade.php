@@ -19,7 +19,12 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
 <body class="page">
-    <div id="app">
+    @guest
+    <?php $userID = 0; ?>
+    @else
+    <?php $userID = Auth::user()->id; ?>
+    @endguest
+    <div id="app" :data-template="{{ $userID }}">
         <v-app>
             @if (\Route::current()->getName() != 'login')
                 <header class="elevation-3 mb-10">
@@ -75,17 +80,18 @@
                                             </v-list>
                                             <v-divider></v-divider>
                                             <v-list dense>
-                                                <v-list-item href="{{ URL::to('/u/cv') }}">
+                                                <v-list-item href="{{ route('user.cv') }}">
                                                     <v-list-item-content>
                                                         <v-list-item-title>CV</v-list-item-title>
                                                     </v-list-item-content>
                                                 </v-list-item>
-                                                <v-list-item href="{{ URL::to('/u/account') }}">
+                                                <v-list-item href="{{ route('user.account') }}">
                                                     <v-list-item-content>
                                                         <v-list-item-title>Account</v-list-item-title>
                                                     </v-list-item-content>
                                                 </v-list-item>
-                                                <v-list-item href="{{ URL::to('/u/my-applications') }}">
+                                                {{-- <v-list-item href="{{ route('user.myapplications', ['id' => Auth::user()->id]) }}"> --}}
+                                                <v-list-item href="{{ route('user.myapplications') }}">
                                                     <v-list-item-content>
                                                         <v-list-item-title>My Applications</v-list-item-title>
                                                     </v-list-item-content>
