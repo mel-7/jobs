@@ -3,16 +3,16 @@
     <div class="card-header mb-6 d-flex align-center">
       <h3 class="headline">Work Experience</h3>
       <v-spacer></v-spacer>
-      <v-btn v-if="formview == false" text small fab color="primary" @click="newWorkExperience()">
+      <v-btn text small fab color="primary" @click="newWorkExperience()">
         <v-icon>mdi-plus</v-icon>
       </v-btn>
     </div>
     <div class="card-body mb-5" v-for="item in experience" :key="item.id">
-      <template v-if="formview == false">
+      <template v-if="checkJSON(item.value) == true">
         <h4 class="title d-flex align-center">
           {{ JSON.parse(item.value).jobtitle }}
           <v-spacer></v-spacer>
-          <v-btn v-if="formview == false" text small fab color="primary" @click="edit(item)">
+          <v-btn text small fab color="primary" @click="edit(item)">
             <v-icon>mdi-pencil</v-icon>
           </v-btn>
         </h4>
@@ -32,6 +32,15 @@
           class="no-border"
         ></v-textarea>
         <v-divider></v-divider>
+      </template>
+      <template v-else>
+        <v-alert
+          dismissible
+          dense
+          text
+          type="error"
+          class="overline"
+        >Error retreiving Work experience({{item.id}}). Please report this error.</v-alert>
       </template>
     </div>
     <v-dialog v-model="dialog" persistent max-width="600px">
@@ -209,7 +218,6 @@ export default {
       dialog: false,
       toPresentCheckbox: false,
 
-      formview: false,
       valid: true,
       experience: [],
       dialogItem: {
@@ -224,6 +232,17 @@ export default {
     };
   },
   methods: {
+    checkJSON(s) {
+      if (typeof s !== "string") {
+        return false;
+      }
+      try {
+        JSON.parse(s);
+        return true;
+      } catch (error) {
+        return false;
+      }
+    },
     snackbarUI(status, type = "", msg = "") {
       setTimeout(() => {
         this.sbStatus = status;
@@ -269,6 +288,7 @@ export default {
         .get("/applicant/experience/" + this.theUserID)
         .then(response => {
           this.experience = response.data.exp;
+          // console.log(this.experience);
         })
         .catch(error => {
           console.log(error.response);
@@ -308,7 +328,7 @@ export default {
           this.dialog = false;
           this.$refs.form.reset();
           this.snackbarUI(true, "success", response.data.message);
-          console.log(response.data.message);
+          // console.log(response.data.message);
         })
         .catch(error => {
           if (error.response && error.response.status == 422) {

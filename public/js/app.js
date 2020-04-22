@@ -5017,6 +5017,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -5039,8 +5048,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       tomenu: false,
       modal: false,
       dialog: false,
-      toPresentCheckbox: false,
-      formview: false
+      toPresentCheckbox: false
     }, _defineProperty(_ref, "valid", true), _defineProperty(_ref, "experience", []), _defineProperty(_ref, "dialogItem", {
       id: "",
       startdate: "",
@@ -5052,6 +5060,18 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     }), _ref;
   },
   methods: {
+    checkJSON: function checkJSON(s) {
+      if (typeof s !== "string") {
+        return false;
+      }
+
+      try {
+        JSON.parse(s);
+        return true;
+      } catch (error) {
+        return false;
+      }
+    },
     snackbarUI: function snackbarUI(status) {
       var _this = this;
 
@@ -5099,7 +5119,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var _this2 = this;
 
       axios.get("/applicant/experience/" + this.theUserID).then(function (response) {
-        _this2.experience = response.data.exp;
+        _this2.experience = response.data.exp; // console.log(this.experience);
       })["catch"](function (error) {
         console.log(error.response);
         console.log("error");
@@ -5139,9 +5159,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
         _this3.$refs.form.reset();
 
-        _this3.snackbarUI(true, "success", response.data.message);
+        _this3.snackbarUI(true, "success", response.data.message); // console.log(response.data.message);
 
-        console.log(response.data.message);
       })["catch"](function (error) {
         if (error.response && error.response.status == 422) {
           // this.errors.setErrors( error.response.data.errors );
@@ -55401,21 +55420,19 @@ var render = function() {
           _vm._v(" "),
           _c("v-spacer"),
           _vm._v(" "),
-          _vm.formview == false
-            ? _c(
-                "v-btn",
-                {
-                  attrs: { text: "", small: "", fab: "", color: "primary" },
-                  on: {
-                    click: function($event) {
-                      return _vm.newWorkExperience()
-                    }
-                  }
-                },
-                [_c("v-icon", [_vm._v("mdi-plus")])],
-                1
-              )
-            : _vm._e()
+          _c(
+            "v-btn",
+            {
+              attrs: { text: "", small: "", fab: "", color: "primary" },
+              on: {
+                click: function($event) {
+                  return _vm.newWorkExperience()
+                }
+              }
+            },
+            [_c("v-icon", [_vm._v("mdi-plus")])],
+            1
+          )
         ],
         1
       ),
@@ -55425,7 +55442,7 @@ var render = function() {
           "div",
           { key: item.id, staticClass: "card-body mb-5" },
           [
-            _vm.formview == false
+            _vm.checkJSON(item.value) == true
               ? [
                   _c(
                     "h4",
@@ -55438,26 +55455,24 @@ var render = function() {
                       ),
                       _c("v-spacer"),
                       _vm._v(" "),
-                      _vm.formview == false
-                        ? _c(
-                            "v-btn",
-                            {
-                              attrs: {
-                                text: "",
-                                small: "",
-                                fab: "",
-                                color: "primary"
-                              },
-                              on: {
-                                click: function($event) {
-                                  return _vm.edit(item)
-                                }
-                              }
-                            },
-                            [_c("v-icon", [_vm._v("mdi-pencil")])],
-                            1
-                          )
-                        : _vm._e()
+                      _c(
+                        "v-btn",
+                        {
+                          attrs: {
+                            text: "",
+                            small: "",
+                            fab: "",
+                            color: "primary"
+                          },
+                          on: {
+                            click: function($event) {
+                              return _vm.edit(item)
+                            }
+                          }
+                        },
+                        [_c("v-icon", [_vm._v("mdi-pencil")])],
+                        1
+                      )
                     ],
                     1
                   ),
@@ -55496,7 +55511,27 @@ var render = function() {
                   _vm._v(" "),
                   _c("v-divider")
                 ]
-              : _vm._e()
+              : [
+                  _c(
+                    "v-alert",
+                    {
+                      staticClass: "overline",
+                      attrs: {
+                        dismissible: "",
+                        dense: "",
+                        text: "",
+                        type: "error"
+                      }
+                    },
+                    [
+                      _vm._v(
+                        "Error retreiving Work experience(" +
+                          _vm._s(item.id) +
+                          "). Please report this error."
+                      )
+                    ]
+                  )
+                ]
           ],
           2
         )
