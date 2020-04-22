@@ -60,9 +60,47 @@ class ApplicantsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+    // 'message' => auth()->id()
     public function store(Request $request)
     {
-        //
+        $valueObj = json_decode($request->value);   
+        if( isset($valueObj->jobtitle) && isset($valueObj->company) && isset($valueObj->city) && isset($valueObj->description) ){
+            $ad = Applicant_details::create($this->validateRequest());
+            return response()->json([
+                'message' => 'Work Experience has been created'
+            ], 200); 
+        }else{
+            return response()->json([
+                'message' => 'Please fill in the fields accordingly'
+            ], 422); 
+        }
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request)
+    {
+        $valueObj = json_decode($request->value);   
+        if( isset($valueObj->jobtitle) && isset($valueObj->company) && isset($valueObj->city) && isset($valueObj->description) ){
+            $ad = Applicant_details::find($request->id);
+            $ad->value = $request->value;
+            $ad->startdate = Carbon::parse($request->startdate);
+            $ad->todate = $request->todate == null ? null : Carbon::parse($request->todate);
+            $ad->topresent = $request->topresent;
+            $ad->save($this->validateRequest());
+            return response()->json([
+                'message' => 'Work Experience has been updated',
+            ], 200);
+        }else{
+            return response()->json([
+                'message' => 'Please fill in the fields accordingly'
+            ], 422); 
+        }
     }
 
     /**
@@ -83,18 +121,6 @@ class ApplicantsController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
     {
         //
     }
@@ -122,18 +148,19 @@ class ApplicantsController extends Controller
         ], 200);
     }
 
-    public function saveWorkExperience(Request $request)
+    /**
+     * Validate Post Request
+     */
+    public function validateRequest()
     {
-        $ad = Applicant_details::find($request->id);
-        $ad->value = $request->value;
-        $ad->startdate = Carbon::parse($request->startdate);
-        $ad->todate = $request->todate == null ? null : Carbon::parse($request->todate);
-        $ad->topresent = $request->topresent;
-        $ad->save();
-        return response()->json([
-            'message' => 'Work Experience Saved',
-            // 'message' => Carbon::parse($request->todate).' '.$request->topresent,
-        ], 200);
-    }
+        return request()->validate([
+            'user' => ['required'],
+            'type' => ['required'],
+            'value' => ['required'],
+            'startdate' => ['required'],
+            'todate' => [''],
+            'topresent' => ['required'],
+        ]);
 
+    }
 }

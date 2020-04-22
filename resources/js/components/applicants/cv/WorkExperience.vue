@@ -21,7 +21,7 @@
         >{{ JSON.parse(item.value).company }} - {{ JSON.parse(item.value).city }}</div>
         <div
           class="subtitle-2"
-        >{{ formatDate(item.startdate)}} to {{ item.topresent ? 'Present' : formatDate(item.todate) }}</div>
+        >{{ formatDate(item.startdate)}} to {{ item.topresent == true ? 'Present' : formatDate(item.todate) }}</div>
         <v-textarea
           color="primary"
           hide-details
@@ -36,68 +36,45 @@
     </div>
     <v-dialog v-model="dialog" persistent max-width="600px">
       <v-card>
-        <v-card-title>
-          <span class="headline">Edit Work Experience</span>
-        </v-card-title>
-        <v-card-text>
-          <v-container>
-            <v-row>
-              <v-col cols="12">
-                <v-text-field dense label="Job Title" required v-model="dialogItem.jobtitle"></v-text-field>
-              </v-col>
-              <v-col cols="12">
-                <v-text-field dense label="Company" v-model="dialogItem.company"></v-text-field>
-              </v-col>
-              <v-col cols="12">
-                <v-text-field dense label="City" v-model="dialogItem.city"></v-text-field>
-              </v-col>
-              <v-col cols="12" class="py-0">
-                <div class="row">
-                  <div class="col-8">
-                    <v-menu
-                      ref="startmenu"
-                      v-model="startmenu"
-                      :close-on-content-click="false"
-                      :return-value.sync="dialogItem.startdate"
-                      transition="scale-transition"
-                      offset-y
-                      width="290px"
-                      max-width="290px"
-                      min-width="290px"
-                    >
-                      <template v-slot:activator="{ on }">
-                        <v-text-field
-                          dense
-                          v-model="dialogItem.startdate"
-                          label="Start Date"
-                          prepend-icon="mdi-calendar"
-                          readonly
-                          v-on="on"
-                          class="mb-3"
-                        ></v-text-field>
-                      </template>
-                      <v-date-picker
-                        v-model="dialogItem.startdate"
-                        color="primary"
-                        type="month"
-                        no-title
-                        scrollable
-                      >
-                        <v-spacer></v-spacer>
-                        <v-btn text color="primary" @click="startmenu = false">Cancel</v-btn>
-                        <v-btn
-                          text
-                          color="primary"
-                          @click="$refs.startmenu.save(dialogItem.startdate)"
-                        >OK</v-btn>
-                      </v-date-picker>
-                    </v-menu>
-                    <template v-if="toPresentCheckbox == false">
+        <v-form ref="form" v-model="valid">
+          <v-card-title>
+            <span class="headline">Edit Work Experience</span>
+          </v-card-title>
+          <v-card-text>
+            <v-container>
+              <v-row>
+                <v-col cols="12">
+                  <v-text-field
+                    :rules="textFeildRules"
+                    dense
+                    label="Job Title"
+                    v-model="dialogItem.jobtitle"
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="12">
+                  <v-text-field
+                    :rules="textFeildRules"
+                    dense
+                    label="Company"
+                    v-model="dialogItem.company"
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="12">
+                  <v-text-field
+                    :rules="textFeildRules"
+                    dense
+                    label="City"
+                    v-model="dialogItem.city"
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="12" class="py-0">
+                  <div class="row">
+                    <div class="col-8">
                       <v-menu
-                        ref="tomenu"
-                        v-model="tomenu"
+                        ref="startmenu"
+                        v-model="startmenu"
                         :close-on-content-click="false"
-                        :return-value.sync="dialogItem.todate"
+                        :return-value.sync="dialogItem.startdate"
                         transition="scale-transition"
                         offset-y
                         width="290px"
@@ -107,78 +84,131 @@
                         <template v-slot:activator="{ on }">
                           <v-text-field
                             dense
-                            v-model="dialogItem.todate"
-                            label="To"
+                            v-model="dialogItem.startdate"
+                            label="Start Date"
                             prepend-icon="mdi-calendar"
                             readonly
                             v-on="on"
+                            class="mb-3"
+                            :rules="textFeildRules"
                           ></v-text-field>
                         </template>
                         <v-date-picker
-                          hide-details
-                          v-model="dialogItem.todate"
+                          v-model="dialogItem.startdate"
                           color="primary"
                           type="month"
                           no-title
                           scrollable
                         >
                           <v-spacer></v-spacer>
-                          <v-btn text color="primary" @click="tomenu = false">Cancel</v-btn>
+                          <v-btn text color="primary" @click="startmenu = false">Cancel</v-btn>
                           <v-btn
                             text
                             color="primary"
-                            @click="$refs.tomenu.save(dialogItem.todate)"
+                            @click="$refs.startmenu.save(dialogItem.startdate)"
                           >OK</v-btn>
                         </v-date-picker>
                       </v-menu>
-                    </template>
+                      <template v-if="toPresentCheckbox == false">
+                        <v-menu
+                          ref="tomenu"
+                          v-model="tomenu"
+                          :close-on-content-click="false"
+                          :return-value.sync="dialogItem.todate"
+                          transition="scale-transition"
+                          offset-y
+                          width="290px"
+                          max-width="290px"
+                          min-width="290px"
+                        >
+                          <template v-slot:activator="{ on }">
+                            <v-text-field
+                              dense
+                              v-model="dialogItem.todate"
+                              label="To"
+                              prepend-icon="mdi-calendar"
+                              readonly
+                              v-on="on"
+                              :rules="textFeildRules"
+                            ></v-text-field>
+                          </template>
+                          <v-date-picker
+                            hide-details
+                            v-model="dialogItem.todate"
+                            color="primary"
+                            type="month"
+                            no-title
+                            scrollable
+                          >
+                            <v-spacer></v-spacer>
+                            <v-btn text color="primary" @click="tomenu = false">Cancel</v-btn>
+                            <v-btn
+                              text
+                              color="primary"
+                              @click="$refs.tomenu.save(dialogItem.todate)"
+                            >OK</v-btn>
+                          </v-date-picker>
+                        </v-menu>
+                      </template>
+                    </div>
+                    <div class="col-4">
+                      <v-checkbox
+                        dense
+                        v-model="toPresentCheckbox"
+                        label="I still work here."
+                        class="ma-0"
+                      ></v-checkbox>
+                    </div>
                   </div>
-                  <div class="col-4">
-                    <v-checkbox
-                      dense
-                      v-model="toPresentCheckbox"
-                      label="I still work here."
-                      class="ma-0"
-                    ></v-checkbox>
-                  </div>
-                </div>
-              </v-col>
-              <v-col cols="12">
-                <v-textarea
-                  color="primary"
-                  auto-grow
-                  label="Description"
-                  v-model="dialogItem.description"
-                ></v-textarea>
-              </v-col>
-            </v-row>
-          </v-container>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text @click="dialog = false">Close</v-btn>
-          <v-btn color="primary" text @click="saveData(dialogItem)">Save</v-btn>
-        </v-card-actions>
+                </v-col>
+                <v-col cols="12">
+                  <v-textarea
+                    color="primary"
+                    auto-grow
+                    label="Description"
+                    v-model="dialogItem.description"
+                    :rules="textFeildRules"
+                  ></v-textarea>
+                </v-col>
+              </v-row>
+            </v-container>
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="blue darken-1" text @click="close()">Cancel</v-btn>
+            <v-btn color="primary" :disabled="!valid" text @click="saveData(dialogItem)">Save</v-btn>
+          </v-card-actions>
+        </v-form>
       </v-card>
     </v-dialog>
+    <snack-bar :snackbar-type="sbType" :snackbar-text="sbText" :snackbar-status="sbStatus"></snack-bar>
   </div>
 </template>
 
 <script>
 import moment from "moment";
+import SnackBar from "../../SnackBar.vue";
+import ErrorBag from "../../../helpers/errorBag.js";
 export default {
   data() {
     return {
+      // SnackBar
+      errors: new ErrorBag(),
+      sbType: "",
+      sbText: "",
+      sbStatus: false,
+
+      valid: false,
+      textFeildRules: [v => !!v || "Name is required"],
+
       theUserID: 0,
 
-      date: new Date().toISOString().substr(0, 7),
       startmenu: false,
       tomenu: false,
       modal: false,
       dialog: false,
       toPresentCheckbox: false,
 
-      action: "store",
       formview: false,
       valid: true,
       experience: [],
@@ -190,28 +220,33 @@ export default {
         jobtitle: "",
         company: "",
         description: ""
-      },
-      dataItem: {
-        jobtitle: "",
-        company: "",
-        date: "",
-        description: ""
-      },
-      value:
-        '{"fullname":"Romel Indemne","jobtitle":Web Developer,"company":"GAG","city":"Dubai","description":"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book."}',
-      jobTitle: "Web Developer",
-      company: "Test Company",
-      city: "Cebu",
-      description:
-        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book."
+      }
     };
   },
   methods: {
+    snackbarUI(status, type = "", msg = "") {
+      setTimeout(() => {
+        this.sbStatus = status;
+        this.sbType = type;
+        this.sbText = msg;
+      }, 100);
+    },
+    close() {
+      this.dialog = false;
+      this.$refs.form.reset();
+      this.sbStatus = false;
+    },
+    validate() {
+      this.$refs.form.validate();
+    },
     newWorkExperience() {
       this.dialogItem = [];
       this.dialog = true;
+      this.toPresentCheckbox = false;
+      this.sbStatus = false;
     },
     edit(i) {
+      this.sbStatus = false;
       this.toPresentCheckbox = false;
       this.dialogItem = Object.assign({}, JSON.parse(i.value));
       this.dialogItem.id = i.id;
@@ -252,32 +287,49 @@ export default {
         id: i.id,
         user: this.theUserID,
         type: "work_experience",
-        startdate: i.startdate,
-        todate: this.toPresentCheckbox == false ? i.todate : null,
+        startdate: moment(i.startdate).format("YYYY-MM-DD HH:MM:SS"),
+        todate:
+          this.toPresentCheckbox == false
+            ? moment(i.todate).format("YYYY-MM-DD HH:MM:SS")
+            : null,
         topresent: this.toPresentCheckbox,
         value: JSON.stringify(valueData)
       };
-      if(!i.id){
+      let action = "update";
+      if (!i.id) {
+        action = "new";
         delete postData.id;
       }
-      console.log(postData)
+      // console.log(postData);
       axios
-        .post("/applicant/experience/save", postData)
+        .post("/applicant/experience/" + action, postData)
         .then(response => {
           this.getExperience();
           this.dialog = false;
+          this.$refs.form.reset();
+          this.snackbarUI(true, "success", response.data.message);
+          console.log(response.data.message);
         })
         .catch(error => {
-          this.dialog = false;
-          console.log(error.response);
-          console.log("error");
+          if (error.response && error.response.status == 422) {
+            // this.errors.setErrors( error.response.data.errors );
+            this.snackbarUI(true, "error", error.response.data.message);
+          }
+          if (error.response.status >= 500) {
+            this.snackbarUI(
+              true,
+              "error",
+              "Error while processing your request. Try again later."
+            );
+          }
+          console.log(error.response.data.message);
         });
     }
   },
   mounted() {
-    this.theUserID = document
-      .getElementById("app")
-      .getAttribute("data-template");
+    this.theUserID = parseInt(
+      document.getElementById("app").getAttribute("data-template")
+    );
     if (this.theUserID > 0) {
       this.getExperience();
     }

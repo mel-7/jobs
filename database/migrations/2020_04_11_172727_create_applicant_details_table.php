@@ -18,8 +18,8 @@ class CreateApplicantDetailsTable extends Migration
             $table->unsignedInteger('user');
             $table->string('type');
             $table->longText('value');
-            $table->date('startdate')->nullable();
-            $table->date('todate')->nullable();
+            $table->dateTime('startdate')->nullable();
+            $table->dateTime('todate')->nullable();
             $table->boolean('topresent')->nullable();
             $table->timestamps();
         });

@@ -4826,6 +4826,31 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _SnackBar_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../SnackBar.vue */ "./resources/js/components/SnackBar.vue");
+/* harmony import */ var _helpers_errorBag_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../helpers/errorBag.js */ "./resources/js/helpers/errorBag.js");
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -4993,48 +5018,67 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 
+
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
-    return {
+    var _ref;
+
+    return _ref = {
+      // SnackBar
+      errors: new _helpers_errorBag_js__WEBPACK_IMPORTED_MODULE_2__["default"](),
+      sbType: "",
+      sbText: "",
+      sbStatus: false,
+      valid: false,
+      textFeildRules: [function (v) {
+        return !!v || "Name is required";
+      }],
       theUserID: 0,
-      date: new Date().toISOString().substr(0, 7),
       startmenu: false,
       tomenu: false,
       modal: false,
       dialog: false,
       toPresentCheckbox: false,
-      action: "store",
-      formview: false,
-      valid: true,
-      experience: [],
-      dialogItem: {
-        id: "",
-        startdate: "",
-        todate: "",
-        topresent: "",
-        jobtitle: "",
-        company: "",
-        description: ""
-      },
-      dataItem: {
-        jobtitle: "",
-        company: "",
-        date: "",
-        description: ""
-      },
-      value: '{"fullname":"Romel Indemne","jobtitle":Web Developer,"company":"GAG","city":"Dubai","description":"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book."}',
-      jobTitle: "Web Developer",
-      company: "Test Company",
-      city: "Cebu",
-      description: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book."
-    };
+      formview: false
+    }, _defineProperty(_ref, "valid", true), _defineProperty(_ref, "experience", []), _defineProperty(_ref, "dialogItem", {
+      id: "",
+      startdate: "",
+      todate: "",
+      topresent: "",
+      jobtitle: "",
+      company: "",
+      description: ""
+    }), _ref;
   },
   methods: {
+    snackbarUI: function snackbarUI(status) {
+      var _this = this;
+
+      var type = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "";
+      var msg = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : "";
+      setTimeout(function () {
+        _this.sbStatus = status;
+        _this.sbType = type;
+        _this.sbText = msg;
+      }, 100);
+    },
+    close: function close() {
+      this.dialog = false;
+      this.$refs.form.reset();
+      this.sbStatus = false;
+    },
+    validate: function validate() {
+      this.$refs.form.validate();
+    },
     newWorkExperience: function newWorkExperience() {
       this.dialogItem = [];
       this.dialog = true;
+      this.toPresentCheckbox = false;
+      this.sbStatus = false;
     },
     edit: function edit(i) {
+      this.sbStatus = false;
       this.toPresentCheckbox = false;
       this.dialogItem = Object.assign({}, JSON.parse(i.value));
       this.dialogItem.id = i.id;
@@ -5052,17 +5096,17 @@ __webpack_require__.r(__webpack_exports__);
       return moment__WEBPACK_IMPORTED_MODULE_0___default()(d).format("MMMM YYYY");
     },
     getExperience: function getExperience() {
-      var _this = this;
+      var _this2 = this;
 
       axios.get("/applicant/experience/" + this.theUserID).then(function (response) {
-        _this.experience = response.data.exp;
+        _this2.experience = response.data.exp;
       })["catch"](function (error) {
         console.log(error.response);
         console.log("error");
       });
     },
     saveData: function saveData(i) {
-      var _this2 = this;
+      var _this3 = this;
 
       var postData = [];
       var valueData = {
@@ -5075,30 +5119,45 @@ __webpack_require__.r(__webpack_exports__);
         id: i.id,
         user: this.theUserID,
         type: "work_experience",
-        startdate: i.startdate,
-        todate: this.toPresentCheckbox == false ? i.todate : null,
+        startdate: moment__WEBPACK_IMPORTED_MODULE_0___default()(i.startdate).format("YYYY-MM-DD HH:MM:SS"),
+        todate: this.toPresentCheckbox == false ? moment__WEBPACK_IMPORTED_MODULE_0___default()(i.todate).format("YYYY-MM-DD HH:MM:SS") : null,
         topresent: this.toPresentCheckbox,
         value: JSON.stringify(valueData)
       };
+      var action = "update";
 
       if (!i.id) {
+        action = "new";
         delete postData.id;
-      }
+      } // console.log(postData);
 
-      console.log(postData);
-      axios.post("/applicant/experience/save", postData).then(function (response) {
-        _this2.getExperience();
 
-        _this2.dialog = false;
+      axios.post("/applicant/experience/" + action, postData).then(function (response) {
+        _this3.getExperience();
+
+        _this3.dialog = false;
+
+        _this3.$refs.form.reset();
+
+        _this3.snackbarUI(true, "success", response.data.message);
+
+        console.log(response.data.message);
       })["catch"](function (error) {
-        _this2.dialog = false;
-        console.log(error.response);
-        console.log("error");
+        if (error.response && error.response.status == 422) {
+          // this.errors.setErrors( error.response.data.errors );
+          _this3.snackbarUI(true, "error", error.response.data.message);
+        }
+
+        if (error.response.status >= 500) {
+          _this3.snackbarUI(true, "error", "Error while processing your request. Try again later.");
+        }
+
+        console.log(error.response.data.message);
       });
     }
   },
   mounted: function mounted() {
-    this.theUserID = document.getElementById("app").getAttribute("data-template");
+    this.theUserID = parseInt(document.getElementById("app").getAttribute("data-template"));
 
     if (this.theUserID > 0) {
       this.getExperience();
@@ -55416,7 +55475,7 @@ var render = function() {
                       _vm._s(_vm.formatDate(item.startdate)) +
                         " to " +
                         _vm._s(
-                          item.topresent
+                          item.topresent == true
                             ? "Present"
                             : _vm.formatDate(item.todate)
                         )
@@ -55459,450 +55518,495 @@ var render = function() {
           _c(
             "v-card",
             [
-              _c("v-card-title", [
-                _c("span", { staticClass: "headline" }, [
-                  _vm._v("Edit Work Experience")
-                ])
-              ]),
-              _vm._v(" "),
               _c(
-                "v-card-text",
+                "v-form",
+                {
+                  ref: "form",
+                  model: {
+                    value: _vm.valid,
+                    callback: function($$v) {
+                      _vm.valid = $$v
+                    },
+                    expression: "valid"
+                  }
+                },
                 [
+                  _c("v-card-title", [
+                    _c("span", { staticClass: "headline" }, [
+                      _vm._v("Edit Work Experience")
+                    ])
+                  ]),
+                  _vm._v(" "),
                   _c(
-                    "v-container",
+                    "v-card-text",
                     [
                       _c(
-                        "v-row",
+                        "v-container",
                         [
                           _c(
-                            "v-col",
-                            { attrs: { cols: "12" } },
+                            "v-row",
                             [
-                              _c("v-text-field", {
-                                attrs: {
-                                  dense: "",
-                                  label: "Job Title",
-                                  required: ""
-                                },
-                                model: {
-                                  value: _vm.dialogItem.jobtitle,
-                                  callback: function($$v) {
-                                    _vm.$set(_vm.dialogItem, "jobtitle", $$v)
-                                  },
-                                  expression: "dialogItem.jobtitle"
-                                }
-                              })
-                            ],
-                            1
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "v-col",
-                            { attrs: { cols: "12" } },
-                            [
-                              _c("v-text-field", {
-                                attrs: { dense: "", label: "Company" },
-                                model: {
-                                  value: _vm.dialogItem.company,
-                                  callback: function($$v) {
-                                    _vm.$set(_vm.dialogItem, "company", $$v)
-                                  },
-                                  expression: "dialogItem.company"
-                                }
-                              })
-                            ],
-                            1
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "v-col",
-                            { attrs: { cols: "12" } },
-                            [
-                              _c("v-text-field", {
-                                attrs: { dense: "", label: "City" },
-                                model: {
-                                  value: _vm.dialogItem.city,
-                                  callback: function($$v) {
-                                    _vm.$set(_vm.dialogItem, "city", $$v)
-                                  },
-                                  expression: "dialogItem.city"
-                                }
-                              })
-                            ],
-                            1
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "v-col",
-                            { staticClass: "py-0", attrs: { cols: "12" } },
-                            [
-                              _c("div", { staticClass: "row" }, [
-                                _c(
-                                  "div",
-                                  { staticClass: "col-8" },
-                                  [
+                              _c(
+                                "v-col",
+                                { attrs: { cols: "12" } },
+                                [
+                                  _c("v-text-field", {
+                                    attrs: {
+                                      rules: _vm.textFeildRules,
+                                      dense: "",
+                                      label: "Job Title"
+                                    },
+                                    model: {
+                                      value: _vm.dialogItem.jobtitle,
+                                      callback: function($$v) {
+                                        _vm.$set(
+                                          _vm.dialogItem,
+                                          "jobtitle",
+                                          $$v
+                                        )
+                                      },
+                                      expression: "dialogItem.jobtitle"
+                                    }
+                                  })
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-col",
+                                { attrs: { cols: "12" } },
+                                [
+                                  _c("v-text-field", {
+                                    attrs: {
+                                      rules: _vm.textFeildRules,
+                                      dense: "",
+                                      label: "Company"
+                                    },
+                                    model: {
+                                      value: _vm.dialogItem.company,
+                                      callback: function($$v) {
+                                        _vm.$set(_vm.dialogItem, "company", $$v)
+                                      },
+                                      expression: "dialogItem.company"
+                                    }
+                                  })
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-col",
+                                { attrs: { cols: "12" } },
+                                [
+                                  _c("v-text-field", {
+                                    attrs: {
+                                      rules: _vm.textFeildRules,
+                                      dense: "",
+                                      label: "City"
+                                    },
+                                    model: {
+                                      value: _vm.dialogItem.city,
+                                      callback: function($$v) {
+                                        _vm.$set(_vm.dialogItem, "city", $$v)
+                                      },
+                                      expression: "dialogItem.city"
+                                    }
+                                  })
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-col",
+                                { staticClass: "py-0", attrs: { cols: "12" } },
+                                [
+                                  _c("div", { staticClass: "row" }, [
                                     _c(
-                                      "v-menu",
-                                      {
-                                        ref: "startmenu",
-                                        attrs: {
-                                          "close-on-content-click": false,
-                                          "return-value":
-                                            _vm.dialogItem.startdate,
-                                          transition: "scale-transition",
-                                          "offset-y": "",
-                                          width: "290px",
-                                          "max-width": "290px",
-                                          "min-width": "290px"
-                                        },
-                                        on: {
-                                          "update:returnValue": function(
-                                            $event
-                                          ) {
-                                            return _vm.$set(
-                                              _vm.dialogItem,
-                                              "startdate",
-                                              $event
-                                            )
-                                          },
-                                          "update:return-value": function(
-                                            $event
-                                          ) {
-                                            return _vm.$set(
-                                              _vm.dialogItem,
-                                              "startdate",
-                                              $event
-                                            )
-                                          }
-                                        },
-                                        scopedSlots: _vm._u([
+                                      "div",
+                                      { staticClass: "col-8" },
+                                      [
+                                        _c(
+                                          "v-menu",
                                           {
-                                            key: "activator",
-                                            fn: function(ref) {
-                                              var on = ref.on
-                                              return [
+                                            ref: "startmenu",
+                                            attrs: {
+                                              "close-on-content-click": false,
+                                              "return-value":
+                                                _vm.dialogItem.startdate,
+                                              transition: "scale-transition",
+                                              "offset-y": "",
+                                              width: "290px",
+                                              "max-width": "290px",
+                                              "min-width": "290px"
+                                            },
+                                            on: {
+                                              "update:returnValue": function(
+                                                $event
+                                              ) {
+                                                return _vm.$set(
+                                                  _vm.dialogItem,
+                                                  "startdate",
+                                                  $event
+                                                )
+                                              },
+                                              "update:return-value": function(
+                                                $event
+                                              ) {
+                                                return _vm.$set(
+                                                  _vm.dialogItem,
+                                                  "startdate",
+                                                  $event
+                                                )
+                                              }
+                                            },
+                                            scopedSlots: _vm._u([
+                                              {
+                                                key: "activator",
+                                                fn: function(ref) {
+                                                  var on = ref.on
+                                                  return [
+                                                    _c(
+                                                      "v-text-field",
+                                                      _vm._g(
+                                                        {
+                                                          staticClass: "mb-3",
+                                                          attrs: {
+                                                            dense: "",
+                                                            label: "Start Date",
+                                                            "prepend-icon":
+                                                              "mdi-calendar",
+                                                            readonly: "",
+                                                            rules:
+                                                              _vm.textFeildRules
+                                                          },
+                                                          model: {
+                                                            value:
+                                                              _vm.dialogItem
+                                                                .startdate,
+                                                            callback: function(
+                                                              $$v
+                                                            ) {
+                                                              _vm.$set(
+                                                                _vm.dialogItem,
+                                                                "startdate",
+                                                                $$v
+                                                              )
+                                                            },
+                                                            expression:
+                                                              "dialogItem.startdate"
+                                                          }
+                                                        },
+                                                        on
+                                                      )
+                                                    )
+                                                  ]
+                                                }
+                                              }
+                                            ]),
+                                            model: {
+                                              value: _vm.startmenu,
+                                              callback: function($$v) {
+                                                _vm.startmenu = $$v
+                                              },
+                                              expression: "startmenu"
+                                            }
+                                          },
+                                          [
+                                            _vm._v(" "),
+                                            _c(
+                                              "v-date-picker",
+                                              {
+                                                attrs: {
+                                                  color: "primary",
+                                                  type: "month",
+                                                  "no-title": "",
+                                                  scrollable: ""
+                                                },
+                                                model: {
+                                                  value:
+                                                    _vm.dialogItem.startdate,
+                                                  callback: function($$v) {
+                                                    _vm.$set(
+                                                      _vm.dialogItem,
+                                                      "startdate",
+                                                      $$v
+                                                    )
+                                                  },
+                                                  expression:
+                                                    "dialogItem.startdate"
+                                                }
+                                              },
+                                              [
+                                                _c("v-spacer"),
+                                                _vm._v(" "),
                                                 _c(
-                                                  "v-text-field",
-                                                  _vm._g(
+                                                  "v-btn",
+                                                  {
+                                                    attrs: {
+                                                      text: "",
+                                                      color: "primary"
+                                                    },
+                                                    on: {
+                                                      click: function($event) {
+                                                        _vm.startmenu = false
+                                                      }
+                                                    }
+                                                  },
+                                                  [_vm._v("Cancel")]
+                                                ),
+                                                _vm._v(" "),
+                                                _c(
+                                                  "v-btn",
+                                                  {
+                                                    attrs: {
+                                                      text: "",
+                                                      color: "primary"
+                                                    },
+                                                    on: {
+                                                      click: function($event) {
+                                                        return _vm.$refs.startmenu.save(
+                                                          _vm.dialogItem
+                                                            .startdate
+                                                        )
+                                                      }
+                                                    }
+                                                  },
+                                                  [_vm._v("OK")]
+                                                )
+                                              ],
+                                              1
+                                            )
+                                          ],
+                                          1
+                                        ),
+                                        _vm._v(" "),
+                                        _vm.toPresentCheckbox == false
+                                          ? [
+                                              _c(
+                                                "v-menu",
+                                                {
+                                                  ref: "tomenu",
+                                                  attrs: {
+                                                    "close-on-content-click": false,
+                                                    "return-value":
+                                                      _vm.dialogItem.todate,
+                                                    transition:
+                                                      "scale-transition",
+                                                    "offset-y": "",
+                                                    width: "290px",
+                                                    "max-width": "290px",
+                                                    "min-width": "290px"
+                                                  },
+                                                  on: {
+                                                    "update:returnValue": function(
+                                                      $event
+                                                    ) {
+                                                      return _vm.$set(
+                                                        _vm.dialogItem,
+                                                        "todate",
+                                                        $event
+                                                      )
+                                                    },
+                                                    "update:return-value": function(
+                                                      $event
+                                                    ) {
+                                                      return _vm.$set(
+                                                        _vm.dialogItem,
+                                                        "todate",
+                                                        $event
+                                                      )
+                                                    }
+                                                  },
+                                                  scopedSlots: _vm._u(
+                                                    [
+                                                      {
+                                                        key: "activator",
+                                                        fn: function(ref) {
+                                                          var on = ref.on
+                                                          return [
+                                                            _c(
+                                                              "v-text-field",
+                                                              _vm._g(
+                                                                {
+                                                                  attrs: {
+                                                                    dense: "",
+                                                                    label: "To",
+                                                                    "prepend-icon":
+                                                                      "mdi-calendar",
+                                                                    readonly:
+                                                                      "",
+                                                                    rules:
+                                                                      _vm.textFeildRules
+                                                                  },
+                                                                  model: {
+                                                                    value:
+                                                                      _vm
+                                                                        .dialogItem
+                                                                        .todate,
+                                                                    callback: function(
+                                                                      $$v
+                                                                    ) {
+                                                                      _vm.$set(
+                                                                        _vm.dialogItem,
+                                                                        "todate",
+                                                                        $$v
+                                                                      )
+                                                                    },
+                                                                    expression:
+                                                                      "dialogItem.todate"
+                                                                  }
+                                                                },
+                                                                on
+                                                              )
+                                                            )
+                                                          ]
+                                                        }
+                                                      }
+                                                    ],
+                                                    null,
+                                                    false,
+                                                    2454250251
+                                                  ),
+                                                  model: {
+                                                    value: _vm.tomenu,
+                                                    callback: function($$v) {
+                                                      _vm.tomenu = $$v
+                                                    },
+                                                    expression: "tomenu"
+                                                  }
+                                                },
+                                                [
+                                                  _vm._v(" "),
+                                                  _c(
+                                                    "v-date-picker",
                                                     {
-                                                      staticClass: "mb-3",
                                                       attrs: {
-                                                        dense: "",
-                                                        label: "Start Date",
-                                                        "prepend-icon":
-                                                          "mdi-calendar",
-                                                        readonly: ""
+                                                        "hide-details": "",
+                                                        color: "primary",
+                                                        type: "month",
+                                                        "no-title": "",
+                                                        scrollable: ""
                                                       },
                                                       model: {
                                                         value:
-                                                          _vm.dialogItem
-                                                            .startdate,
+                                                          _vm.dialogItem.todate,
                                                         callback: function(
                                                           $$v
                                                         ) {
                                                           _vm.$set(
                                                             _vm.dialogItem,
-                                                            "startdate",
+                                                            "todate",
                                                             $$v
                                                           )
                                                         },
                                                         expression:
-                                                          "dialogItem.startdate"
+                                                          "dialogItem.todate"
                                                       }
                                                     },
-                                                    on
-                                                  )
-                                                )
-                                              ]
-                                            }
-                                          }
-                                        ]),
-                                        model: {
-                                          value: _vm.startmenu,
-                                          callback: function($$v) {
-                                            _vm.startmenu = $$v
-                                          },
-                                          expression: "startmenu"
-                                        }
-                                      },
-                                      [
-                                        _vm._v(" "),
-                                        _c(
-                                          "v-date-picker",
-                                          {
-                                            attrs: {
-                                              color: "primary",
-                                              type: "month",
-                                              "no-title": "",
-                                              scrollable: ""
-                                            },
-                                            model: {
-                                              value: _vm.dialogItem.startdate,
-                                              callback: function($$v) {
-                                                _vm.$set(
-                                                  _vm.dialogItem,
-                                                  "startdate",
-                                                  $$v
-                                                )
-                                              },
-                                              expression: "dialogItem.startdate"
-                                            }
-                                          },
-                                          [
-                                            _c("v-spacer"),
-                                            _vm._v(" "),
-                                            _c(
-                                              "v-btn",
-                                              {
-                                                attrs: {
-                                                  text: "",
-                                                  color: "primary"
-                                                },
-                                                on: {
-                                                  click: function($event) {
-                                                    _vm.startmenu = false
-                                                  }
-                                                }
-                                              },
-                                              [_vm._v("Cancel")]
-                                            ),
-                                            _vm._v(" "),
-                                            _c(
-                                              "v-btn",
-                                              {
-                                                attrs: {
-                                                  text: "",
-                                                  color: "primary"
-                                                },
-                                                on: {
-                                                  click: function($event) {
-                                                    return _vm.$refs.startmenu.save(
-                                                      _vm.dialogItem.startdate
-                                                    )
-                                                  }
-                                                }
-                                              },
-                                              [_vm._v("OK")]
-                                            )
-                                          ],
-                                          1
-                                        )
-                                      ],
-                                      1
-                                    ),
-                                    _vm._v(" "),
-                                    _vm.toPresentCheckbox == false
-                                      ? [
-                                          _c(
-                                            "v-menu",
-                                            {
-                                              ref: "tomenu",
-                                              attrs: {
-                                                "close-on-content-click": false,
-                                                "return-value":
-                                                  _vm.dialogItem.todate,
-                                                transition: "scale-transition",
-                                                "offset-y": "",
-                                                width: "290px",
-                                                "max-width": "290px",
-                                                "min-width": "290px"
-                                              },
-                                              on: {
-                                                "update:returnValue": function(
-                                                  $event
-                                                ) {
-                                                  return _vm.$set(
-                                                    _vm.dialogItem,
-                                                    "todate",
-                                                    $event
-                                                  )
-                                                },
-                                                "update:return-value": function(
-                                                  $event
-                                                ) {
-                                                  return _vm.$set(
-                                                    _vm.dialogItem,
-                                                    "todate",
-                                                    $event
-                                                  )
-                                                }
-                                              },
-                                              scopedSlots: _vm._u(
-                                                [
-                                                  {
-                                                    key: "activator",
-                                                    fn: function(ref) {
-                                                      var on = ref.on
-                                                      return [
-                                                        _c(
-                                                          "v-text-field",
-                                                          _vm._g(
-                                                            {
-                                                              attrs: {
-                                                                dense: "",
-                                                                label: "To",
-                                                                "prepend-icon":
-                                                                  "mdi-calendar",
-                                                                readonly: ""
-                                                              },
-                                                              model: {
-                                                                value:
-                                                                  _vm.dialogItem
-                                                                    .todate,
-                                                                callback: function(
-                                                                  $$v
-                                                                ) {
-                                                                  _vm.$set(
-                                                                    _vm.dialogItem,
-                                                                    "todate",
-                                                                    $$v
-                                                                  )
-                                                                },
-                                                                expression:
-                                                                  "dialogItem.todate"
-                                                              }
-                                                            },
-                                                            on
-                                                          )
-                                                        )
-                                                      ]
-                                                    }
-                                                  }
-                                                ],
-                                                null,
-                                                false,
-                                                2463746690
-                                              ),
-                                              model: {
-                                                value: _vm.tomenu,
-                                                callback: function($$v) {
-                                                  _vm.tomenu = $$v
-                                                },
-                                                expression: "tomenu"
-                                              }
-                                            },
-                                            [
-                                              _vm._v(" "),
-                                              _c(
-                                                "v-date-picker",
-                                                {
-                                                  attrs: {
-                                                    "hide-details": "",
-                                                    color: "primary",
-                                                    type: "month",
-                                                    "no-title": "",
-                                                    scrollable: ""
-                                                  },
-                                                  model: {
-                                                    value:
-                                                      _vm.dialogItem.todate,
-                                                    callback: function($$v) {
-                                                      _vm.$set(
-                                                        _vm.dialogItem,
-                                                        "todate",
-                                                        $$v
+                                                    [
+                                                      _c("v-spacer"),
+                                                      _vm._v(" "),
+                                                      _c(
+                                                        "v-btn",
+                                                        {
+                                                          attrs: {
+                                                            text: "",
+                                                            color: "primary"
+                                                          },
+                                                          on: {
+                                                            click: function(
+                                                              $event
+                                                            ) {
+                                                              _vm.tomenu = false
+                                                            }
+                                                          }
+                                                        },
+                                                        [_vm._v("Cancel")]
+                                                      ),
+                                                      _vm._v(" "),
+                                                      _c(
+                                                        "v-btn",
+                                                        {
+                                                          attrs: {
+                                                            text: "",
+                                                            color: "primary"
+                                                          },
+                                                          on: {
+                                                            click: function(
+                                                              $event
+                                                            ) {
+                                                              return _vm.$refs.tomenu.save(
+                                                                _vm.dialogItem
+                                                                  .todate
+                                                              )
+                                                            }
+                                                          }
+                                                        },
+                                                        [_vm._v("OK")]
                                                       )
-                                                    },
-                                                    expression:
-                                                      "dialogItem.todate"
-                                                  }
-                                                },
-                                                [
-                                                  _c("v-spacer"),
-                                                  _vm._v(" "),
-                                                  _c(
-                                                    "v-btn",
-                                                    {
-                                                      attrs: {
-                                                        text: "",
-                                                        color: "primary"
-                                                      },
-                                                      on: {
-                                                        click: function(
-                                                          $event
-                                                        ) {
-                                                          _vm.tomenu = false
-                                                        }
-                                                      }
-                                                    },
-                                                    [_vm._v("Cancel")]
-                                                  ),
-                                                  _vm._v(" "),
-                                                  _c(
-                                                    "v-btn",
-                                                    {
-                                                      attrs: {
-                                                        text: "",
-                                                        color: "primary"
-                                                      },
-                                                      on: {
-                                                        click: function(
-                                                          $event
-                                                        ) {
-                                                          return _vm.$refs.tomenu.save(
-                                                            _vm.dialogItem
-                                                              .todate
-                                                          )
-                                                        }
-                                                      }
-                                                    },
-                                                    [_vm._v("OK")]
+                                                    ],
+                                                    1
                                                   )
                                                 ],
                                                 1
                                               )
-                                            ],
-                                            1
-                                          )
-                                        ]
-                                      : _vm._e()
-                                  ],
-                                  2
-                                ),
-                                _vm._v(" "),
-                                _c(
-                                  "div",
-                                  { staticClass: "col-4" },
-                                  [
-                                    _c("v-checkbox", {
-                                      staticClass: "ma-0",
-                                      attrs: {
-                                        dense: "",
-                                        label: "I still work here."
+                                            ]
+                                          : _vm._e()
+                                      ],
+                                      2
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "div",
+                                      { staticClass: "col-4" },
+                                      [
+                                        _c("v-checkbox", {
+                                          staticClass: "ma-0",
+                                          attrs: {
+                                            dense: "",
+                                            label: "I still work here."
+                                          },
+                                          model: {
+                                            value: _vm.toPresentCheckbox,
+                                            callback: function($$v) {
+                                              _vm.toPresentCheckbox = $$v
+                                            },
+                                            expression: "toPresentCheckbox"
+                                          }
+                                        })
+                                      ],
+                                      1
+                                    )
+                                  ])
+                                ]
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-col",
+                                { attrs: { cols: "12" } },
+                                [
+                                  _c("v-textarea", {
+                                    attrs: {
+                                      color: "primary",
+                                      "auto-grow": "",
+                                      label: "Description",
+                                      rules: _vm.textFeildRules
+                                    },
+                                    model: {
+                                      value: _vm.dialogItem.description,
+                                      callback: function($$v) {
+                                        _vm.$set(
+                                          _vm.dialogItem,
+                                          "description",
+                                          $$v
+                                        )
                                       },
-                                      model: {
-                                        value: _vm.toPresentCheckbox,
-                                        callback: function($$v) {
-                                          _vm.toPresentCheckbox = $$v
-                                        },
-                                        expression: "toPresentCheckbox"
-                                      }
-                                    })
-                                  ],
-                                  1
-                                )
-                              ])
-                            ]
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "v-col",
-                            { attrs: { cols: "12" } },
-                            [
-                              _c("v-textarea", {
-                                attrs: {
-                                  color: "primary",
-                                  "auto-grow": "",
-                                  label: "Description"
-                                },
-                                model: {
-                                  value: _vm.dialogItem.description,
-                                  callback: function($$v) {
-                                    _vm.$set(_vm.dialogItem, "description", $$v)
-                                  },
-                                  expression: "dialogItem.description"
-                                }
-                              })
+                                      expression: "dialogItem.description"
+                                    }
+                                  })
+                                ],
+                                1
+                              )
                             ],
                             1
                           )
@@ -55911,40 +56015,44 @@ var render = function() {
                       )
                     ],
                     1
-                  )
-                ],
-                1
-              ),
-              _vm._v(" "),
-              _c(
-                "v-card-actions",
-                [
-                  _c("v-spacer"),
-                  _vm._v(" "),
-                  _c(
-                    "v-btn",
-                    {
-                      attrs: { color: "blue darken-1", text: "" },
-                      on: {
-                        click: function($event) {
-                          _vm.dialog = false
-                        }
-                      }
-                    },
-                    [_vm._v("Close")]
                   ),
                   _vm._v(" "),
                   _c(
-                    "v-btn",
-                    {
-                      attrs: { color: "primary", text: "" },
-                      on: {
-                        click: function($event) {
-                          return _vm.saveData(_vm.dialogItem)
-                        }
-                      }
-                    },
-                    [_vm._v("Save")]
+                    "v-card-actions",
+                    [
+                      _c("v-spacer"),
+                      _vm._v(" "),
+                      _c(
+                        "v-btn",
+                        {
+                          attrs: { color: "blue darken-1", text: "" },
+                          on: {
+                            click: function($event) {
+                              return _vm.close()
+                            }
+                          }
+                        },
+                        [_vm._v("Cancel")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-btn",
+                        {
+                          attrs: {
+                            color: "primary",
+                            disabled: !_vm.valid,
+                            text: ""
+                          },
+                          on: {
+                            click: function($event) {
+                              return _vm.saveData(_vm.dialogItem)
+                            }
+                          }
+                        },
+                        [_vm._v("Save")]
+                      )
+                    ],
+                    1
                   )
                 ],
                 1
@@ -55954,7 +56062,15 @@ var render = function() {
           )
         ],
         1
-      )
+      ),
+      _vm._v(" "),
+      _c("snack-bar", {
+        attrs: {
+          "snackbar-type": _vm.sbType,
+          "snackbar-text": _vm.sbText,
+          "snackbar-status": _vm.sbStatus
+        }
+      })
     ],
     2
   )
