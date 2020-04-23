@@ -15,6 +15,9 @@
           <v-btn text small fab color="primary" @click="edit(item)">
             <v-icon>mdi-pencil</v-icon>
           </v-btn>
+          <v-btn text small fab color="primary" @click="todelete(item)">
+            <v-icon>mdi-trash-can-outline</v-icon>
+          </v-btn>
         </h4>
         <div
           class="subtitle-2"
@@ -43,8 +46,24 @@
         >Error retreiving Work experience({{item.id}}). Please report this error.</v-alert>
       </template>
     </div>
+    <v-dialog v-model="deleteDialog" persistent max-width="450px">
+      <v-card :loading="loading">
+        <v-card-title>
+          <span class="headline">Confirm Delete</span>
+        </v-card-title>
+        <v-card-text>
+          Are you sure you want to delete your work experience as
+          <strong>{{dialogItem.jobtitle}}</strong>?
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="blue darken-1" text @click="close()">Cancel</v-btn>
+          <v-btn color="primary" :disabled="!deleteValid" text @click="confirmDelete(dialogItem)">Delete</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
     <v-dialog v-model="dialog" persistent max-width="600px">
-      <v-card>
+      <v-card :loading="loading">
         <v-form ref="form" v-model="valid">
           <v-card-title>
             <span class="headline">Edit Work Experience</span>
@@ -193,7 +212,6 @@
     <snack-bar :snackbar-type="sbType" :snackbar-text="sbText" :snackbar-status="sbStatus"></snack-bar>
   </div>
 </template>
-
 <script>
 import moment from "moment";
 import SnackBar from "../../SnackBar.vue";
@@ -201,12 +219,15 @@ import ErrorBag from "../../../helpers/errorBag.js";
 export default {
   data() {
     return {
+      deleteDialog: false,
+      loading: false,
       // SnackBar
       errors: new ErrorBag(),
       sbType: "",
       sbText: "",
       sbStatus: false,
 
+      deleteValid: false,
       valid: false,
       textFeildRules: [v => !!v || "Name is required"],
 
@@ -218,7 +239,6 @@ export default {
       dialog: false,
       toPresentCheckbox: false,
 
-      valid: true,
       experience: [],
       dialogItem: {
         id: "",
@@ -252,8 +272,12 @@ export default {
     },
     close() {
       this.dialog = false;
-      this.$refs.form.reset();
       this.sbStatus = false;
+      if (this.deleteDialog == true) {
+        this.deleteDialog = false;
+      } else {
+        this.$refs.form.reset();
+      }
     },
     validate() {
       this.$refs.form.validate();
@@ -263,6 +287,31 @@ export default {
       this.dialog = true;
       this.toPresentCheckbox = false;
       this.sbStatus = false;
+    },
+    todelete(i) {
+      this.deleteValid = true;
+      this.deleteDialog = true;
+      this.sbStatus = false;
+      this.dialogItem = Object.assign({}, JSON.parse(i.value));
+      this.dialogItem.id = i.id;
+    },
+    confirmDelete() {
+      this.loading = true;
+      this.deleteValid = false;
+      axios
+        .delete("/applicant/experience/destroy/" + this.dialogItem.id)
+        .then(response => {
+          this.loading = false;
+          this.deleteDialog = false;
+          this.snackbarUI(true, "success", response.data.message);
+          this.getExperience();
+        })
+        .catch(error => {
+          this.loading = false;
+          this.deleteDialog = false;
+          this.snackbarUI(true, "error", error.response.statusText);
+          console.log(error.response.statusText);
+        });
     },
     edit(i) {
       this.sbStatus = false;
@@ -292,10 +341,11 @@ export default {
         })
         .catch(error => {
           console.log(error.response);
-          console.log("error");
         });
     },
     saveData(i) {
+      this.valid = false;
+      this.loading = true;
       let postData = [];
       let valueData = {
         jobtitle: i.jobtitle,
@@ -324,6 +374,7 @@ export default {
       axios
         .post("/applicant/experience/" + action, postData)
         .then(response => {
+          this.loading = false;
           this.getExperience();
           this.dialog = false;
           this.$refs.form.reset();
@@ -331,6 +382,7 @@ export default {
           // console.log(response.data.message);
         })
         .catch(error => {
+          this.loading = false;
           if (error.response && error.response.status == 422) {
             // this.errors.setErrors( error.response.data.errors );
             this.snackbarUI(true, "error", error.response.data.message);

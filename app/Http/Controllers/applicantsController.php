@@ -133,7 +133,10 @@ class ApplicantsController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Applicant_details::where('id', '=', $id)->firstOrFail()->delete();
+        return response()->json([
+            'message' => 'Work Experience has been deleted'
+        ], 200);
     }
 
     public function getWorkExperience($id)

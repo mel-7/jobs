@@ -4828,8 +4828,24 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _SnackBar_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../SnackBar.vue */ "./resources/js/components/SnackBar.vue");
 /* harmony import */ var _helpers_errorBag_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../helpers/errorBag.js */ "./resources/js/helpers/errorBag.js");
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -5031,14 +5047,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
-    var _ref;
-
-    return _ref = {
+    return {
+      deleteDialog: false,
+      loading: false,
       // SnackBar
       errors: new _helpers_errorBag_js__WEBPACK_IMPORTED_MODULE_2__["default"](),
       sbType: "",
       sbText: "",
       sbStatus: false,
+      deleteValid: false,
       valid: false,
       textFeildRules: [function (v) {
         return !!v || "Name is required";
@@ -5048,16 +5065,18 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       tomenu: false,
       modal: false,
       dialog: false,
-      toPresentCheckbox: false
-    }, _defineProperty(_ref, "valid", true), _defineProperty(_ref, "experience", []), _defineProperty(_ref, "dialogItem", {
-      id: "",
-      startdate: "",
-      todate: "",
-      topresent: "",
-      jobtitle: "",
-      company: "",
-      description: ""
-    }), _ref;
+      toPresentCheckbox: false,
+      experience: [],
+      dialogItem: {
+        id: "",
+        startdate: "",
+        todate: "",
+        topresent: "",
+        jobtitle: "",
+        company: "",
+        description: ""
+      }
+    };
   },
   methods: {
     checkJSON: function checkJSON(s) {
@@ -5085,8 +5104,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     },
     close: function close() {
       this.dialog = false;
-      this.$refs.form.reset();
       this.sbStatus = false;
+
+      if (this.deleteDialog == true) {
+        this.deleteDialog = false;
+      } else {
+        this.$refs.form.reset();
+      }
     },
     validate: function validate() {
       this.$refs.form.validate();
@@ -5096,6 +5120,34 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.dialog = true;
       this.toPresentCheckbox = false;
       this.sbStatus = false;
+    },
+    todelete: function todelete(i) {
+      this.deleteValid = true;
+      this.deleteDialog = true;
+      this.sbStatus = false;
+      this.dialogItem = Object.assign({}, JSON.parse(i.value));
+      this.dialogItem.id = i.id;
+    },
+    confirmDelete: function confirmDelete() {
+      var _this2 = this;
+
+      this.loading = true;
+      this.deleteValid = false;
+      axios["delete"]("/applicant/experience/destroy/" + this.dialogItem.id).then(function (response) {
+        _this2.loading = false;
+        _this2.deleteDialog = false;
+
+        _this2.snackbarUI(true, "success", response.data.message);
+
+        _this2.getExperience();
+      })["catch"](function (error) {
+        _this2.loading = false;
+        _this2.deleteDialog = false;
+
+        _this2.snackbarUI(true, "error", error.response.statusText);
+
+        console.log(error.response.statusText);
+      });
     },
     edit: function edit(i) {
       this.sbStatus = false;
@@ -5116,18 +5168,19 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       return moment__WEBPACK_IMPORTED_MODULE_0___default()(d).format("MMMM YYYY");
     },
     getExperience: function getExperience() {
-      var _this2 = this;
+      var _this3 = this;
 
       axios.get("/applicant/experience/" + this.theUserID).then(function (response) {
-        _this2.experience = response.data.exp; // console.log(this.experience);
+        _this3.experience = response.data.exp; // console.log(this.experience);
       })["catch"](function (error) {
         console.log(error.response);
-        console.log("error");
       });
     },
     saveData: function saveData(i) {
-      var _this3 = this;
+      var _this4 = this;
 
+      this.valid = false;
+      this.loading = true;
       var postData = [];
       var valueData = {
         jobtitle: i.jobtitle,
@@ -5153,22 +5206,26 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
       axios.post("/applicant/experience/" + action, postData).then(function (response) {
-        _this3.getExperience();
+        _this4.loading = false;
 
-        _this3.dialog = false;
+        _this4.getExperience();
 
-        _this3.$refs.form.reset();
+        _this4.dialog = false;
 
-        _this3.snackbarUI(true, "success", response.data.message); // console.log(response.data.message);
+        _this4.$refs.form.reset();
+
+        _this4.snackbarUI(true, "success", response.data.message); // console.log(response.data.message);
 
       })["catch"](function (error) {
+        _this4.loading = false;
+
         if (error.response && error.response.status == 422) {
           // this.errors.setErrors( error.response.data.errors );
-          _this3.snackbarUI(true, "error", error.response.data.message);
+          _this4.snackbarUI(true, "error", error.response.data.message);
         }
 
         if (error.response.status >= 500) {
-          _this3.snackbarUI(true, "error", "Error while processing your request. Try again later.");
+          _this4.snackbarUI(true, "error", "Error while processing your request. Try again later.");
         }
 
         console.log(error.response.data.message);
@@ -55472,6 +55529,25 @@ var render = function() {
                         },
                         [_c("v-icon", [_vm._v("mdi-pencil")])],
                         1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-btn",
+                        {
+                          attrs: {
+                            text: "",
+                            small: "",
+                            fab: "",
+                            color: "primary"
+                          },
+                          on: {
+                            click: function($event) {
+                              return _vm.todelete(item)
+                            }
+                          }
+                        },
+                        [_c("v-icon", [_vm._v("mdi-trash-can-outline")])],
+                        1
                       )
                     ],
                     1
@@ -55540,6 +55616,81 @@ var render = function() {
       _c(
         "v-dialog",
         {
+          attrs: { persistent: "", "max-width": "450px" },
+          model: {
+            value: _vm.deleteDialog,
+            callback: function($$v) {
+              _vm.deleteDialog = $$v
+            },
+            expression: "deleteDialog"
+          }
+        },
+        [
+          _c(
+            "v-card",
+            { attrs: { loading: _vm.loading } },
+            [
+              _c("v-card-title", [
+                _c("span", { staticClass: "headline" }, [
+                  _vm._v("Confirm Delete")
+                ])
+              ]),
+              _vm._v(" "),
+              _c("v-card-text", [
+                _vm._v(
+                  "\n        Are you sure you want to delete your work experience as\n        "
+                ),
+                _c("strong", [_vm._v(_vm._s(_vm.dialogItem.jobtitle))]),
+                _vm._v("?\n      ")
+              ]),
+              _vm._v(" "),
+              _c(
+                "v-card-actions",
+                [
+                  _c("v-spacer"),
+                  _vm._v(" "),
+                  _c(
+                    "v-btn",
+                    {
+                      attrs: { color: "blue darken-1", text: "" },
+                      on: {
+                        click: function($event) {
+                          return _vm.close()
+                        }
+                      }
+                    },
+                    [_vm._v("Cancel")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-btn",
+                    {
+                      attrs: {
+                        color: "primary",
+                        disabled: !_vm.deleteValid,
+                        text: ""
+                      },
+                      on: {
+                        click: function($event) {
+                          return _vm.confirmDelete(_vm.dialogItem)
+                        }
+                      }
+                    },
+                    [_vm._v("Delete")]
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          )
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "v-dialog",
+        {
           attrs: { persistent: "", "max-width": "600px" },
           model: {
             value: _vm.dialog,
@@ -55552,6 +55703,7 @@ var render = function() {
         [
           _c(
             "v-card",
+            { attrs: { loading: _vm.loading } },
             [
               _c(
                 "v-form",

@@ -73,3 +73,4 @@ Route::group(['prefix'=>'admin','as'=>'admin.'], function(){
 Route::get('/applicant/experience/{id}', 'ApplicantsController@getWorkExperience')->name('get_work_experience');
 Route::post('/applicant/experience/update', 'ApplicantsController@update')->name('save_work_experience');
 Route::post('/applicant/experience/new', 'ApplicantsController@store')->name('save_work_experience');
+Route::delete('/applicant/experience/destroy/{id}', 'ApplicantsController@destroy')->name('delete_work_experience');
