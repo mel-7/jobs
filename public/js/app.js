@@ -5042,6 +5042,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 
 
 
@@ -5108,9 +5113,9 @@ __webpack_require__.r(__webpack_exports__);
 
       if (this.deleteDialog == true) {
         this.deleteDialog = false;
-      } else {
-        this.$refs.form.reset();
       }
+
+      this.$refs.form.reset();
     },
     validate: function validate() {
       this.$refs.form.validate();
@@ -5140,11 +5145,19 @@ __webpack_require__.r(__webpack_exports__);
         _this2.snackbarUI(true, "success", response.data.message);
 
         _this2.getExperience();
+
+        _this2.deleteValid = true;
+
+        _this2.$refs.form.reset();
       })["catch"](function (error) {
         _this2.loading = false;
         _this2.deleteDialog = false;
 
         _this2.snackbarUI(true, "error", error.response.statusText);
+
+        _this2.deleteValid = true;
+
+        _this2.$refs.form.reset();
 
         console.log(error.response.statusText);
       });

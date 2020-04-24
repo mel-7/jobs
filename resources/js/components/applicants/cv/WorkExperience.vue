@@ -58,7 +58,12 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="blue darken-1" text @click="close()">Cancel</v-btn>
-          <v-btn color="primary" :disabled="!deleteValid" text @click="confirmDelete(dialogItem)">Delete</v-btn>
+          <v-btn
+            color="primary"
+            :disabled="!deleteValid"
+            text
+            @click="confirmDelete(dialogItem)"
+          >Delete</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -275,9 +280,8 @@ export default {
       this.sbStatus = false;
       if (this.deleteDialog == true) {
         this.deleteDialog = false;
-      } else {
-        this.$refs.form.reset();
       }
+      this.$refs.form.reset();
     },
     validate() {
       this.$refs.form.validate();
@@ -305,11 +309,15 @@ export default {
           this.deleteDialog = false;
           this.snackbarUI(true, "success", response.data.message);
           this.getExperience();
+          this.deleteValid = true;
+          this.$refs.form.reset();
         })
         .catch(error => {
           this.loading = false;
           this.deleteDialog = false;
           this.snackbarUI(true, "error", error.response.statusText);
+          this.deleteValid = true;
+          this.$refs.form.reset();
           console.log(error.response.statusText);
         });
     },
