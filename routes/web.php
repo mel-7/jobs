@@ -25,8 +25,18 @@ Route::group(['prefix'=>'u','as'=>'user.'], function(){
     Route::get('/account', 'applicantsController@account')->name('account');
     Route::get('/cv', 'applicantsController@cv')->name('cv');
     Route::get('/my-applications', 'applicantsController@myApplications')->name('myapplications');
-    // Route::get('/dashboard', 'applicantsController@dashboard')->name('dashboard');
+    // Messages
+    Route::get('/my-messages', 'MessageController@index')->name('my_messages');
+    Route::get('/my-messages/conversation/{id}', 'MessageController@getMessagesFor');
+    Route::post('/my-messages/conversation/send', 'MessageController@send');
+    Route::get('/my-messages/contacts/', 'MessageController@getContacts');
 });
+// Applicant Details
+Route::get('/applicant/experience/{id}', 'ApplicantsController@getWorkExperience')->name('get_work_experience');
+Route::post('/applicant/experience/update', 'ApplicantsController@update')->name('save_work_experience');
+Route::post('/applicant/experience/new', 'ApplicantsController@store')->name('save_work_experience');
+Route::delete('/applicant/experience/destroy/{id}', 'ApplicantsController@destroy')->name('delete_work_experience');
+
 
 /**
  *
@@ -65,12 +75,3 @@ Route::group(['prefix'=>'admin','as'=>'admin.'], function(){
         return view('layouts.admin');
     })->where('any', '.*');
 });
-
-
-/**
- * Applicant Details
- */
-Route::get('/applicant/experience/{id}', 'ApplicantsController@getWorkExperience')->name('get_work_experience');
-Route::post('/applicant/experience/update', 'ApplicantsController@update')->name('save_work_experience');
-Route::post('/applicant/experience/new', 'ApplicantsController@store')->name('save_work_experience');
-Route::delete('/applicant/experience/destroy/{id}', 'ApplicantsController@destroy')->name('delete_work_experience');

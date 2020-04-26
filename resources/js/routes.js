@@ -10,6 +10,7 @@ import UserForm from './components/admin/users/UserForm';
 import Cv from './components/applicants/Cv';
 import Account from './components/applicants/Account';
 import MyApplications from './components/applicants/MyApplications';
+import MyMessages from './components/applicants/MyMessages';
 
 export const routes = [
     {
@@ -69,5 +70,11 @@ export const routes = [
         path: '/u/my-applications',
         name: 'MyApplications',
         component: MyApplications,
+    },
+    {
+        path: '/u/my-messages',
+        name: 'MyMessages',
+        component: MyMessages,
+        props: true
     },
 ]

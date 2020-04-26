@@ -3,8 +3,9 @@
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
 use App\User;
-use Faker\Generator as Faker;
+use App\Message;
 use Illuminate\Support\Str;
+use Faker\Generator as Faker;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,3 +27,17 @@ $factory->define(User::class, function (Faker $faker) {
         'remember_token' => Str::random(10),
     ];
 });
+
+$factory->define(Message::class, function (Faker $faker) {
+    do{
+        $from = rand(1,2);
+        $to = rand(1,2);
+    } while ($from == $to);
+
+    return [
+        'from' => $from,
+        'to' => $to,
+        'text' => $faker->sentence,
+    ];
+});
+
