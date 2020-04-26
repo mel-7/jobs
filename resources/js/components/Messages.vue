@@ -34,6 +34,7 @@ export default {
   },
   methods: {
     startConversationWith(contact) {
+      this.updateUnreadCount(contact, true);
       if (contact) {
         axios
           .get("/u/my-messages/conversation/" + contact.id)
@@ -45,11 +46,33 @@ export default {
     },
     saveNewMessage(message) {
       this.messages.push(message);
+    },
+    handleIncoming(message) {
+      if (this.selectedContact && message.from == this.selectedContact.id) {
+        this.saveNewMessage(message);
+        return;
+      }
+      this.updateUnreadCount(message.from_contact, false);
+    },
+    updateUnreadCount(contact, reset) {
+      this.contacts = this.contacts.map(single => {
+        if (single.id !== contact.id) {
+          return single;
+        }
+        if (reset) {
+          single.unread = 0;
+        } else {
+          single.unread += 1;
+        }
+        return single;
+      });
     }
   },
   mounted() {
-    this.startConversationWith();
-    axios.get("/u/my-messages/contacts/").then(response => {
+    Echo.private(`messages.${this.userData.id}`).listen("NewMessage", e => {
+      this.handleIncoming(e.message);
+    });
+    axios.get("/u/my-messages/contacts").then(response => {
       this.contacts = response.data;
     });
   }

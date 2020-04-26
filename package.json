@@ -25,8 +25,10 @@
         "@sindresorhus/slugify": "^0.11.0",
         "axios": "^0.19",
         "babel-polyfill": "^6.26.0",
+        "laravel-echo": "^1.7.0",
         "moment": "^2.24.0",
         "node-sass": "^4.13.1",
+        "pusher-js": "^5.1.1",
         "vue-router": "^3.1.6",
         "vuetify": "^2.2.21",
         "vuex": "^3.1.2"

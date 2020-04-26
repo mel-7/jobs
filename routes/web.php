@@ -29,7 +29,7 @@ Route::group(['prefix'=>'u','as'=>'user.'], function(){
     Route::get('/my-messages', 'MessageController@index')->name('my_messages');
     Route::get('/my-messages/conversation/{id}', 'MessageController@getMessagesFor');
     Route::post('/my-messages/conversation/send', 'MessageController@send');
-    Route::get('/my-messages/contacts/', 'MessageController@getContacts');
+    Route::get('/my-messages/contacts', 'MessageController@getContacts');
 });
 // Applicant Details
 Route::get('/applicant/experience/{id}', 'ApplicantsController@getWorkExperience')->name('get_work_experience');

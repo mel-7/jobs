@@ -1,6 +1,6 @@
 <template>
-  <div  style="max-height: 400px" ref="feed" class="overflow-y-auto">
-    <v-list dense flat v-if="contact">
+  <div  style="height:400px; max-height: 400px" ref="feed" class="overflow-y-auto">
+    <v-list dense flat v-if="contact" nav>
       <v-list-item
         v-for="message in messages"
         :class="`message ${message.to == contact.id ? 'text-right' : 'text-left'}`"
@@ -9,7 +9,7 @@
       >
         <v-list-item-content class="py-0">
           <v-list-item-subtitle>
-            <v-chip :color="`${message.to == contact.id ? 'info' : 'success'} `">{{message.text}}</v-chip>
+            <v-chip :color="`${message.to == contact.id ? '#f1f1f1' : 'info'} `">{{message.text}}</v-chip>
           </v-list-item-subtitle>
         </v-list-item-content>
       </v-list-item>
@@ -51,6 +51,3 @@ export default {
   }
 };
 </script>
-
-<style>
-</style>

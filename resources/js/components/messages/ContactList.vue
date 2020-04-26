@@ -1,23 +1,22 @@
 <template>
   <v-list subheader>
     <v-subheader>Recent chat</v-subheader>
-    <v-list-item
-      v-for="(contact, index) in contacts"
-      :key="contact.id"
-      @click="selectContact(index, contact)"
-      :class="{'selected': index == selected}"
-    >
-      <v-list-item-avatar>
-        <v-icon>mdi-account-circle-outline</v-icon>
-      </v-list-item-avatar>
-      <v-list-item-content>
-        <v-list-item-title>{{contact.name}}</v-list-item-title>
-        <v-list-item-subtitle>{{contact.email}}</v-list-item-subtitle>
-      </v-list-item-content>
-      <v-list-item-icon>
-        <v-icon color="deep-purple accent-4">mdi-chat</v-icon>
-      </v-list-item-icon>
-    </v-list-item>
+    <v-list-item-group color="info">
+      <v-list-item
+        v-for="contact in sortedContacts"
+        :key="contact.id"
+        @click="selectContact(contact)"
+      >
+        <v-list-item-avatar>
+          <v-icon>mdi-account-circle-outline</v-icon>
+        </v-list-item-avatar>
+        <v-list-item-content>
+          <v-list-item-title>{{contact.name}}</v-list-item-title>
+          <v-list-item-subtitle>{{contact.email}}</v-list-item-subtitle>
+        </v-list-item-content>
+        <v-badge v-if="contact.unread" inline color="info" :content="contact.unread"></v-badge>
+      </v-list-item>
+    </v-list-item-group>
   </v-list>
 </template>
 
@@ -27,19 +26,28 @@ export default {
     contacts: Array,
     default: []
   },
-  data(){
-      return {
-          selected: 0
-      }
+  data() {
+    return {
+      selected: this.contacts.length ? this.contacts[0] : 0
+    };
   },
   methods: {
-      selectContact(index, contact){
-          this.selected = index;
-          this.$emit('selected', contact);
-      }
+    selectContact(contact) {
+      this.selected = contact;
+      this.$emit("selected", contact);
+    }
   },
-  mounted() {
-    // console.log(this.contacts);
+  computed: {
+    sortedContacts() {
+      return _.sortBy(this.contacts, [
+        contact => {
+          if (contact == this.selected) {
+            return Infinity;
+          }
+          return contact.unread;
+        }
+      ]).reverse();
+    }
   }
 };
 </script>

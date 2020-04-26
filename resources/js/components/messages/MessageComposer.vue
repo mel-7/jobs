@@ -1,7 +1,6 @@
 <template>
   <div class="pa-3" style="border-top:1px solid #f1f1f1;">
     <v-text-field
-      autofocus
       v-model="message"
       @keydown.enter="send"
       outlined
