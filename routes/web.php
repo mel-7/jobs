@@ -29,6 +29,7 @@ Route::group(['prefix'=>'u','as'=>'user.'], function(){
     Route::get('/my-messages', 'MessageController@index')->name('my_messages');
     Route::get('/my-messages/conversation/{id}', 'MessageController@getMessagesFor');
     Route::post('/my-messages/conversation/send', 'MessageController@send');
+    // Route::post('/my-messages/conversation/file', 'MessageController@sendFile');
     Route::get('/my-messages/contacts', 'MessageController@getContacts');
 });
 // Applicant Details
@@ -75,3 +76,8 @@ Route::group(['prefix'=>'admin','as'=>'admin.'], function(){
         return view('layouts.admin');
     })->where('any', '.*');
 });
+
+/**
+ * Get Image
+ */
+Route::get('/conversation/files/{msgid}/{extn}/{filename}', 'FileController@show')->name('file.show');

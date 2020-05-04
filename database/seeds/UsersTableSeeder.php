@@ -27,5 +27,13 @@ class UsersTableSeeder extends Seeder
             'role'     => 5
         ]);
         $user->save();
+        $user = new \App\User([
+            'name'     => 'zzzzzz',
+            'email'    => 'zzz@zzz.com',
+            'password' => Hash::make('123456789'),
+            'phone'    => '05012345678',
+            'role'     => 5
+        ]);
+        $user->save();
     }
 }

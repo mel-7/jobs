@@ -56,3 +56,8 @@ Route::group(['prefix'=>'admin','as'=>'admin.'], function(){
  * Applicant Details
  */
 // Route::get('/applicant_details', 'ApplicantDetailsController@applicantDetailsAPI')->name('applicant_details');
+
+/**
+ * Message
+ */
+Route::post('/u/my-messages/conversation/file', 'MessageController@sendFile');

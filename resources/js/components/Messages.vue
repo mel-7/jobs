@@ -45,6 +45,7 @@ export default {
       }
     },
     saveNewMessage(message) {
+      console.log(message)
       this.messages.push(message);
     },
     handleIncoming(message) {

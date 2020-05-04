@@ -18,7 +18,9 @@ class CreateMessagesTable extends Migration
             $table->integer('from')->unsigned();
             $table->integer('to')->unsigned();
             $table->boolean('read')->default(false);
-            $table->text('text');
+            $table->boolean('attachment')->default(false);
+            $table->longText('text');
+            $table->longText('files')->nullable();
             $table->timestamps();
         });
     }
