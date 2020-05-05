@@ -46,7 +46,6 @@
                 <v-img
                   :src="'/conversation/files/'+message.id+'/'+file.extension+'/'+file.filename+'.'+file.extension"
                   aspect-ratio="1"
-                  :class="`${message.to == contact.id ? 'blue' : 'blue-grey lighten-5'}`"
                   width="100px"
                 ></v-img>
               </v-card>

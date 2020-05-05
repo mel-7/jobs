@@ -1,25 +1,27 @@
 <template>
   <div style="position:relative;">
-    <vue-dropzone
-      class="file-upload"
-      ref="myVueDropzone"
-      id="dropzone"
-      :options="dropzoneOptions"
-      v-on:vdropzone-sending="sendingEvent"
-      v-on:vdropzone-drop="dropFunction"
-      v-on:vdropzone-complete-multiple="uploadComplete"
-      v-on:vdropzone-success-multiple="uploadSuccess"
-      :include-styling="false"
-    ></vue-dropzone>
     <div
       @dragover.prevent="dragging = true"
       @drop.prevent="dropFunction"
       @dragleave.prevent="dragging = false"
       class="drop-wrapper"
     >
-      <span
+      <vue-dropzone
+        v-show="dragging == true || sendWithFile == true "
+        class="file-upload"
+        ref="myVueDropzone"
+        id="dropzone"
+        :options="dropzoneOptions"
+        v-on:vdropzone-sending="sendingEvent"
+        v-on:vdropzone-drop="dropFunction"
+        v-on:vdropzone-complete-multiple="uploadComplete"
+        v-on:vdropzone-success-multiple="uploadSuccess"
+        :include-styling="false"
+      ></vue-dropzone>
+
+      <!-- <span
         :class="`overline drop-msg ${dragging == false ? 'hide' : ''}`"
-      >Click to browse or drop your file(s) here</span>
+      >Click to browse or drop your file(s) here</span>-->
       <div v-if="dragging == false" class="textfield pa-3 d-flex">
         <v-btn class="mr-3 open-uploader" text icon>
           <v-icon>mdi-paperclip</v-icon>
@@ -40,7 +42,6 @@
     </div>
   </div>
 </template>
-
 <script>
 import vue2Dropzone from "vue2-dropzone";
 import "vue2-dropzone/dist/vue2Dropzone.min.css";
@@ -64,7 +65,7 @@ export default {
         autoProcessQueue: false,
         maxFiles: 10,
         parallelUploads: 10,
-        // maxFilesize: 0.5,
+        maxFilesize: 1,
         previewTemplate: this.dropzoneTemplate(),
         headers: {
           "x-csrf-token": document
@@ -72,7 +73,7 @@ export default {
             .getAttribute("content")
         }
       },
-      sendFile: false,
+      sendWithFile: false,
       message: "",
       dropzone: null,
       dragging: false,
@@ -83,33 +84,33 @@ export default {
   },
   methods: {
     dropzoneTemplate() {
-      return ` <div class="dz-preview dz-file-preview d-flex pa-2">
-        <div class="dz-details d-flex align-center">
-          <img data-dz-thumbnail />
-          <div class="dz-size px-2 caption" data-dz-size></div>
-          <div class="dz-filename px-2 caption">
-            <span data-dz-name></span>
-          </div>
-        </div>
-        <div class="dz-progress d-flex align-center justify-center caption">
-          <span class="dz-upload" data-dz-uploadprogress></span>
-        </div>
-        <div class="dz-error-message px-2 d-flex align-center justify-center caption">
-          <span data-dz-errormessage></span>
-        </div>
-        <v-spacer></v-spacer>
-        <div class="dz-success-mark px-2 d-flex align-center justify-center">
-          <span>✔</span>
-        </div>
-        <div class="dz-error-mark px-2 d-flex align-center justify-center">
-          <span>✘</span>
-        </div>
-      </div>
-        `;
+      return `<div class="dz-preview dz-file-preview d-flex pa-2">
+                <div class="dz-details d-flex align-center">
+                  <img data-dz-thumbnail />
+                  <div class="dz-size px-2 caption" data-dz-size></div>
+                  <div class="dz-filename px-2 caption">
+                    <span data-dz-name></span>
+                  </div>
+                </div>
+                <div class="dz-progress d-flex align-center justify-center caption">
+                  <span class="dz-upload" data-dz-uploadprogress></span>
+                </div>
+                <div class="dz-error-message px-2 d-flex align-center justify-center caption">
+                  <span data-dz-errormessage></span>
+                </div>
+                <v-spacer></v-spacer>
+                <div class="dz-success-mark px-2 d-flex align-center justify-center">
+                  <span>✔</span>
+                </div>
+                <div class="dz-error-mark px-2 d-flex align-center justify-center">
+                  <span>✘</span>
+                </div>
+              </div>`;
     },
     dropFunction(e) {
       e.preventDefault();
-      this.sendFile = true;
+      this.sendWithFile = true;
+      this.dragging = false;
     },
     sendingEvent(file, xhr, formData) {
       formData.append("text", this.message);
@@ -122,14 +123,14 @@ export default {
         attachment: 1
       };
     },
-    uploadSuccess(files, response){
+    uploadSuccess(files, response) {
       this.$emit("send", response);
     },
     send(e) {
       e.preventDefault();
       let messageData = null;
 
-      if (this.sendFile == true) {
+      if (this.sendWithFile == true) {
         this.$refs.myVueDropzone.processQueue();
         this.message = "";
       } else {
@@ -149,12 +150,17 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.hide {
-  display: none;
-}
+// .hide {
+//   display: none;
+// }
 .file-upload {
-  height: 150px;
-  max-height: 150px;
+  position: absolute;
+  bottom: 0;
+  top: auto;
+  right: 0;
+  left: 0;
+  height: 100px;
+  max-height: 100px;
   overflow-y: auto;
   border-top: 1px solid #f1f1f1;
   width: 100%;
