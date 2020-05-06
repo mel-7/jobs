@@ -145,11 +145,10 @@ export default {
     send(e) {
       e.preventDefault();
       let messageData = null;
-
-      this.loading = true;
       if (this.sendWithFile == true) {
         this.$refs.myVueDropzone.processQueue();
         this.message = "";
+        this.loading = true;
       } else {
         if (this.message == "") {
           return;
