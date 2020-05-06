@@ -6,19 +6,6 @@
       @dragleave.prevent="dragging = false"
       class="drop-wrapper"
     >
-      <vue-dropzone
-        v-show="dragging == true || sendWithFile == true "
-        class="file-upload"
-        ref="myVueDropzone"
-        id="dropzone"
-        :options="dropzoneOptions"
-        v-on:vdropzone-sending="sendingEvent"
-        v-on:vdropzone-drop="dropFunction"
-        v-on:vdropzone-complete-multiple="uploadComplete"
-        v-on:vdropzone-success-multiple="uploadSuccess"
-        :include-styling="false"
-      ></vue-dropzone>
-
       <!-- <span
         :class="`overline drop-msg ${dragging == false ? 'hide' : ''}`"
       >Click to browse or drop your file(s) here</span>-->
@@ -39,7 +26,22 @@
           flat
         ></v-text-field>
       </div>
+      <vue-dropzone
+        v-show="dragging == true || sendWithFile == true "
+        class="file-upload"
+        ref="myVueDropzone"
+        id="dropzone"
+        :options="dropzoneOptions"
+        v-on:vdropzone-sending="sendingEvent"
+        v-on:vdropzone-drop="dropFunction"
+        v-on:vdropzone-success-multiple="uploadSuccess"
+        v-on:vdropzone-removed-file="removedFile"
+        :include-styling="false"
+      ></vue-dropzone>
     </div>
+    <v-overlay absolute color="white" :value="loading">
+      <v-progress-circular :width="2" size="25" color="primary" indeterminate></v-progress-circular>
+    </v-overlay>
   </div>
 </template>
 <script>
@@ -57,6 +59,7 @@ export default {
   },
   data() {
     return {
+      loading: false,
       dropzoneOptions: {
         url: "/u/my-messages/conversation/send",
         thumbnailWidth: 40,
@@ -65,8 +68,9 @@ export default {
         autoProcessQueue: false,
         maxFiles: 10,
         parallelUploads: 10,
-        maxFilesize: 1,
+        maxFilesize: 0.5,
         previewTemplate: this.dropzoneTemplate(),
+        clickable: ".open-uploader",
         headers: {
           "x-csrf-token": document
             .querySelector('meta[name="csrf-token"]')
@@ -82,29 +86,39 @@ export default {
         .getAttribute("content")
     };
   },
+  watch: {
+    contact(contact) {
+      this.scrollToBottom();
+    }
+  },
   methods: {
     dropzoneTemplate() {
-      return `<div class="dz-preview dz-file-preview d-flex pa-2">
-                <div class="dz-details d-flex align-center">
-                  <img data-dz-thumbnail />
-                  <div class="dz-size px-2 caption" data-dz-size></div>
-                  <div class="dz-filename px-2 caption">
-                    <span data-dz-name></span>
+      return `<div class="dz-preview dz-file-preview d-flex pa-2 blue lighten-5">
+                <img data-dz-thumbnail />
+                <div class="dz-details d-flex align-center justify-start">
+                  <div class="dz-size px-1 caption" data-dz-size></div>
+                  <div class="px-1 caption">
+                    <div class="dz-filename" data-dz-name></div>
+                    <div class="error--text overline" data-dz-errormessage></div>
+                  </div>
+                  <div class="dz-progress d-flex align-center justify-center caption">
+                    <span class="dz-upload" data-dz-uploadprogress></span>
                   </div>
                 </div>
-                <div class="dz-progress d-flex align-center justify-center caption">
-                  <span class="dz-upload" data-dz-uploadprogress></span>
-                </div>
-                <div class="dz-error-message px-2 d-flex align-center justify-center caption">
-                  <span data-dz-errormessage></span>
-                </div>
                 <v-spacer></v-spacer>
-                <div class="dz-success-mark px-2 d-flex align-center justify-center">
-                  <span>✔</span>
-                </div>
-                <div class="dz-error-mark px-2 d-flex align-center justify-center">
-                  <span>✘</span>
-                </div>
+                <button
+                  data-dz-remove
+                  type="button"
+                  class="ml-auto v-btn v-btn--flat v-btn--icon v-btn--round theme--light v-size--x-small error--text"
+                >
+                  <span class="v-btn__content">
+                    <i
+                      aria-hidden="true"
+                      class="v-icon notranslate mdi mdi-trash-can-outline theme--light"
+                      style="font-size: 12px;"
+                    ></i>
+                  </span>
+                </button>
               </div>`;
     },
     dropFunction(e) {
@@ -117,19 +131,22 @@ export default {
       formData.append("contact_id", this.contactwith);
       formData.append("attachment", 1);
     },
-    uploadComplete(response) {
-      let messageData = {
-        text: this.message,
-        attachment: 1
-      };
+    removedFile(file, xhr, formData) {
+      this.$refs.myVueDropzone.getQueuedFiles().length == 0
+        ? (this.sendWithFile = false)
+        : "";
     },
     uploadSuccess(files, response) {
       this.$emit("send", response);
+      this.$refs.myVueDropzone.removeAllFiles();
+      this.sendWithFile = false;
+      this.loading = false;
     },
     send(e) {
       e.preventDefault();
       let messageData = null;
 
+      this.loading = true;
       if (this.sendWithFile == true) {
         this.$refs.myVueDropzone.processQueue();
         this.message = "";
@@ -149,36 +166,53 @@ export default {
   mounted() {}
 };
 </script>
-<style lang="scss" scoped>
-// .hide {
-//   display: none;
-// }
-.file-upload {
+<style lang="scss">
+.loading-sheet {
   position: absolute;
-  bottom: 0;
-  top: auto;
-  right: 0;
+  height: 100%;
+  width: 100%;
+  top: 0;
   left: 0;
+  bottom: auto;
+  right: auto;
+}
+.file-upload {
   height: 100px;
   max-height: 100px;
   overflow-y: auto;
   border-top: 1px solid #f1f1f1;
   width: 100%;
   background-color: #fdfdfd;
+  display: flex;
+  flex-wrap: wrap;
+  padding: 4px;
+  justify-content: flex-start;
   .dz-preview {
-    width: 100%;
-    background-color: #f1f1f1;
+    width: calc(50% - 16px);
+    border-radius: 4px;
+    margin: 8px;
+    max-height: 65px;
+    min-width: 200px;
     .dz-details {
+      .dz-filename {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
+      }
       img {
         width: 30px;
         height: auto;
       }
     }
+    &.dz-error.dz-complete {
+      background-color: #ffebee !important;
+    }
   }
 }
 .drop-wrapper {
   background-color: #fdfdfd;
-  height: 65px;
   .drop-msg {
     position: absolute;
     top: auto;

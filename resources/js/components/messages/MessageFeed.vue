@@ -29,6 +29,7 @@
             :class="`d-flex flex-wrap ${message.to == contact.id ? 'justify-end' : 'justify-start'} `"
           >
             <v-sheet
+            style="border-radius:0;"
               :class="`pa-2 ${message.to == contact.id ? 'blue-grey lighten-5' : 'blue'}`"
               v-for="file in JSON.parse(message.files)"
               :key="file.filename"
@@ -62,7 +63,7 @@
                 <v-icon
                   x-large
                   class="pr-1"
-                  :color="`${message.to == contact.id ? 'blue' : 'blue-grey lighten-5'}`"
+                  :color="`${message.to == contact.id ? 'primary' : 'blue-grey lighten-5'}`"
                 >{{printIcon(file.extension)}}</v-icon>
                 <div
                   :class="`caption ${message.to == contact.id ? 'primary--text' : 'white--text'}`"
