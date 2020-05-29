@@ -12,6 +12,9 @@ import Account from './components/applicants/Account';
 import MyApplications from './components/applicants/MyApplications';
 import MyMessages from './components/applicants/MyMessages';
 
+import Jobs from './components/employer/Jobs';
+import EmployerDashboard from './components/employer/EmployerDashboard';
+
 export const routes = [
     {
         path: '/admin/dashboard',
@@ -76,6 +79,22 @@ export const routes = [
         path: '/u/my-messages',
         name: 'MyMessages',
         component: MyMessages,
+        props: true
+    },
+
+    /**
+     * Employer Routes
+     */
+    {
+        path: '/e/jobs',
+        name: 'Jobs',
+        component: Jobs,
+        props: true
+    },
+    {
+        path: '/e/dashboard',
+        name: 'EmployerDashboard',
+        component: EmployerDashboard,
         props: true
     },
 ]

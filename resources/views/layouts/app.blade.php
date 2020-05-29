@@ -22,11 +22,11 @@
 
 <body class="page">
     @guest
-    <?php $userID = 0; ?>
+    <?php //$userID = 0; ?>
     @else
-    <?php $userID = Auth::user()->id; ?>
+    <?php //$userID = Auth::user()->id; :data-template="{{ $userID }}" ?>
     @endguest
-    <div id="app" :data-template="{{ $userID }}">
+    <div id="app">
         <v-app>
             @if (\Route::current()->getName() != 'login')
             <header class="elevation-3 mb-10">
@@ -56,6 +56,10 @@
                             <v-menu :close-on-content-click="false" :nudge-width="150" transition="slide-y-transition"
                                 offset-y left :nudge-bottom="5">
                                 <template v-slot:activator="{ on }">
+                                    <v-btn text icon class="mr-5">
+                                        <v-icon medium color="primary">mdi-message-text-outline</v-icon>
+                                        <v-badge dot color="red" content="6"></v-badge>
+                                    </v-btn>
                                     <v-btn text icon v-on="on">
                                         <v-avatar size="36">
                                             <img src="https://mel-7.com/wp-content/uploads/2019/04/romel-indemne-v1.jpg"
@@ -63,53 +67,110 @@
                                         </v-avatar>
                                     </v-btn>
                                 </template>
-                                <v-card>
-                                    <v-list>
-                                        <v-list-item>
-                                            <v-list-item-avatar>
-                                                <img src="https://mel-7.com/wp-content/uploads/2019/04/romel-indemne-v1.jpg"
-                                                    alt="Romel Indemne">
-                                            </v-list-item-avatar>
-                                            <v-list-item-content>
-                                                <v-list-item-title> {{ Auth::user()->name }} </v-list-item-title>
-                                                <v-list-item-subtitle>{{ Auth::user()->email }}</v-list-item-subtitle>
-                                            </v-list-item-content>
-                                        </v-list-item>
-                                    </v-list>
-                                    <v-divider></v-divider>
-                                    <v-list dense>
-                                        <v-list-item href="{{ route('user.cv') }}">
-                                            <v-list-item-content>
-                                                <v-list-item-title>CV</v-list-item-title>
-                                            </v-list-item-content>
-                                        </v-list-item>
-                                        <v-list-item href="{{ route('user.account') }}">
-                                            <v-list-item-content>
-                                                <v-list-item-title>Account</v-list-item-title>
-                                            </v-list-item-content>
-                                        </v-list-item>
-                                        {{-- <v-list-item href="{{ route('user.myapplications', ['id' => Auth::user()->id]) }}">
-                                        --}}
-                                        <v-list-item href="{{ route('user.myapplications') }}">
-                                            <v-list-item-content>
-                                                <v-list-item-title>My Applications</v-list-item-title>
-                                            </v-list-item-content>
-                                        </v-list-item>
-                                        <v-list-item href="{{ route('user.my_messages') }}">
-                                            <v-list-item-content>
-                                                <v-list-item-title>My Messages</v-list-item-title>
-                                            </v-list-item-content>
-                                        </v-list-item>
-                                    </v-list>
-                                    <v-divider></v-divider>
-                                    <v-card-actions>
-                                        <form id="logout-form" action="{{ route('logout') }}" method="POST"
-                                            style="display: none;">
-                                            @csrf
-                                        </form>
-                                        <v-btn depressed v-on:click="logout" width="100%">Logout</v-btn>
-                                    </v-card-actions>
-                                </v-card>
+                                @if (Auth::user()->role == 5 )
+                                    <v-card>
+                                        <v-list>
+                                            <v-list-item>
+                                                <v-list-item-avatar>
+                                                    <img src="https://mel-7.com/wp-content/uploads/2019/04/romel-indemne-v1.jpg"
+                                                        alt="Romel Indemne">
+                                                </v-list-item-avatar>
+                                                <v-list-item-content>
+                                                    <v-list-item-title> {{ Auth::user()->name }} </v-list-item-title>
+                                                    <v-list-item-subtitle>{{ Auth::user()->email }}</v-list-item-subtitle>
+                                                </v-list-item-content>
+                                            </v-list-item>
+                                        </v-list>
+                                        <v-divider></v-divider>
+                                        <v-list dense>
+                                            <v-list-item href="{{ route('user.cv') }}">
+                                                <v-list-item-content>
+                                                    <v-list-item-title>CV</v-list-item-title>
+                                                </v-list-item-content>
+                                            </v-list-item>
+                                            <v-list-item href="{{ route('user.account') }}">
+                                                <v-list-item-content>
+                                                    <v-list-item-title>Account</v-list-item-title>
+                                                </v-list-item-content>
+                                            </v-list-item>
+                                            {{-- <v-list-item href="{{ route('user.myapplications', ['id' => Auth::user()->id]) }}">
+                                            --}}
+                                            <v-list-item href="{{ route('user.myapplications') }}">
+                                                <v-list-item-content>
+                                                    <v-list-item-title>My Applications</v-list-item-title>
+                                                </v-list-item-content>
+                                            </v-list-item>
+                                            <v-list-item href="{{ route('user.my_messages') }}">
+                                                <v-list-item-content>
+                                                    <v-list-item-title>My Messages</v-list-item-title>
+                                                </v-list-item-content>
+                                            </v-list-item>
+                                        </v-list>
+                                        <v-divider></v-divider>
+                                        <v-card-actions>
+                                            <form id="logout-form" action="{{ route('logout') }}" method="POST"
+                                                style="display: none;">
+                                                @csrf
+                                            </form>
+                                            <v-btn depressed v-on:click="logout" width="100%">Logout</v-btn>
+                                        </v-card-actions>
+                                    </v-card>
+                                @elseif(Auth::user()->role === 4)
+                                    <v-card>
+                                        <v-list>
+                                            <v-list-item>
+                                                <v-list-item-avatar>
+                                                    <img src="https://mel-7.com/wp-content/uploads/2019/04/romel-indemne-v1.jpg"
+                                                        alt="Romel Indemne">
+                                                </v-list-item-avatar>
+                                                <v-list-item-content>
+                                                    <v-list-item-title> {{ Auth::user()->name }} </v-list-item-title>
+                                                    <v-list-item-subtitle>{{ Auth::user()->email }}</v-list-item-subtitle>
+                                                </v-list-item-content>
+                                            </v-list-item>
+                                        </v-list>
+                                        <v-divider></v-divider>
+                                        <v-list dense>
+                                            <v-list-item href="{{ route('employer.dashboard') }}">
+                                                <v-list-item-content>
+                                                    <v-list-item-title>Dashboard</v-list-item-title>
+                                                </v-list-item-content>
+                                            </v-list-item>
+                                            <v-list-item href="{{ route('employer.jobs') }}">
+                                                <v-list-item-content>
+                                                    <v-list-item-title>Jobs</v-list-item-title>
+                                                </v-list-item-content>
+                                            </v-list-item>
+                                            {{-- {{ route('employer.jobs') }} --}}
+                                            <v-list-item href="#">
+                                                <v-list-item-content>
+                                                    <v-list-item-title>Applications</v-list-item-title>
+                                                </v-list-item-content>
+                                            </v-list-item>
+                                            {{-- <v-list-item href="{{ route('user.myapplications', ['id' => Auth::user()->id]) }}">
+                                            --}}
+                                            <v-list-item href="{{ route('user.my_messages') }}">
+                                                <v-list-item-content>
+                                                    <v-list-item-title>Messages</v-list-item-title>
+                                                </v-list-item-content>
+                                            </v-list-item>
+                                            {{-- {{ route('employer.account') }} --}}
+                                            <v-list-item href="#">
+                                                <v-list-item-content>
+                                                    <v-list-item-title>Account Settings</v-list-item-title>
+                                                </v-list-item-content>
+                                            </v-list-item>
+                                        </v-list>
+                                        <v-divider></v-divider>
+                                        <v-card-actions>
+                                            <form id="logout-form" action="{{ route('logout') }}" method="POST"
+                                                style="display: none;">
+                                                @csrf
+                                            </form>
+                                            <v-btn depressed v-on:click="logout" width="100%">Logout</v-btn>
+                                        </v-card-actions>
+                                    </v-card>
+                                @endif
                             </v-menu>
                         </div>
                         @endguest

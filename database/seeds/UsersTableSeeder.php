@@ -28,11 +28,11 @@ class UsersTableSeeder extends Seeder
         ]);
         $user->save();
         $user = new \App\User([
-            'name'     => 'zzzzzz',
-            'email'    => 'zzz@zzz.com',
+            'name'     => 'Employer Account',
+            'email'    => 'emp@emp.com',
             'password' => Hash::make('123456789'),
             'phone'    => '05012345678',
-            'role'     => 5
+            'role'     => 4
         ]);
         $user->save();
     }

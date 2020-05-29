@@ -41,6 +41,13 @@ Route::post('/applicant/experience/update', 'ApplicantsController@update')->name
 Route::post('/applicant/experience/new', 'ApplicantsController@store')->name('save_work_experience');
 Route::delete('/applicant/experience/destroy/{id}', 'ApplicantsController@destroy')->name('delete_work_experience');
 
+/**
+ * Employer Routes
+ */
+Route::group(['prefix'=>'e','as'=>'employer.'], function(){
+    Route::get('/jobs', 'EmployerController@jobs')->name('jobs');
+    Route::get('/dashboard', 'EmployerController@dashboard')->name('dashboard');
+});
 
 /**
  *
