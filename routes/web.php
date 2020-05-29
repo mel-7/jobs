@@ -21,10 +21,13 @@ Auth::routes();
  * Loggedin Users/Applicants
  */
 Route::group(['prefix'=>'u','as'=>'user.'], function(){
-    Route::get('/', 'applicantsController@account')->name('account');
-    Route::get('/account', 'applicantsController@account')->name('account');
-    Route::get('/cv', 'applicantsController@cv')->name('cv');
-    Route::get('/my-applications', 'applicantsController@myApplications')->name('myapplications');
+    Route::get('/', 'ApplicantsController@account')->name('account');
+    Route::get('/account', 'ApplicantsController@account')->name('account');
+    Route::post('/update-account-info', 'ApplicantsController@updateAccountInfo')->name('update_account_info');
+    Route::get('/get-account-info/{id}', 'ApplicantsController@getAccountInfo')->name('get_account_info');
+
+    Route::get('/cv', 'ApplicantsController@cv')->name('cv');
+    Route::get('/my-applications', 'ApplicantsController@myApplications')->name('myapplications');
     // Messages
     Route::get('/my-messages', 'MessageController@index')->name('my_messages');
     Route::get('/my-messages/conversation/{id}', 'MessageController@getMessagesFor');

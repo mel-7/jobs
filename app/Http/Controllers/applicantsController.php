@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\User;
 use App\Applicant_details;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -34,6 +35,30 @@ class ApplicantsController extends Controller
         return view('user.myapplications');
     }
 
+    public function getAccountInfo($id)
+    {
+        $user = User::where('id', '=', $id)->get();
+        return response()->json([
+            'user' => $user,
+        ], 200);
+    }
+
+    public function updateAccountInfo(Request $request)
+    {
+        $user = User::where('id', '=', $request->id)->first();
+
+        $user->update(
+            $this->validate($request, [
+                'name' => ['required', 'string', 'min:5', 'max:255'],
+                'email' => ['string', 'email', 'max:255', 'unique:users'],
+                'phone' => ['required'],
+            ])
+        );
+        return response()->json([
+            'message' => 'Account settings have been updated'
+        ], 200);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -63,16 +88,16 @@ class ApplicantsController extends Controller
     // 'message' => auth()->id()
     public function store(Request $request)
     {
-        $valueObj = json_decode($request->value);   
+        $valueObj = json_decode($request->value);
         if( isset($valueObj->jobtitle) && isset($valueObj->company) && isset($valueObj->city) && isset($valueObj->description) ){
             $ad = Applicant_details::create($this->validateRequest());
             return response()->json([
                 'message' => 'Work Experience has been created'
-            ], 200); 
+            ], 200);
         }else{
             return response()->json([
                 'message' => 'Please fill in the fields accordingly'
-            ], 422); 
+            ], 422);
         }
     }
 
@@ -85,7 +110,7 @@ class ApplicantsController extends Controller
      */
     public function update(Request $request)
     {
-        $valueObj = json_decode($request->value);   
+        $valueObj = json_decode($request->value);
         if( isset($valueObj->jobtitle) && isset($valueObj->company) && isset($valueObj->city) && isset($valueObj->description) ){
             $ad = Applicant_details::find($request->id);
             $ad->value = $request->value;
@@ -99,7 +124,7 @@ class ApplicantsController extends Controller
         }else{
             return response()->json([
                 'message' => 'Please fill in the fields accordingly'
-            ], 422); 
+            ], 422);
         }
     }
 

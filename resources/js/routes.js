@@ -60,6 +60,7 @@ export const routes = [
         path: '/u/account',
         name: 'Account',
         component: Account,
+        props: true
     },
     {
         path: '/u/cv',
