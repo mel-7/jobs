@@ -155,7 +155,7 @@
                                                 </v-list-item-content>
                                             </v-list-item>
                                             {{-- {{ route('employer.account') }} --}}
-                                            <v-list-item href="#">
+                                            <v-list-item href="{{ route('employer.account_settings') }}">
                                                 <v-list-item-content>
                                                     <v-list-item-title>Account Settings</v-list-item-title>
                                                 </v-list-item-content>

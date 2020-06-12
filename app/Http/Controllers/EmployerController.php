@@ -16,6 +16,11 @@ class EmployerController extends Controller
         return view('employer.dashboard');
     }
 
+    public function accountSettings()
+    {
+        return view('employer.account-settings');
+    }
+
     /**
      * Display a listing of the resource.
      *

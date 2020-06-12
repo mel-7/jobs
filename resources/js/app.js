@@ -38,6 +38,8 @@ Vue.component('search-job', require('./components/frontend/SearchJob.vue').defau
 Vue.component('job-list', require('./components/frontend/JobList.vue').default);
 Vue.component('side-bar', require('./components/frontend/SideBar.vue').default);
 
+Vue.component('account-settings-form', require('./components/AccountSettingsForm.vue').default);
+
 /**
  * Applicants Portal
  */

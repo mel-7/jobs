@@ -47,6 +47,7 @@ Route::delete('/applicant/experience/destroy/{id}', 'ApplicantsController@destro
 Route::group(['prefix'=>'e','as'=>'employer.'], function(){
     Route::get('/jobs', 'EmployerController@jobs')->name('jobs');
     Route::get('/dashboard', 'EmployerController@dashboard')->name('dashboard');
+    Route::get('/account-settings', 'EmployerController@accountSettings')->name('account_settings');
 });
 
 /**

@@ -14,6 +14,7 @@ import MyMessages from './components/applicants/MyMessages';
 
 import Jobs from './components/employer/Jobs';
 import EmployerDashboard from './components/employer/EmployerDashboard';
+import AccountSettings from './components/employer/AccountSettings';
 
 export const routes = [
     {
@@ -95,6 +96,12 @@ export const routes = [
         path: '/e/dashboard',
         name: 'EmployerDashboard',
         component: EmployerDashboard,
+        props: true
+    },
+    {
+        path: '/e/account-settings',
+        name: 'AccountSettings',
+        component: AccountSettings,
         props: true
     },
 ]
