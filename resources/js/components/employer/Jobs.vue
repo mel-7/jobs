@@ -2,18 +2,25 @@
   <div class="col-12">
     <v-card v-for="post in posts" v-bind:key="post.id" class="mx-auto mb-5">
       <v-list-item three-line>
-        <v-list-item-content>
-          <div class="overline mb-4">OVERLINE</div>
-          <v-list-item-title class="headline mb-1">Headline 5</v-list-item-title>
-          <v-list-item-subtitle>Greyhound divisely hello coldly fonwderfully</v-list-item-subtitle>
+        <v-list-item-avatar class="align-self-center">
+          <v-avatar color="teal" size="48">
+            <span class="white--text overline">48</span>
+          </v-avatar>
+        </v-list-item-avatar>
+        <v-list-item-content class="align-self-center">
+          <v-list-item-title class="mb-1">{{post.position}}</v-list-item-title>
+          <v-list-item-subtitle>{{post.content}}</v-list-item-subtitle>
         </v-list-item-content>
+        <v-list-item-action class="align-self-center">
+          <div class="overline mb-4">ACTIONS</div>
+          <div class="d-flex">
+            <v-icon small color="primary">mdi-pencil</v-icon>
+            <v-icon small color="primary" class="ml-3">mdi-trash-can-outline</v-icon>
+          </div>
+        </v-list-item-action>
       </v-list-item>
-      <v-card-actions>
-        <v-btn text>Button</v-btn>
-        <v-btn text>Button</v-btn>
-      </v-card-actions>
     </v-card>
-    <!-- <v-pagination v-if="pageCount > 1" class="mt-3" v-model="page" :length="pageCount"></v-pagination> -->
+    <v-pagination v-if="pageCount > 1" class="mt-3" v-model="page" :length="pageCount"></v-pagination>
     <!-- @input="onPageChange" -->
   </div>
 </template>
