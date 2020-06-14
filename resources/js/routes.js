@@ -13,6 +13,7 @@ import MyApplications from './components/applicants/MyApplications';
 import MyMessages from './components/applicants/MyMessages';
 
 import Jobs from './components/employer/Jobs';
+import CreateJob from './components/employer/jobs/CreateJob';
 import EmployerDashboard from './components/employer/EmployerDashboard';
 import AccountSettings from './components/employer/AccountSettings';
 
@@ -90,6 +91,12 @@ export const routes = [
         path: '/e/jobs',
         name: 'Jobs',
         component: Jobs,
+        props: true
+    },
+    {
+        path: '/e/job/create',
+        name: 'CreateJob',
+        component: CreateJob,
         props: true
     },
     {
