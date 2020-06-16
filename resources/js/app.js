@@ -47,6 +47,12 @@ Vue.component('applicant-side-nav', require('./components/applicants/ApplicantSi
 Vue.component('personal-details', require('./components/applicants/cv/PersonalDetails.vue').default);
 Vue.component('work-experience', require('./components/applicants/cv/WorkExperience.vue').default);
 
+/**
+ * Common Components for Applicants and Employer
+ */
+Vue.component('job-form', require('./components/employer/jobs/JobForm.vue').default);
+
+
 
 
 // Vue Router

@@ -1,6 +1,6 @@
 <template>
-  <div>
-      This is create Job
+  <div class="col-12">
+      <job-form/>
   </div>
 </template>
 
