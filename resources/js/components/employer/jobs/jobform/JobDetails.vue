@@ -10,9 +10,9 @@
         v-model="title"
         label="Ex. Head of Human Resources"
         required
-        :rules="textRules"
-        :error="textError"
-        :error-messages="textErrMsg"
+        :rules="inputRules"
+        :error="inputError"
+        :error-messages="inputErrMsg"
         @change="clearAlert"
       ></v-text-field>
       <label for>Job Role</label>
@@ -63,14 +63,27 @@
       ></v-autocomplete>
       <label for>Employment Type</label>
       <v-autocomplete
-        v-model="job.location"
-        :items="roles"
+        v-model="job.employment_type"
+        :items="empTypes"
         single-line
         outlined
-        required
+        return-object
+        :item-text="empTypes.name"
         dense
-        label="Select Employment Type"
-      ></v-autocomplete>
+        label="unspecified"
+      >
+        <template slot="selection" slot-scope="data">{{ data.item.name }}</template>
+        <template v-slot:item="data">
+          <template v-if="typeof data.item !== 'object'">
+            <v-list-item-content v-text="data.item"></v-list-item-content>
+          </template>
+          <template v-else>
+            <v-list-item-content>
+              <v-list-item-title v-html="data.item.name"></v-list-item-title>
+            </v-list-item-content>
+          </template>
+        </template>
+      </v-autocomplete>
       <label for>Remote Job?</label>
       <v-switch class="ml-3" v-model="job.remote" :label="`${job.remote.toString()}`"></v-switch>
       <label for>Monthly Salary</label>
@@ -126,8 +139,9 @@ export default {
       title: "",
       job: {
         title: "",
-        position: "",
         slug: "",
+        employment_type: "unspecified",
+        position: "",
         content: "",
         status: "",
         role: "",
@@ -136,19 +150,49 @@ export default {
       },
       roles: ["foo", "bar", "fizz", "buzz"],
       industries: ["foo", "bar", "fizz", "buzz"],
+      empTypes: [
+        {
+          name: "Unspecified",
+          value: "unspecified"
+        },
+        {
+          name: "Commission",
+          value: "commission"
+        },
+        {
+          name: "Contractor",
+          value: "contractor"
+        },
+        {
+          name: "Freelancer",
+          value: "freelancer"
+        },
+        {
+          name: "Full Time Employee",
+          value: "full-time-employee"
+        },
+        {
+          name: "Internship",
+          value: "internship"
+        },
+        {
+          name: "Part Time Employee",
+          value: "part-time-employee"
+        },
+        {
+          name: "Volunteer",
+          value: "volunteer"
+        }
+      ],
       // ui
       validInput: false,
 
       // Rules
-      textRules: [
-        value => !!value || "Required",
-        value => (value && value.length < 50) || "Max 50 characters",
-        value => (value && value.length > 1) || "Min 1 characters"
-      ],
+      inputRules: [value => !!value || "Required"],
 
       // Error Handling
-      textError: false,
-      textErrMsg: ""
+      inputError: false,
+      inputErrMsg: ""
     };
   },
   methods: {
@@ -162,18 +206,18 @@ export default {
     },
     complete() {
       console.log(this.validInput);
-    //   this.$refs.form.validInputate();
-      //   if (this.validInput == true) {
-      //     let d = {
-      //       el: 2,
-      //       jobdetails: this.job
-      //     };
-      //     this.$emit("complete", d);
-      //   }
+      this.$refs.form.validate();
+      if (this.validInput == true) {
+        let d = {
+          el: 2,
+          jobdetails: this.job
+        };
+        this.$emit("complete", d);
+      }
     }
   },
-  mounted(){
-      console.log(this.validInput)
+  mounted() {
+    setTimeout(() => console.log(this.validInput), 2000);
   }
 };
 </script>
