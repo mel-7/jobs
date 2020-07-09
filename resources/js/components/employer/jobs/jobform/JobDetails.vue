@@ -51,10 +51,21 @@
           <v-list-item-content v-text="data.item"></v-list-item-content>
         </template>
       </v-autocomplete>
-      <label for>Job Location</label>
+      <label for="province">Province</label>
       <v-autocomplete
-        v-model="job.location"
-        :items="roles"
+        id="province"
+        v-model="job.province"
+        :items="provinces"
+        single-line
+        outlined
+        required
+        dense
+        label="Select your Job Location"
+      ></v-autocomplete>
+      <label for>City or Municipality</label>
+      <v-autocomplete
+        v-model="job.city_municipality"
+        :items="provinces"
         single-line
         outlined
         required
@@ -97,15 +108,15 @@
         label="Monthly Salary"
       ></v-autocomplete>
       <label for>Number of Vacancy</label>
-      <v-autocomplete
-        v-model="job.location"
-        :items="roles"
+      <v-text-field
+        v-model="job.vacancies"
+        type="number"
         single-line
         outlined
         required
         dense
-        label="Select"
-      ></v-autocomplete>
+        label="Vacancy"
+      ></v-text-field>
       <label for>Job Description</label>
       <v-textarea
         dense
@@ -133,21 +144,29 @@
 </template>
 
 <script>
+import json from "../../../../json/provinces_municipalities.min.json";
 export default {
   data() {
     return {
+      provinces_municipalities: json,
+      provinces: [],
       title: "",
       job: {
-        title: "",
         slug: "",
+        title: "",
+        role: "",
+        industry: [],
+        province: "",
+        city_municipality: "",
+        location: "",
         employment_type: "unspecified",
-        position: "",
+        vacancies: 1,
         content: "",
         status: "",
         role: "",
-        industry: [],
-        remote: 0
+        remote: false
       },
+      monthly_salaries: [""],
       roles: ["foo", "bar", "fizz", "buzz"],
       industries: ["foo", "bar", "fizz", "buzz"],
       empTypes: [
@@ -214,10 +233,54 @@ export default {
         };
         this.$emit("complete", d);
       }
+    },
+    getLocation() {
+      //   let the_locations = this.locations["NCR"]["province_list"]["TAGUIG - PATEROS"][
+      //     "municipality_list"
+      //   ];
+      //   let arr = [];
+      //   Object.keys(the_locations).map(function(key, index) {
+      //     arr.push(key);
+      //   });
+      //   console.log(typeof arr);
+      //   console.log(arr);
+    //   console.log(this.provinces_municipalities);
+      let p = [];
+      Object.keys(this.provinces_municipalities).map(function(value, key) {
+        p.push(value);
+      });
+      this.provinces = p.sort();
+
+      //   Object.keys(the_locations).map(region => {
+      //     Object.keys(the_locations[region].province_list).map(function(
+      //       value,
+      //       key
+      //     ) {
+      //       // console.log(value)
+      //       provinces.push(value);
+      //     });
+      //     // Object.keys(this.locations[region].province_list).map(function(province, k) {
+      //     //     console.log(typeof province);
+      //     //     console.log(province);
+      //     // //   Object.keys(this.locations[myObj].province_list[p]).map(function(m) {
+      //     // //     console.log(m);
+      //     // //   });
+      //     // });
+      //   });
+
+      //   var result = Object.keys(the_locations).map(function(e) {
+      //     var o = JSON.parse(JSON.stringify(e));
+      //     // o.province_list = e.values[qIndex];
+      //     // o.hey = e.values[qIndex];
+      //     console.log(typeof JSON.parse(o))
+      //     // return o;
+      //   });
     }
   },
   mounted() {
-    setTimeout(() => console.log(this.validInput), 2000);
+    this.getLocation();
+    // setTimeout(() => this.getLocation(), 2000);
+    // setTimeout(() => console.log(this.validInput), 2000);
   }
 };
 </script>

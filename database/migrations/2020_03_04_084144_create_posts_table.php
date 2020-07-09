@@ -15,13 +15,20 @@ class CreatePostsTable extends Migration
     {
         Schema::create('posts', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('position');
             $table->string('slug')->unique();
-            $table->text('content')->nullable();
-            $table->string('status')->nullable();
-            $table->string('featured_image')->nullable();
+            $table->string('title');
+            $table->string('role')->nullable();
+            $table->text('industry')->nullable();
+            $table->string('region')->nullable();
+            $table->string('city')->nullable();
+            $table->string('employment_type')->nullable();
+            $table->boolean('remote')->default(false);
+            $table->text('monthly_salary')->nullable();
+            $table->integer('vacancy')->nullable();
+            $table->text('description')->nullable();
+            $table->text('desired_skills')->nullable();
+            $table->boolean('status')->default(false);
             $table->unsignedInteger('author')->nullable();
-            $table->unsignedInteger('company')->nullable();
             $table->timestamps();
         });
     }

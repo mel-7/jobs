@@ -12,48 +12,43 @@ class PostsTableSeeder extends Seeder
     public function run()
     {
         $post = new \App\Post([
-            'position'  => 'Chef',
+            'title'  => 'Chef',
             'slug'      => 'chef',
-            'content'   => null,
-            'status'    => 'publish',
-            'author'    => 1,
-            'company'   => 1
+            'description'   => null,
+            'status'    => true,
+            'author'    => 1
         ]);
         $post->save();
         $post = new \App\Post([
-            'position'  => 'CEO',
+            'title'  => 'CEO',
             'slug'      => 'ceo',
-            'content'   => null,
-            'status'    => 'publish',
-            'author'    => 1,
-            'company'   => 1
+            'description'   => null,
+            'status'    => true,
+            'author'    => 1
         ]);
         $post->save();
         $post = new \App\Post([
-            'position'  => 'CFO',
+            'title'  => 'CFO',
             'slug'      => 'cfo',
-            'content'   => null,
-            'status'    => 'publish',
-            'author'    => 1,
-            'company'   => 1
+            'description'   => null,
+            'status'    => true,
+            'author'    => 1
         ]);
         $post->save();
         $post = new \App\Post([
-            'position'  => 'Grandiose Staff',
+            'title'  => 'Grandiose Staff',
             'slug'      => 'grandiose-staff',
-            'content'   => null,
-            'status'    => 'publish',
-            'author'    => 1,
-            'company'   => 3
+            'description'   => null,
+            'status'    => true,
+            'author'    => 1
         ]);
         $post->save();
         $post = new \App\Post([
-            'position'  => 'Sales',
+            'title'  => 'Sales',
             'slug'      => 'sales',
-            'content'   => null,
-            'status'    => 'publish',
-            'author'    => 1,
-            'company'   => 4
+            'description'   => null,
+            'status'    => true,
+            'author'    => 1
         ]);
         $post->save();
     }
